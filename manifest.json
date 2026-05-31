@@ -1,24 +1,26 @@
 {
-  "name": "html-bank-site",
+  "package": "bank_agent_file_space",
+  "site_type": "static_github_pages",
   "entrypoint": "index.html",
-  "source": "dashboard.html",
-  "generated_on": "2026-05-31",
-  "counts": {
-    "total": 100,
-    "work_now": 67,
-    "light_research": 30,
-    "suppress": 3
-  },
+  "source_upload": "dashboard (5).html",
   "files": [
-    "index.html",
-    "README.md",
-    "manifest.json",
     ".nojekyll",
+    "README.md",
     "data/dashboard-data.json",
+    "exports/account_research.csv",
+    "exports/deprioritize.csv",
+    "exports/light_research.csv",
     "exports/prospects_flat.csv",
     "exports/work_now.csv",
-    "exports/light_research.csv",
-    "exports/suppress.csv",
-    "exports/deprioritize.csv"
-  ]
+    "html/dashboard_original.html",
+    "index.html"
+  ],
+  "record_count": 88,
+  "counts_by_execution_status": {
+    "Ready to send": 1,
+    "Light research": 76,
+    "Account research": 2,
+    "Deprioritize": 9
+  },
+  "publish_notes": "Upload folder contents to a GitHub repository root and enable GitHub Pages from main branch /root."
 }
