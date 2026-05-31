@@ -1,26 +1,23 @@
 {
-  "package": "bank_agent_file_space",
-  "site_type": "static_github_pages",
+  "name": "HTML Bank",
+  "site_type": "static_github_pages_html_bank",
   "entrypoint": "index.html",
-  "source_upload": "dashboard (5).html",
-  "files": [
-    ".nojekyll",
-    "README.md",
-    "data/dashboard-data.json",
-    "exports/account_research.csv",
-    "exports/deprioritize.csv",
-    "exports/light_research.csv",
-    "exports/prospects_flat.csv",
-    "exports/work_now.csv",
-    "html/dashboard_original.html",
-    "index.html"
-  ],
-  "record_count": 88,
-  "counts_by_execution_status": {
-    "Ready to send": 1,
-    "Light research": 76,
-    "Account research": 2,
-    "Deprioritize": 9
+  "repository": "pducoffe20-a11y/HTML-BANK---Engine",
+  "pages_url": "https://pducoffe20-a11y.github.io/HTML-BANK---Engine/",
+  "folders": {
+    "outreach-dashboards": "Prospect/account boards, territory views, re-engagement trackers, and internal sales dashboard views.",
+    "pre-call-briefs": "Single-prospect or single-meeting prep documents used before a call.",
+    "client-ready-assets": "External-facing assets that could be sent to or screen-shared with a client or prospect."
   },
-  "publish_notes": "Upload folder contents to a GitHub repository root and enable GitHub Pages from main branch /root."
+  "filename_convention": "YYYY-MM-DD_account-name_asset-type.html",
+  "files": [
+    "README.md",
+    "AGENTS.md",
+    "index.html",
+    "manifest.json",
+    ".nojekyll",
+    "outreach-dashboards/2026-05-30_d2l-brightspace_prospect-execution-dashboard.html",
+    "pre-call-briefs/.gitkeep",
+    "client-ready-assets/.gitkeep"
+  ]
 }
