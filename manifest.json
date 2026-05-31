@@ -10,14 +10,22 @@
     "client-ready-assets": "External-facing assets that could be sent to or screen-shared with a client or prospect."
   },
   "filename_convention": "YYYY-MM-DD_account-name_asset-type.html",
-  "files": [
+  "html_asset_files": [
+    "outreach-dashboards/2026-05-30_d2l-brightspace_prospect-execution-dashboard.html"
+  ],
+  "instruction_files": [
     "README.md",
-    "AGENTS.md",
-    "index.html",
-    "manifest.json",
+    "AGENTS.md"
+  ],
+  "support_files_preserved_from_previous_site": [
     ".nojekyll",
-    "outreach-dashboards/2026-05-30_d2l-brightspace_prospect-execution-dashboard.html",
-    "pre-call-briefs/.gitkeep",
-    "client-ready-assets/.gitkeep"
+    "dashboard-data.json",
+    "dashboard_original.html",
+    "account_research.csv",
+    "deprioritize.csv",
+    "light_research.csv",
+    "prospects_flat.csv",
+    "suppress.csv",
+    "work_now.csv"
   ]
 }
