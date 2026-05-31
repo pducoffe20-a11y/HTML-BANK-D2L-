@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pat Ducoffe | External Call Briefs | Week of May 25, 2026</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+    :root {
+      --bg: #f6f0e6;
+      --bg-deep: #ece1d0;
+      --panel: rgba(255, 252, 246, 0.82);
+      --panel-strong: #fffaf2;
+      --ink: #1f2625;
+      --muted: #5d6764;
+      --line: rgba(31, 38, 37, 0.12);
+      --teal: #0f766e;
+      --teal-soft: rgba(15, 118, 110, 0.12);
+      --rust: #b64d2d;
+      --rust-soft: rgba(182, 77, 45, 0.12);
+      --gold: #b48728;
+      --gold-soft: rgba(180, 135, 40, 0.14);
+      --olive: #4f6b39;
+      --olive-soft: rgba(79, 107, 57, 0.12);
+      --shadow: 0 18px 40px rgba(76, 59, 31, 0.1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Syne", "Avenir Next", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.11), transparent 28%),
+        radial-gradient(circle at top right, rgba(182, 77, 45, 0.1), transparent 24%),
+        linear-gradient(180deg, #f8f3ea 0%, #efe4d4 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(31, 38, 37, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 38, 37, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 80%);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .app-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      align-self: start;
+      display: grid;
+      gap: 18px;
+    }
+
+    .band {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      padding: 22px 22px 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -30% auto;
+      width: 240px;
+      height: 240px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(182, 77, 45, 0.08));
+      transform: rotate(24deg);
+    }
+
+    .eyebrow,
+    .meta-line,
+    .small-label,
+    .copy-note,
+    .character-meter,
+    .history-meta,
+    .step-label,
+    .pill,
+    .detail-label {
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      letter-spacing: 0;
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      font-size: clamp(34px, 4vw, 52px);
+      max-width: 8ch;
+      margin-top: 10px;
+    }
+
+    .hero-copy {
+      margin-top: 14px;
+      max-width: 28ch;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .summary-row {
+      padding: 0 22px 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .summary-tile {
+      padding: 14px;
+      background: rgba(255, 250, 242, 0.88);
+      border: 1px solid rgba(31, 38, 37, 0.08);
+      border-radius: var(--radius);
+    }
+
+    .summary-tile strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 6px;
+    }
+
+    .meeting-list,
+    .history-list,
+    .steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel-title {
+      padding: 18px 18px 8px;
+      font-size: 18px;
+    }
+
+    .panel-body {
+      padding: 0 18px 18px;
+    }
+
+    .meeting-button,
+    .history-button {
+      width: 100%;
+      text-align: left;
+      padding: 14px;
+      border: 1px solid rgba(31, 38, 37, 0.08);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.5);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .meeting-button:hover,
+    .history-button:hover,
+    .copy-action:hover,
+    .rationale-toggle:hover,
+    .copy-all:hover {
+      transform: translateY(-1px);
+    }
+
+    .meeting-button.active {
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(15, 118, 110, 0.04));
+      border-color: rgba(15, 118, 110, 0.28);
+    }
+
+    .meeting-topline,
+    .history-topline {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .meeting-title,
+    .history-title {
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .meeting-meta,
+    .history-meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .badge-row,
+    .signal-row,
+    .detail-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill,
+    .detail-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      line-height: 1;
+      background: rgba(31, 38, 37, 0.06);
+      color: var(--ink);
+    }
+
+    .pill.external {
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .pill.strong {
+      background: rgba(79, 107, 57, 0.14);
+      color: var(--olive);
+    }
+
+    .pill.moderate {
+      background: var(--gold-soft);
+      color: #8c6713;
+    }
+
+    .pill.light {
+      background: var(--rust-soft);
+      color: var(--rust);
+    }
+
+    .main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .top-strip {
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+    }
+
+    .top-strip p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 64ch;
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .copy-all {
+      background: var(--ink);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      box-shadow: 0 10px 20px rgba(31, 38, 37, 0.18);
+      white-space: nowrap;
+    }
+
+    .brief-head {
+      padding: 24px 24px 20px;
+      display: grid;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brief-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brief-title h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      max-width: 13ch;
+    }
+
+    .brief-title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+      max-width: 66ch;
+    }
+
+    .progress-shell {
+      padding: 18px 24px 24px;
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .progress-note {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .step {
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(31, 38, 37, 0.08);
+      overflow: hidden;
+    }
+
+    .step-bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--teal), #1f9f96);
+      transition: width 220ms ease;
+    }
+
+    .step.complete .step-bar span {
+      width: 100%;
+    }
+
+    .step.active .step-bar span {
+      width: 56%;
+    }
+
+    .step-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .brief-grid {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      gap: 20px;
+    }
+
+    .content-stack,
+    .support-stack {
+      display: grid;
+      gap: 18px;
+      align-self: start;
+    }
+
+    .section-card,
+    .support-card {
+      background: var(--panel-strong);
+      border: 1px solid rgba(31, 38, 37, 0.08);
+      border-radius: var(--radius);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .support-card.accent-teal { border-top: 4px solid var(--teal); }
+    .support-card.accent-rust { border-top: 4px solid var(--rust); }
+    .support-card.accent-gold { border-top: 4px solid var(--gold); }
+
+    .section-head,
+    .support-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .section-head h3,
+    .support-head h3 {
+      font-size: 20px;
+    }
+
+    .copy-action,
+    .rationale-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(31, 38, 37, 0.12);
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .copy-note {
+      font-size: 11px;
+      color: var(--muted);
+      min-height: 16px;
+    }
+
+    .fit-line {
+      font-size: 15px;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .fit-meter {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .fit-track {
+      width: 100%;
+      height: 14px;
+      background: rgba(31, 38, 37, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fit-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      transition: width 650ms ease;
+    }
+
+    .fit-meter.ready .fit-fill {
+      width: var(--fit-width);
+    }
+
+    .fit-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .number-list,
+    .value-list,
+    .objection-list,
+    .question-list,
+    .prep-list,
+    .signal-list,
+    .detail-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .number-list li,
+    .value-item,
+    .objection-item,
+    .question-item,
+    .signal-item,
+    .detail-item {
+      padding: 12px 13px;
+      border: 1px solid rgba(31, 38, 37, 0.08);
+      border-radius: var(--radius);
+      background: rgba(245, 241, 234, 0.72);
+    }
+
+    .value-item strong,
+    .objection-item strong,
+    .question-item strong,
+    .signal-item strong,
+    .detail-item strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .number-list span,
+    .value-item p,
+    .objection-item p,
+    .question-item p,
+    .signal-item p,
+    .detail-item p,
+    .script-block p,
+    .support-card p,
+    .support-card li,
+    .section-card p,
+    .section-card li {
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .muted-copy {
+      color: var(--muted) !important;
+    }
+
+    .buyer-badge {
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(31, 38, 37, 0.08);
+      min-width: 110px;
+      text-align: right;
+    }
+
+    .buyer-badge strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .power-high { color: var(--teal); }
+    .power-medium { color: #8c6713; }
+    .power-low { color: var(--rust); }
+
+    .question-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .rationale {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(31, 38, 37, 0.14);
+      display: none;
+      color: var(--muted);
+    }
+
+    .question-item.open .rationale {
+      display: block;
+    }
+
+    .script-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .script-block div {
+      padding: 12px 13px;
+      border-radius: var(--radius);
+      background: rgba(245, 241, 234, 0.72);
+      border: 1px solid rgba(31, 38, 37, 0.08);
+    }
+
+    .script-block strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .context-box {
+      width: 100%;
+      min-height: 164px;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 38, 37, 0.1);
+      background: rgba(245, 241, 234, 0.72);
+      color: var(--ink);
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .context-box.warn {
+      border-color: rgba(180, 135, 40, 0.5);
+      box-shadow: inset 0 0 0 1px rgba(180, 135, 40, 0.18);
+    }
+
+    .character-meter {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .character-meter.warn {
+      color: #8c6713;
+    }
+
+    .prep-item {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(31, 38, 37, 0.08);
+    }
+
+    .prep-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .prep-item input {
+      accent-color: var(--teal);
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+    }
+
+    .signal-item strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .signal-tag {
+      font-size: 10px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: rgba(31, 38, 37, 0.07);
+      color: var(--muted);
+    }
+
+    .delay-0 { animation-delay: 0ms; }
+    .delay-1 { animation-delay: 80ms; }
+    .delay-2 { animation-delay: 160ms; }
+    .delay-3 { animation-delay: 240ms; }
+    .delay-4 { animation-delay: 320ms; }
+    .delay-5 { animation-delay: 400ms; }
+    .delay-6 { animation-delay: 480ms; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: rise 480ms ease forwards;
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .empty-history {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    @media (max-width: 1120px) {
+      .app-shell,
+      .brief-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app-shell {
+        padding: 16px;
+        gap: 16px;
+      }
+
+      .summary-row {
+        grid-template-columns: 1fr;
+      }
+
+      .top-strip,
+      .brief-kicker,
+      .question-top,
+      .section-head,
+      .support-head {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .brief-head,
+      .brief-grid,
+      .progress-shell,
+      .top-strip {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      h1 {
+        max-width: 10ch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <section class="band hero">
+        <div class="eyebrow">Pre-Call Brief Agent</div>
+        <h1>External Call Briefs</h1>
+        <p class="hero-copy">Week of May 25 to May 31, 2026. Five external meetings, one review surface, and copy-ready talk tracks grounded in your calendar and nearby thread context.</p>
+        <div class="summary-row">
+          <div class="summary-tile">
+            <span class="eyebrow">Meetings</span>
+            <strong id="meetingCount">5</strong>
+          </div>
+          <div class="summary-tile">
+            <span class="eyebrow">Signal Mix</span>
+            <strong>4 strong, 1 light</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <h2 class="panel-title">This Week</h2>
+        <div class="panel-body">
+          <div class="meeting-list" id="meetingList"></div>
+        </div>
+      </section>
+
+      <section class="band">
+        <h2 class="panel-title">Recent Briefs</h2>
+        <div class="panel-body">
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="band top-strip">
+        <div>
+          <div class="eyebrow">Grounded Run</div>
+          <h2>Built from Outlook meeting context, targeted email threads, and prior-call evidence where it added signal</h2>
+          <p>Most grounded: OhioCPA, GPM, PRIMA, and MSAE. Lighter evidence: Marcom, where the calendar setup note carried most of the usable context.</p>
+        </div>
+        <button class="copy-all" id="copyAll">Copy Current Brief</button>
+      </section>
+
+      <section class="band">
+        <div class="brief-head">
+          <div class="brief-kicker">
+            <div class="badge-row" id="activeBadges"></div>
+            <div class="copy-note" id="globalCopyNote"></div>
+          </div>
+          <div class="brief-title">
+            <div class="eyebrow" id="briefDate"></div>
+            <h2 id="briefTitle"></h2>
+            <p id="briefSummary"></p>
+          </div>
+        </div>
+
+        <div class="progress-shell">
+          <div class="progress-note">
+            <span id="progressMessage">Loading brief…</span>
+            <span class="meta-line">6-step assembly view</span>
+          </div>
+          <div class="steps" id="progressSteps"></div>
+        </div>
+
+        <div class="brief-grid">
+          <div class="content-stack" id="contentStack"></div>
+          <div class="support-stack" id="supportStack"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const briefs = [
+      {
+        id: "oscpa",
+        account: "OhioCPA / OSCPA",
+        accountShort: "OhioCPA",
+        title: "OSCPA’s & D2L ; Transformational CPA Program Scope",
+        contact: "Tiffany Crosby",
+        contactTitle: "Program lead or learning stakeholder",
+        meetingType: "Working session",
+        when: "Tuesday, May 26, 2026",
+        time: "1:30 PM to 2:30 PM ET",
+        summary: "Working session with Tiffany Crosby and Ruth Cuthbert to scope the Transformational CPA refresh and keep the wider LMS decision moving without forcing it too early.",
+        signalStrength: "Strong",
+        fit: { label: "Strong", percent: 84, reason: "Confirmed TopClass exit, visible program refresh need, and a clear education use case." },
+        buyerPower: "Medium",
+        buyerType: "Program owner",
+        powerLabel: "Medium influence",
+        badges: ["External", "Strong fit", "Refresh + scope", "Association education"],
+        sourceNotes: "Confirmed from email and calendar: OSCPA is moving on from TopClass; the Transformational CPA series needs a real refresh before 2027; the broader LMS decision is still taking shape; Pat proposed starting narrow with a learning consultant to scope the 14-course series, rough out experience, and frame budget before the platform decision.",
+        prep: [
+          "Pull one or two crisp examples of how D2L can refresh an aging on-demand certification experience without making the first step feel like a full-platform rip-and-replace.",
+          "Be ready to explain how a scoped program refresh can inform a larger LMS evaluation instead of delaying it.",
+          "Have one practical point of view on what a TopClass migration conversation should and should not try to answer in this meeting.",
+          "Clarify who owns the 2027 timing pressure and whether Tiffany is the program owner, evaluator, or internal coordinator."
+        ],
+        signals: [
+          { type: "Confirmed", title: "TopClass exit is already in motion", body: "Pat’s May 8 recap says OSCPA is moving on from TopClass, which turns this from vague curiosity into an actual platform-change motion." },
+          { type: "Confirmed", title: "The 14-course Transformational CPA series is the natural wedge", body: "Pat framed the refresh of that series as the best narrow starting point and tied it to learning design support." },
+          { type: "Inferred", title: "Sequence matters more than full-suite positioning right now", body: "The call is likely to go better if it feels like a scoped planning session first and a broad LMS pitch second." },
+          { type: "Open question", title: "Refresh project or platform committee?", body: "Validate whether this meeting is meant to sponsor a near-term scoped engagement, an LMS shortlist, or both." }
+        ],
+        accountSnapshot: {
+          fitLine: "ICP Fit: Strong - There is a clear association education use case, a visible legacy-platform transition, and a time-bound program refresh need.",
+          timingSignals: [
+            "OSCPA is moving on from TopClass - the platform conversation is active, not hypothetical.",
+            "The Transformational CPA series needs a refresh before 2027 - there is a concrete educational asset that can anchor urgency.",
+            "The broader LMS decision is still taking shape - the team may be open to a scoped first move if it helps de-risk the bigger choice."
+          ],
+          read: "This looks like a real education modernization motion with two tracks running at once: a specific program refresh and a broader LMS decision. The opportunity is strong because the team already has a forcing event, a known pain point, and a manageable first use case. The risk is that the meeting drifts into abstract platform talk before the business case for the initial scope gets clear. D2L will land better if the conversation makes the next step feel practical, bounded, and useful to Tiffany’s internal decision process.",
+          sellerNote: "Validate whether Tiffany wants this meeting to produce a scoped working plan for the Transformational CPA series, a clearer migration picture from TopClass, or both."
+        },
+        contactAngle: {
+          buyerType: "Program owner (Medium confidence)",
+          priorities: [
+            "Refreshing a flagship learning program - a dated or hard-to-maintain CPA series can directly affect learner experience and program credibility.",
+            "Reducing risk in the larger LMS transition - if the platform decision is still forming, she will care about effort, sequence, and internal defensibility.",
+            "Keeping the first step manageable - a narrow scope is easier to socialize internally than a big transformation story."
+          ],
+          approach: "Lead with the program, not the platform. Show that you understand why the Transformational CPA series is the near-term pressure point, then connect that work to the larger LMS path only after you’ve earned the right. She is more likely to trust a conversation that helps her structure the next move than one that tries to win the whole decision in one sitting.",
+          avoid: "Do not force a full-suite pitch before she sees how a scoped refresh helps her handle the current pressure."
+        },
+        valueAngles: [
+          {
+            name: "Refresh the program people already care about",
+            proof: "D2L can help OSCPA modernize the Transformational CPA experience first, with stronger structure, cleaner learner flow, and a clearer plan for keeping content current over time.",
+            why: "That is the most concrete issue already surfaced in Pat’s recap and gives the team a credible first win."
+          },
+          {
+            name: "Create one home for mixed-format professional learning",
+            proof: "Brightspace can support Ohio-specific content, recorded sessions, and on-demand professional learning in one place without leaning on the kind of operational sprawl they appear to be leaving behind.",
+            why: "Pat already framed this as a likely need, which makes it more relevant than a generic modernization claim."
+          },
+          {
+            name: "Make the LMS evaluation less abstract",
+            proof: "A scoped planning exercise around the CPA series can give OSCPA something real to compare against as they think through migration effort, tradeoffs, and what a better future state should actually look like.",
+            why: "The broader platform decision is still forming, so practical clarity is part of the value."
+          }
+        ],
+        discoveryQuestions: [
+          {
+            question: "When you say the Transformational CPA series needs a refresh before 2027, what feels most urgent to fix: the learner experience, the content structure, the admin lift, or something else?",
+            why: "This tells you whether the wedge is design quality, platform friction, or internal capacity."
+          },
+          {
+            question: "How much of the pressure here is tied to leaving TopClass versus improving the actual learning experience for members?",
+            why: "You need to know whether this is mostly a migration conversation or a program-outcome conversation."
+          },
+          {
+            question: "If we scoped the 14-course series first, what would make that feel like a useful step inside the larger LMS decision rather than a side project?",
+            why: "This reveals the internal test for a credible next step."
+          },
+          {
+            question: "Who else needs to believe in this path if the refresh work is going to move from idea to funded priority?",
+            why: "You need the buying group early if the work could branch into a broader platform decision."
+          },
+          {
+            question: "By the end of today, what would be most helpful for you to walk away with: a scoping direction, a rough effort picture, or a clearer platform point of view?",
+            why: "It lets you tune the meeting outcome to the real decision she is trying to move."
+          }
+        ],
+        objections: [
+          {
+            objection: "We’re not ready to make a big LMS decision yet.",
+            counter: "That makes sense. I wouldn’t try to force the whole platform conversation in one jump either. If it helps, we can keep this centered on the Transformational CPA scope and use that to make the bigger decision easier later.",
+            followUp: "Would it be useful if today stayed focused on what a strong first phase could look like?"
+          },
+          {
+            objection: "We may not have budget or bandwidth for something broad right now.",
+            counter: "That’s exactly why a narrow first move may be the better conversation. If we can sketch a realistic scope and rough range around the highest-value part of the work, you’ll know quickly whether it deserves a next step.",
+            followUp: "What level of effort would feel realistic for your team this year?"
+          },
+          {
+            objection: "Our current setup still works well enough for now.",
+            counter: "Totally fair. The question I’d want to get clear on is whether it works well enough for where you need the program to be by 2027, not just for today. That’s usually where the real decision shows up.",
+            followUp: "Where do you feel the current setup starts to hold the program back?"
+          }
+        ],
+        opener: {
+          main: "Thanks for making the time. From our last conversation, it sounds like the Transformational CPA series is the clearest near-term pressure point, while the broader LMS decision is still taking shape in the background. I’d love to compare notes on that and see whether a scoped working plan around the 14-course series would actually help move the bigger decision forward.",
+          next: "If this feels worth pursuing after today, my suggestion would be a short follow-up working session with our learning consultant so we can sketch the refreshed experience, rough out scope, and give you something practical to react to.",
+          soft: "If it’s too early for that, we can keep it simple and just decide what would need to be true for a scoped session to make sense."
+        }
+      },
+      {
+        id: "gpm",
+        account: "GPM",
+        accountShort: "GPM",
+        title: "D2L : GPM - Executive Demo",
+        contact: "Michael Pace, Ph.D.",
+        contactTitle: "Vice President, Learning and Academics",
+        meetingType: "Executive demo",
+        when: "Wednesday, May 27, 2026",
+        time: "11:00 AM to 12:00 PM ET",
+        summary: "Executive demo for Michael Pace, Joel Carboni, and David Smyth, with the conversation anchored around academic course delivery, VitalSource or RedShelf workflows, and the student-facing Course Materials Dashboard flow.",
+        signalStrength: "Strong",
+        fit: { label: "Strong", percent: 81, reason: "Repeat interactions, clear commercialization use case, and a very specific workflow request." },
+        buyerPower: "High",
+        buyerType: "Executive sponsor / program owner",
+        powerLabel: "High influence",
+        badges: ["External", "Strong fit", "Executive demo", "Academic distribution"],
+        sourceNotes: "Confirmed from Michael Pace’s May 20 note: GPM wants to understand whether Brightspace integrates with VitalSource or RedShelf, wants to sell a course to academics as a third-party content pack through campus bookstores, and wants the Course Materials Dashboard workflow shown for students. Calendar shows a prior technical demo on May 21 and multiple earlier GPM sessions.",
+        prep: [
+          "Align internally on what you can say cleanly about VitalSource and RedShelf without overpromising integration behavior.",
+          "Structure the demo around the bookstore distribution use case, not a general platform tour.",
+          "Be ready to separate what Brightspace can do natively from what would depend on packaging, workflow design, or partner integration choices.",
+          "Leave time to test who else on the GPM side will shape the technical and commercial decision."
+        ],
+        signals: [
+          { type: "Confirmed", title: "They asked for a specific bookstore workflow", body: "Michael explicitly requested a view of the Course Materials Dashboard flow for students in a campus-bookstore content-pack model." },
+          { type: "Confirmed", title: "The conversation has already advanced beyond intro discovery", body: "There was a one-on-one technical demo on May 21 and multiple prior GPM planning sessions before this executive demo." },
+          { type: "Inferred", title: "This team cares about commercial delivery as much as learning design", body: "The use case is not just teaching; it is packaging and selling learning content through established academic channels." },
+          { type: "Open question", title: "Integration blocker or evaluation lens?", body: "You need to learn whether VitalSource and RedShelf are hard requirements or just the easiest way for them to picture the model." }
+        ],
+        accountSnapshot: {
+          fitLine: "ICP Fit: Strong - GPM has a concrete learning-product use case, a visible path to monetization, and specific operational questions that match a real platform evaluation.",
+          timingSignals: [
+            "Michael asked for a whole-team demo next week - the conversation is broadening beyond one person.",
+            "The team raised VitalSource and RedShelf directly - they are testing the fit against an actual go-to-market workflow.",
+            "There was a technical demo on May 21 - this executive session is likely about confidence, practicality, and next-step alignment."
+          ],
+          read: "This looks like a serious fit test around a high-value distribution model, not a generic feature review. GPM appears to be evaluating whether Brightspace can support a student experience that feels credible inside a bookstore-driven course-materials motion. The strongest angle is not just flexibility; it is whether D2L can make the workflow understandable and operationally believable. The risk is getting pulled into feature breadth when the buyer really wants confidence around one very specific use case.",
+          sellerNote: "Find out whether the bookstore workflow is the centerpiece of the opportunity or the sharpest proxy they have for evaluating overall platform fit."
+        },
+        contactAngle: {
+          buyerType: "Executive sponsor / program owner (High confidence)",
+          priorities: [
+            "Commercially viable course delivery - he is thinking about how learning content reaches academics through established channels.",
+            "Confidence in the learner workflow - the student experience around course materials appears important enough to call out by name.",
+            "Technical credibility without ambiguity - he asked directly about integrations, which suggests he is screening for operational risk."
+          ],
+          approach: "Lead like someone who respects the specificity of his use case. Michael will likely respond better to a crisp point of view on the bookstore model than to a broad product walkthrough. Keep the conversation grounded, answer cleanly where you can, and be explicit about what still needs validation rather than hand-waving it away.",
+          avoid: "Do not blur uncertain integration details into confident platform claims just to keep the demo moving."
+        },
+        valueAngles: [
+          {
+            name: "A cleaner path from content to learner access",
+            proof: "Brightspace can help GPM create a more coherent student experience once learners land in the course, which matters when the buying path starts outside the LMS through a bookstore or materials channel.",
+            why: "Michael specifically asked to see the Course Materials Dashboard flow, so the learner handoff matters."
+          },
+          {
+            name: "Flexibility for specialized academic distribution models",
+            proof: "D2L is a stronger fit when the learning business model is not simple one-audience training, but a more complex mix of external academics, third-party packaging, and evolving delivery expectations.",
+            why: "Their use case is already more specialized than a standard corporate training deployment."
+          },
+          {
+            name: "Operational clarity before scale",
+            proof: "A well-run demo and follow-up can help GPM map what parts of the model are straightforward, what depends on integrations, and where design choices will shape launch complexity before they go further.",
+            why: "Right now, clarity is part of the value because the team is pressure-testing fit through concrete edge cases."
+          }
+        ],
+        discoveryQuestions: [
+          {
+            question: "When you picture this course-pack model working well, what has to feel seamless for the learner between bookstore purchase and course access?",
+            why: "This defines whether the core concern is access, discoverability, entitlement, or the in-course experience."
+          },
+          {
+            question: "How hard of a requirement are VitalSource and RedShelf specifically, versus the broader ability to support that style of academic distribution?",
+            why: "You need to know whether you are solving for named systems or a commercial workflow pattern."
+          },
+          {
+            question: "What would make this executive demo feel successful on your side: technical confidence, student-workflow confidence, or a clearer sense of launch feasibility?",
+            why: "It lets you tune the demo to the decision they are actually trying to make."
+          },
+          {
+            question: "Who beyond this group will need to weigh in if the model looks viable from a learning perspective?",
+            why: "Specialized distribution models often bring in technical, commercial, or operational stakeholders fast."
+          },
+          {
+            question: "If the workflow looks promising, what is the next practical milestone you would want to hit after this meeting?",
+            why: "A good demo without a concrete next checkpoint can still stall."
+          }
+        ],
+        objections: [
+          {
+            objection: "We need confidence that this can work with systems like VitalSource or RedShelf.",
+            counter: "That’s a fair place to push. I’d rather be precise than fuzzy here. If some parts are straightforward and other parts need validation, we’ll separate those cleanly so you can judge the model on real facts.",
+            followUp: "Which part of that workflow feels most critical to validate first?"
+          },
+          {
+            objection: "Our use case may be too specialized.",
+            counter: "It may be specialized, but that doesn’t automatically make it a bad fit. Usually the key is figuring out which parts are truly unique and which parts are standard learning operations wrapped in a different delivery motion.",
+            followUp: "Where do you think your model departs most from a typical learning deployment?"
+          },
+          {
+            objection: "We’re still early and don’t want to overinvest yet.",
+            counter: "That makes sense. The goal of today doesn’t need to be commitment. It can just be getting enough clarity to decide whether the model is worth a deeper working session with the right people in the room.",
+            followUp: "What would you need to see today to justify that next conversation?"
+          }
+        ],
+        opener: {
+          main: "Thanks for pulling the team together. From Michael’s note, it sounds like the heart of this conversation is pretty specific: whether Brightspace can support the student workflow you’re imagining for academic course delivery through bookstore channels like VitalSource or RedShelf. I’d like to stay tight on that today and make sure we leave with a clear read on what looks straightforward, what needs validation, and whether a deeper working session is worth it.",
+          next: "If the workflow looks directionally right, the next move I’d suggest is a focused working session with the people who own technical fit and launch design so we can pressure-test the model without turning this into a vague follow-up.",
+          soft: "If we’re not there yet, we can simply leave with the open questions that matter most and decide whether it’s worth one more pass."
+        }
+      },
+      {
+        id: "marcom",
+        account: "Marcom",
+        accountShort: "Marcom",
+        title: "Marcom & D2L | Introduction",
+        contact: "Jennifer Manning",
+        contactTitle: "Unknown stakeholder",
+        meetingType: "Intro call",
+        when: "Thursday, May 28, 2026",
+        time: "12:00 PM to 12:30 PM ET",
+        summary: "Initial 30-minute introduction with Jennifer Manning. Calendar notes say the meeting is meant to explore Marcom’s learning initiatives, current solution set, learner volume, integrations, and timing. No demo is planned.",
+        signalStrength: "Light",
+        fit: { label: "Moderate", percent: 61, reason: "Clear learning interest, but very little grounded detail on role, industry, or urgency beyond the intro setup." },
+        buyerPower: "Low",
+        buyerType: "Unknown",
+        powerLabel: "Low confidence",
+        badges: ["External", "Light context", "Intro call", "No demo"],
+        sourceNotes: "Confirmed from the calendar setup note sent by Stephanie Jean: the call is an introductory meeting to explore Marcom’s learning initiatives and whether D2L could be a fit. The questions Stephanie flagged were yearly learner volume, required integrations, current solutions, and key deadlines. No demonstration is planned.",
+        prep: [
+          "Treat this as a disciplined discovery call, not a teaser demo in disguise.",
+          "Open with a point of view on why learner volume, current stack, and deadlines matter, so the questions feel purposeful rather than generic.",
+          "Be ready with one concise D2L-for-associations-and-training-organizations frame if Jennifer asks what makes D2L relevant before deep discovery.",
+          "Listen hard for whether this is customer education, partner education, workforce learning, or a broader commercial training motion."
+        ],
+        signals: [
+          { type: "Confirmed", title: "The meeting is explicitly exploratory", body: "Stephanie’s invite note says the purpose is to explore Marcom’s learning initiatives and fit, and that no demo will be included." },
+          { type: "Confirmed", title: "Four discovery themes were pre-seeded", body: "Learner volume, integrations, current solutions, and deadlines are already on the table." },
+          { type: "Inferred", title: "Buying stage is very early", body: "The lack of a demo and the basic discovery framing suggest this is still about qualification and shaping the problem." },
+          { type: "Open question", title: "What kind of learning business is this?", body: "The biggest missing piece is whether Marcom is serving employees, customers, members, partners, or a mixed audience." }
+        ],
+        accountSnapshot: {
+          fitLine: "ICP Fit: Moderate - There is clear interest in a learning conversation, but too little grounded detail to call the opportunity strong yet.",
+          timingSignals: [
+            "A 30-minute introductory call has already been booked - there is enough curiosity to create time now.",
+            "The invite framed specific discovery topics - the buyer is at least willing to compare current state, integrations, and deadlines.",
+            "No demo is planned - this is likely still a qualification and framing conversation, not a late-stage evaluation."
+          ],
+          read: "This is a real opening, but still a lightly grounded one. The main job here is to learn what kind of learning initiative Marcom is actually running and whether it maps to a D2L-style problem worth chasing. If the audience, current stack, and timeline are meaningful, the opportunity can sharpen quickly. If those answers stay vague, it may be better treated as a nurture path rather than an immediate sales motion.",
+          sellerNote: "Use the call to discover whether there is a defined learning program and business driver behind the meeting or just general curiosity."
+        },
+        contactAngle: {
+          buyerType: "Unknown (Low confidence)",
+          priorities: [
+            "Determining whether D2L is relevant at all - the intro framing suggests basic fit validation is still happening.",
+            "Understanding effort and complexity early - integrations and current tools were named before the meeting even happened.",
+            "Testing whether this is worth a deeper session - the call likely needs to earn the right to a follow-up."
+          ],
+          approach: "Keep the tone practical and lightly guided. Jennifer may not want a broad pitch; she may want help organizing the problem and seeing whether D2L belongs in the conversation. Give the call just enough structure that it feels useful, while staying genuinely curious about the learning motion behind the meeting.",
+          avoid: "Do not act as if this is a mature evaluation when the evidence still says early discovery."
+        },
+        valueAngles: [
+          {
+            name: "A platform that can grow with the learning motion",
+            proof: "If Marcom is trying to build or formalize a learning initiative, Brightspace can give them a foundation that supports growth in learners, programs, and reporting without forcing them into a short-term patchwork.",
+            why: "This is the safest strong angle when the exact audience and program shape are still unknown."
+          },
+          {
+            name: "Better learner experience without operational drag",
+            proof: "D2L is often most helpful when a team wants a more credible learner experience without adding admin chaos behind the scenes.",
+            why: "That connects to both learner volume and current-solution questions without overclaiming the specifics."
+          },
+          {
+            name: "Clearer visibility into what is working",
+            proof: "If Marcom needs to prove adoption, completion, or program value, Brightspace can help create a more measurable learning operation than a loose set of disconnected tools.",
+            why: "Reporting usually matters early once buyers start comparing current approaches to something more structured."
+          }
+        ],
+        discoveryQuestions: [
+          {
+            question: "When you say learning initiatives, who are the learners you have in mind right now: employees, customers, partners, or another audience?",
+            why: "This is the fastest way to understand what kind of problem you are actually selling into."
+          },
+          {
+            question: "What’s working well enough in your current setup, and where does it start to break down?",
+            why: "It separates mild curiosity from real friction."
+          },
+          {
+            question: "How many learners do you expect to support, and what about that scale feels important to plan for now?",
+            why: "Learner volume matters most when it changes the operational or experience requirements."
+          },
+          {
+            question: "Are integrations on the table because they are mandatory, or because you’re trying to avoid rework later?",
+            why: "This clarifies whether integrations are a present blocker or a future-proofing concern."
+          },
+          {
+            question: "If this conversation turns out to be useful, what would you want the next meeting to accomplish?",
+            why: "It helps you earn a next step that matches the buyer’s pace."
+          }
+        ],
+        objections: [
+          {
+            objection: "We’re really just exploring at this stage.",
+            counter: "That’s completely fine. We don’t need to force this into a buying process before it’s ready. If we can leave today with a clearer picture of the use case and whether a deeper session is worthwhile, that’s already a good outcome.",
+            followUp: "What would make this feel like a useful first conversation on your side?"
+          },
+          {
+            objection: "Our current tools may be enough for now.",
+            counter: "They may be. Usually the question is less whether the current setup works today and more whether it still works once the audience, reporting needs, or complexity picks up. That’s worth pressure-testing together.",
+            followUp: "Where do you think your current approach would start to strain first?"
+          },
+          {
+            objection: "We don’t have a clear timeline yet.",
+            counter: "That’s okay. A loose timeline is still useful to understand because it helps us figure out whether this should stay exploratory or whether there’s a real planning window coming into view.",
+            followUp: "Is there any event or internal milestone that could make this more urgent later this year?"
+          }
+        ],
+        opener: {
+          main: "Thanks for taking the time. My understanding is that this is meant to be a simple intro conversation to learn more about Marcom’s learning initiatives and see whether D2L is even worth a deeper look. I’d love to spend our time getting a clean read on who the learners are, what you’re using today, and what would need to be true for a next conversation to make sense.",
+          next: "If there’s enough signal after today, the natural next step would be a more focused working session around the highest-priority use case rather than a generic product walkthrough.",
+          soft: "And if it’s still too early, we can just leave with the few questions that are most worth clarifying on your side."
+        }
+      },
+      {
+        id: "prima",
+        account: "PRIMA",
+        accountShort: "PRIMA",
+        title: "PRIMA & D2L: Brief Chat",
+        contact: "Shaunda Ragland",
+        contactTitle: "Senior Director, Education and Training",
+        meetingType: "Intro call",
+        when: "Thursday, May 28, 2026",
+        time: "1:30 PM to 2:10 PM ET",
+        summary: "Introductory conversation with Shaunda Ragland at PRIMA. The email thread explicitly framed CE and credentialing for public sector risk professionals as the relevance hook.",
+        signalStrength: "Strong",
+        fit: { label: "Strong", percent: 88, reason: "Association education leader, clear CE and credentialing angle, and a highly aligned professional-learning audience." },
+        buyerPower: "High",
+        buyerType: "Program owner",
+        powerLabel: "High influence",
+        badges: ["External", "Strong fit", "Association education", "CE + credentialing"],
+        sourceNotes: "Confirmed from the email thread: Shaunda Ragland is Senior Director, Education and Training at the Public Risk Management Association. Pat’s outreach positioned D2L around CE and credentialing for public sector risk professionals, and Shaunda agreed to connect. The current meeting is a rescheduled version of that intro.",
+        prep: [
+          "Go in ready to talk PRIMA’s world, not just platform capability: niche professional audience, competency, CE, and credentialing pressure.",
+          "Prepare a clean association-learning story around member education, completion visibility, and operational flexibility.",
+          "Use the intro to learn whether PRIMA is actively reconsidering systems or simply exploring what stronger infrastructure could look like.",
+          "Be ready to ask how education, credentials, and member value connect inside PRIMA’s broader strategy."
+        ],
+        signals: [
+          { type: "Confirmed", title: "Shaunda owns education and training", body: "Her signature in the thread identifies her as Senior Director, Education and Training at PRIMA." },
+          { type: "Confirmed", title: "Pat opened on CE and credentialing", body: "The original outreach tied D2L directly to PRIMA’s niche public-sector risk audience and continuing education needs." },
+          { type: "Inferred", title: "The strongest route is role-relevant association language", body: "This buyer is likely to respond to member learning, credential pathways, and admin practicality more than broad edtech framing." },
+          { type: "Open question", title: "Exploration or active initiative?", body: "You still need to learn whether PRIMA is already facing platform strain or simply reacting to a relevant idea." }
+        ],
+        accountSnapshot: {
+          fitLine: "ICP Fit: Strong - PRIMA fits the association and credentialing profile well, and the conversation is already anchored in CE and professional education.",
+          timingSignals: [
+            "The buyer leading the conversation owns education and training - the meeting is tied to the right part of the organization.",
+            "Pat’s outreach landed on credentialing and CE - the message already connected to a plausible business problem.",
+            "The meeting was rescheduled, not dropped - interest appears intact even if timing shifted."
+          ],
+          read: "PRIMA looks like a high-quality association fit with a very believable D2L story. The combination of a niche professional audience, continuing education needs, and a senior education leader makes the conversation commercially relevant even before there is proof of an active replacement cycle. The main question is not whether the use case is real, but how urgent the current operational pain is. This call should focus on whether PRIMA’s education infrastructure is limiting growth, learner experience, or credentialing effectiveness today.",
+          sellerNote: "Listen for whether Shaunda describes education as a strategic growth lever, a member-service function under pressure, or an operational area that needs modernization."
+        },
+        contactAngle: {
+          buyerType: "Program owner (High confidence)",
+          priorities: [
+            "Supporting meaningful CE and training for a specialized professional audience - that is central to her remit and the outreach angle.",
+            "Making education operations manageable - senior program leaders usually care about both member experience and team lift.",
+            "Choosing tools that fit association complexity - niche credentialing and professional development programs often come with reporting and pathway nuance."
+          ],
+          approach: "Lead with respect for PRIMA’s audience and the responsibility of running education for a profession where competency actually matters. Shaunda is likely to appreciate specificity and relevance more than a polished company intro. Let her teach you where the current education model works, then connect D2L only where it clearly fits the pressures she names.",
+          avoid: "Do not flatten PRIMA into a generic association story or talk past the public-sector risk context."
+        },
+        valueAngles: [
+          {
+            name: "Support CE and credentialing with less friction",
+            proof: "Brightspace can help associations run professional learning and credential-related experiences in a way that feels cleaner for members and more manageable for the teams behind the scenes.",
+            why: "That is the clearest fit between D2L’s strengths and the problem Pat already named."
+          },
+          {
+            name: "Create a better member education experience for a niche audience",
+            proof: "D2L is well suited when the learning audience is specialized and the organization needs the experience to feel credible, structured, and easy to navigate rather than patched together.",
+            why: "PRIMA serves a specific professional community, which makes relevance and usability matter more."
+          },
+          {
+            name: "Give leaders clearer visibility into program performance",
+            proof: "If PRIMA is trying to understand participation, completion, or where members get stuck, Brightspace can provide a stronger reporting foundation than manual or fragmented workflows.",
+            why: "Education leaders often need clearer signals to improve programs and justify investment."
+          }
+        ],
+        discoveryQuestions: [
+          {
+            question: "How are you delivering CE and training for PRIMA members today, and where does that experience feel stronger or weaker than you want it to be?",
+            why: "This gets current state and pain on the table without sounding interrogative."
+          },
+          {
+            question: "What parts of the education operation take more manual work than they should right now?",
+            why: "Admin friction is often the most actionable early pain in association learning environments."
+          },
+          {
+            question: "When you think about member education over the next year or two, what are you hoping to improve most: reach, completion, reporting, credential pathways, or something else?",
+            why: "It surfaces the real outcome she is trying to drive."
+          },
+          {
+            question: "How much of this conversation is about improving what PRIMA already runs versus planning for new programs or growth?",
+            why: "You need to know whether the motion is optimization, expansion, or both."
+          },
+          {
+            question: "If this seems relevant after today, who else would you want involved in a deeper working conversation?",
+            why: "That reveals the stakeholder path early and helps shape the next meeting well."
+          }
+        ],
+        objections: [
+          {
+            objection: "We may not be looking to change systems right now.",
+            counter: "That’s okay. This doesn’t need to start as a replacement conversation. If there are parts of the education experience or operation that feel constrained, we can simply understand those and decide whether it’s worth going further.",
+            followUp: "Where do you feel the current approach is good enough, and where does it start to limit you?"
+          },
+          {
+            objection: "Our needs are pretty specialized.",
+            counter: "They probably are, and that’s part of why this is worth a real conversation. Associations with credentialing and professional education often look niche on the surface, but the underlying challenge is usually building a strong learner and admin experience without creating more complexity.",
+            followUp: "Which part of PRIMA’s model feels most unique from your perspective?"
+          },
+          {
+            objection: "This may just be an exploratory chat for now.",
+            counter: "That’s perfectly fine. If we can use the time to get a cleaner read on your education priorities and whether there’s a meaningful fit, that’s already a productive outcome.",
+            followUp: "What would make this feel like time well spent for you?"
+          }
+        ],
+        opener: {
+          main: "Thanks for making the time, Shaunda. When I reached out, the reason PRIMA stood out to me was the combination of a specialized professional audience and the kind of CE and credentialing work that tends to put real pressure on the platform behind it. I’d love to learn a bit more about how you’re running education today and see whether there’s a useful fit to explore further.",
+          next: "If the conversation points to a real opportunity, the next step I’d suggest is a deeper working session around PRIMA’s current education model and where the experience or operations feel most constrained.",
+          soft: "If it’s still early, we can simply use today to decide whether that kind of follow-up would be worthwhile."
+        }
+      },
+      {
+        id: "msae",
+        account: "MSAE",
+        accountShort: "MSAE",
+        title: "Patrick Ducoffe and Brittany Shideler",
+        contact: "Brittany Shideler",
+        contactTitle: "Director, Membership & Business Development",
+        meetingType: "Relationship call",
+        when: "Friday, May 29, 2026",
+        time: "11:30 AM to 12:00 PM ET",
+        summary: "Relationship-building call with Brittany Shideler at MSAE, following the membership handoff from Cameron and Brittany’s invitation to connect on goals, available engagement points, and where it makes sense for D2L to show up.",
+        signalStrength: "Strong",
+        fit: { label: "Moderate", percent: 68, reason: "Excellent association adjacency and network value, but the near-term motion looks more like relationship development than active LMS evaluation." },
+        buyerPower: "Medium",
+        buyerType: "Economic buyer / ecosystem owner",
+        powerLabel: "Medium influence",
+        badges: ["External", "Moderate fit", "Relationship call", "Association network"],
+        sourceNotes: "Confirmed from Brittany’s April 17 email: she welcomed Pat, offered to talk through goals, overview available options, and figure out where it makes sense to engage with MSAE. Her May 15 note highlighted Association Essentials, ad opportunities in the weekly Update, and keeping the Association Buyer’s Guide current. The original thread was a membership transfer from Cameron to Pat after D2L’s team change.",
+        prep: [
+          "Treat this as a relationship and ecosystem call first, not a direct pipeline call.",
+          "Know what D2L wants from MSAE this year: visibility, member relevance, partnerships, event presence, introductions, or a mix.",
+          "Have a concise association-market point of view in case Brittany asks how D2L typically shows up for groups like MSAE and its members.",
+          "Listen for where MSAE sees education, sponsorship, and member value intersect rather than trying to invent a product opportunity too early."
+        ],
+        signals: [
+          { type: "Confirmed", title: "Brittany owns membership and business development", body: "Her signature makes clear that she is the person to discuss how D2L engages with MSAE and its opportunities." },
+          { type: "Confirmed", title: "The meeting came from a handoff and welcome motion", body: "The original thread was about transferring MSAE relationship continuity from Cameron to Pat." },
+          { type: "Confirmed", title: "She is already surfacing engagement levers", body: "Her later email highlighted buyer’s guide visibility, advertising options, and association insight resources." },
+          { type: "Inferred", title: "This is about strategic presence more than immediate platform demand", body: "The strongest near-term value may be relationship depth, market intelligence, and smarter association-channel visibility." }
+        ],
+        accountSnapshot: {
+          fitLine: "ICP Fit: Moderate - MSAE is a strong association-market relationship, but the current call looks more like ecosystem development than active LMS evaluation.",
+          timingSignals: [
+            "The account relationship was formally handed over to Pat - there is a clear reason for the conversation now.",
+            "Brittany invited a goals and overview conversation - the meeting is meant to define how D2L should engage, not just reconnect casually.",
+            "Her recent note highlighted buyer’s guide, ads, and association content - there are concrete channels already on the table."
+          ],
+          read: "This meeting matters because MSAE can shape market presence, association learning intelligence, and future relationship leverage even if it does not immediately turn into a platform deal. Brittany appears to be the kind of contact who can help D2L understand where to show up, how to be relevant, and what member-facing opportunities are worth attention. The risk is treating the call like a direct product pitch and missing the broader business-development value. The best outcome is likely a stronger relationship map and one or two practical engagement paths.",
+          sellerNote: "Validate whether Brittany sees D2L primarily as a member/vendor partner, a thought-leadership contributor, a potential advertiser, or a future education-technology conversation."
+        },
+        contactAngle: {
+          buyerType: "Economic buyer / ecosystem owner (Medium confidence)",
+          priorities: [
+            "Driving member value through relevant partners and offers - that fits her membership and business-development remit.",
+            "Protecting MSAE’s brand and channel quality - she is likely selective about what feels useful versus salesy to members.",
+            "Creating engagement that supports attendance, awareness, or revenue - her later outreach focused on visibility channels and member touchpoints."
+          ],
+          approach: "Show up as a thoughtful partner, not a vendor looking for a shortcut. Brittany is likely to respond well to clear intent, practical questions, and signs that you care how MSAE actually creates value for members. If a product conversation emerges naturally, great, but the first win is understanding how D2L can engage in ways that are relevant and welcome.",
+          avoid: "Do not force this into a product-discovery script when the call is clearly positioned as a relationship-and-goals conversation."
+        },
+        valueAngles: [
+          {
+            name: "Association learning relevance with real market empathy",
+            proof: "D2L can bring a credible point of view on how associations use education, credentialing, and professional learning to serve members and grow non-dues value, which can make D2L a more relevant voice inside MSAE’s ecosystem.",
+            why: "That aligns with Brittany’s business-development lens better than a product-first message."
+          },
+          {
+            name: "A partner who understands member education motions",
+            proof: "Where MSAE members are wrestling with training, certification, or learning experience challenges, D2L can be positioned as a thoughtful education-technology partner rather than a generic LMS brand.",
+            why: "It connects D2L’s strengths to the membership context without assuming an immediate deal."
+          },
+          {
+            name: "Better visibility into the right association touchpoints",
+            proof: "A strong conversation with Brittany can help D2L decide where buyer’s guide presence, ads, events, or thought leadership actually matter instead of spreading effort too thin.",
+            why: "That is a practical business outcome from this call even if no direct opportunity surfaces."
+          }
+        ],
+        discoveryQuestions: [
+          {
+            question: "When you think about the partners who engage best with MSAE, what do they do that actually feels useful to your members?",
+            why: "This tells you how Brittany judges relevance and what kind of presence D2L should aim for."
+          },
+          {
+            question: "From your side, where do you see the strongest overlap between MSAE’s member needs and the kinds of education or learning conversations D2L tends to have?",
+            why: "It invites Brittany to connect the dots instead of forcing the premise."
+          },
+          {
+            question: "If D2L wanted to be more intentional about showing up this year, which channels or moments would you look at first?",
+            why: "That turns the conversation toward practical next steps."
+          },
+          {
+            question: "How do you usually decide whether something belongs in buyer’s guide visibility, event presence, content partnership, or a different lane altogether?",
+            why: "It helps you understand the internal logic behind MSAE engagement options."
+          },
+          {
+            question: "What would make this conversation feel useful enough that it leads to a clear next move for both sides?",
+            why: "It keeps the call outcome concrete without pushing too hard."
+          }
+        ],
+        objections: [
+          {
+            objection: "This may be more about general membership engagement than a direct opportunity.",
+            counter: "That’s completely fine. A good outcome here doesn’t have to be a product conversation. If we can get clearer on where D2L can show up in ways that are genuinely relevant to MSAE and its members, that’s worthwhile in its own right.",
+            followUp: "Which kinds of engagement tend to produce the most value from your point of view?"
+          },
+          {
+            objection: "Our members get pitched by a lot of vendors.",
+            counter: "I believe it, and I’d rather avoid adding to that noise. The goal on my side is to understand where D2L can be useful and where we should stay disciplined, not just find another place to put our logo.",
+            followUp: "What separates a helpful partner presence from a generic vendor one for your members?"
+          },
+          {
+            objection: "It may be too early to define anything specific.",
+            counter: "No problem. Even a lighter conversation can still help us sort out where there is real relevance and where we shouldn’t overreach. That kind of clarity is useful too.",
+            followUp: "What would you want us to understand first before we talk about any specific engagement?"
+          }
+        ],
+        opener: {
+          main: "Thanks for making the time, Brittany. Since this relationship was just handed over to me, my main goal today is pretty simple: understand how you think about MSAE’s member and partner ecosystem, what kinds of engagement are actually useful, and where it might make sense for D2L to show up in a more intentional way.",
+          next: "If it feels like there’s a good lane for us, I’d love to leave with one or two concrete next steps, whether that’s a member-facing channel, an event, or a better way to stay plugged into the association conversation.",
+          soft: "And if today is mostly about orientation, that’s useful too. I’d still rather get the map right before we try to do too much."
+        }
+      }
+    ];
+
+    const progressLabels = [
+      "Account read",
+      "Contact read",
+      "Value angles",
+      "Discovery draft",
+      "Objection prep",
+      "Final opener"
+    ];
+
+    const state = {
+      activeId: briefs[0].id,
+      history: JSON.parse(localStorage.getItem("briefHistory") || "[]")
+    };
+
+    const meetingList = document.getElementById("meetingList");
+    const historyList = document.getElementById("historyList");
+    const activeBadges = document.getElementById("activeBadges");
+    const briefDate = document.getElementById("briefDate");
+    const briefTitle = document.getElementById("briefTitle");
+    const briefSummary = document.getElementById("briefSummary");
+    const progressMessage = document.getElementById("progressMessage");
+    const progressSteps = document.getElementById("progressSteps");
+    const contentStack = document.getElementById("contentStack");
+    const supportStack = document.getElementById("supportStack");
+    const copyAllButton = document.getElementById("copyAll");
+    const globalCopyNote = document.getElementById("globalCopyNote");
+
+    function toPlainText(brief) {
+      const lines = [
+        `${brief.title}`,
+        `${brief.when} | ${brief.time}`,
+        `${brief.contact} | ${brief.contactTitle}`,
+        "",
+        "Account Snapshot",
+        `ICP Fit: ${brief.accountSnapshot.fitLine.replace("ICP Fit: ", "")}`,
+        "Timing Signals:",
+        ...brief.accountSnapshot.timingSignals.map((item, index) => `${index + 1}. ${item}`),
+        "Account Read:",
+        brief.accountSnapshot.read,
+        "Seller Note:",
+        brief.accountSnapshot.sellerNote,
+        "",
+        "Contact Angle",
+        `Buyer Type: ${brief.contactAngle.buyerType}`,
+        "Likely Priorities:",
+        ...brief.contactAngle.priorities.map((item, index) => `${index + 1}. ${item}`),
+        "Approach Note:",
+        brief.contactAngle.approach,
+        "What To Avoid:",
+        brief.contactAngle.avoid,
+        "",
+        "D2L Value Angles",
+        ...brief.valueAngles.flatMap((item, index) => [
+          `${index + 1}. ${item.name}`,
+          `Proof point: ${item.proof}`,
+          `Why it fits: ${item.why}`
+        ]),
+        "",
+        "Discovery Questions",
+        ...brief.discoveryQuestions.flatMap((item, index) => [
+          `${index + 1}. ${item.question}`,
+          `Why this matters: ${item.why}`
+        ]),
+        "",
+        "Likely Objections",
+        ...brief.objections.flatMap((item, index) => [
+          `${index + 1}. Objection: ${item.objection}`,
+          `Counter: ${item.counter}`,
+          `Follow-up: ${item.followUp}`
+        ]),
+        "",
+        "Opener + Next Step Ask",
+        "Opener:",
+        brief.opener.main,
+        "Next Step Ask:",
+        brief.opener.next,
+        "Optional Softer Version:",
+        brief.opener.soft
+      ];
+      return lines.join("\n");
+    }
+
+    function updateHistory(id) {
+      state.history = [id, ...state.history.filter(item => item !== id)].slice(0, 3);
+      localStorage.setItem("briefHistory", JSON.stringify(state.history));
+    }
+
+    function renderMeetingList() {
+      meetingList.innerHTML = briefs.map(brief => `
+        <button class="meeting-button ${brief.id === state.activeId ? "active" : ""}" data-brief-id="${brief.id}">
+          <div class="meeting-topline">
+            <div class="meeting-title">${brief.accountShort} | ${brief.contact}</div>
+            <span class="pill ${brief.signalStrength.toLowerCase()}">${brief.signalStrength}</span>
+          </div>
+          <div class="meeting-meta">${brief.when}<br>${brief.time}<br>${brief.meetingType}</div>
+        </button>
+      `).join("");
+    }
+
+    function renderHistory() {
+      const items = state.history
+        .map(id => briefs.find(brief => brief.id === id))
+        .filter(Boolean);
+
+      if (!items.length) {
+        historyList.innerHTML = `<p class="empty-history">Open briefs and your last three views will stay here for quick switching.</p>`;
+        return;
+      }
+
+      historyList.innerHTML = items.map(brief => `
+        <button class="history-button" data-brief-id="${brief.id}">
+          <div class="history-topline">
+            <div class="history-title">${brief.accountShort}</div>
+            <span class="pill external">Viewed</span>
+          </div>
+          <div class="history-meta">${brief.contact}<br>${brief.meetingType}</div>
+        </button>
+      `).join("");
+    }
+
+    function renderProgress() {
+      progressSteps.innerHTML = progressLabels.map(label => `
+        <div class="step">
+          <div class="step-bar"><span></span></div>
+          <div class="step-label">${label}</div>
+        </div>
+      `).join("");
+    }
+
+    function powerClass(brief) {
+      if (brief.buyerPower === "High") return "power-high";
+      if (brief.buyerPower === "Medium") return "power-medium";
+      return "power-low";
+    }
+
+    function sectionCard(title, body, key, delay = "delay-0") {
+      return `
+        <section class="section-card reveal ${delay}" data-section="${key}">
+          <div class="section-head">
+            <h3>${title}</h3>
+            <button class="copy-action" data-copy-section="${key}">Copy section</button>
+          </div>
+          ${body}
+          <div class="copy-note" data-copy-note="${key}"></div>
+        </section>
+      `;
+    }
+
+    function renderBrief() {
+      const brief = briefs.find(item => item.id === state.activeId);
+      updateHistory(brief.id);
+      renderMeetingList();
+      renderHistory();
+      activeBadges.innerHTML = brief.badges.map((badge, index) => {
+        const cls = index === 0 ? "external" : index === 1 ? (brief.fit.label === "Strong" ? "strong" : "moderate") : "";
+        return `<span class="pill ${cls}">${badge}</span>`;
+      }).join("");
+      briefDate.textContent = `${brief.when} | ${brief.time}`;
+      briefTitle.textContent = `${brief.account} | ${brief.contact}`;
+      briefSummary.textContent = brief.summary;
+
+      progressMessage.textContent = `Building ${brief.accountShort} brief…`;
+      renderProgress();
+
+      contentStack.innerHTML = [
+        sectionCard("Account Snapshot", `
+          <div class="fit-line">${brief.accountSnapshot.fitLine}</div>
+          <div class="fit-meter" style="--fit-width:${brief.fit.percent}%">
+            <div class="fit-track"><div class="fit-fill"></div></div>
+            <div class="fit-meta">
+              <span>${brief.fit.reason}</span>
+              <strong>${brief.fit.percent}%</strong>
+            </div>
+          </div>
+          <ul class="number-list">
+            ${brief.accountSnapshot.timingSignals.map(item => `<li><span>${item}</span></li>`).join("")}
+          </ul>
+          <div class="detail-list" style="margin-top:12px;">
+            <div class="detail-item">
+              <strong>Account Read</strong>
+              <p>${brief.accountSnapshot.read}</p>
+            </div>
+            <div class="detail-item">
+              <strong>Seller Note</strong>
+              <p>${brief.accountSnapshot.sellerNote}</p>
+            </div>
+          </div>
+        `, "account", "delay-1"),
+        sectionCard("Contact Angle", `
+          <div class="section-head" style="padding:0; margin:0 0 14px; border:0;">
+            <div>
+              <p class="muted-copy" style="margin-bottom:8px;"><strong>Buyer Type:</strong> ${brief.contactAngle.buyerType}</p>
+            </div>
+            <div class="buyer-badge">
+              <span class="small-label">Buyer Power</span>
+              <strong class="${powerClass(brief)}">${brief.buyerPower}</strong>
+              <span class="muted-copy">${brief.powerLabel}</span>
+            </div>
+          </div>
+          <ul class="number-list">
+            ${brief.contactAngle.priorities.map(item => `<li><span>${item}</span></li>`).join("")}
+          </ul>
+          <div class="detail-list" style="margin-top:12px;">
+            <div class="detail-item">
+              <strong>Approach Note</strong>
+              <p>${brief.contactAngle.approach}</p>
+            </div>
+            <div class="detail-item">
+              <strong>What To Avoid</strong>
+              <p>${brief.contactAngle.avoid}</p>
+            </div>
+          </div>
+        `, "contact", "delay-2"),
+        sectionCard("D2L Value Angles", `
+          <div class="value-list">
+            ${brief.valueAngles.map((item, index) => `
+              <div class="value-item">
+                <strong>${index + 1}. ${item.name}</strong>
+                <p><span class="muted-copy">Proof point:</span> ${item.proof}</p>
+                <p style="margin-top:8px;"><span class="muted-copy">Why it fits:</span> ${item.why}</p>
+              </div>
+            `).join("")}
+          </div>
+        `, "value", "delay-3"),
+        sectionCard("Discovery Questions", `
+          <div class="question-list">
+            ${brief.discoveryQuestions.map((item, index) => `
+              <div class="question-item" data-question>
+                <div class="question-top">
+                  <strong>${index + 1}. ${item.question}</strong>
+                  <button class="rationale-toggle" data-rationale-toggle>Why this matters</button>
+                </div>
+                <div class="rationale">${item.why}</div>
+              </div>
+            `).join("")}
+          </div>
+        `, "discovery", "delay-4"),
+        sectionCard("Likely Objections", `
+          <div class="objection-list">
+            ${brief.objections.map((item, index) => `
+              <div class="objection-item">
+                <strong>${index + 1}. Objection: ${item.objection}</strong>
+                <p><span class="muted-copy">Counter:</span> ${item.counter}</p>
+                <p style="margin-top:8px;"><span class="muted-copy">Follow-up:</span> ${item.followUp}</p>
+              </div>
+            `).join("")}
+          </div>
+        `, "objections", "delay-5"),
+        sectionCard("Opener + Next Step Ask", `
+          <div class="script-block">
+            <div>
+              <strong>Opener</strong>
+              <p>${brief.opener.main}</p>
+            </div>
+            <div>
+              <strong>Next Step Ask</strong>
+              <p>${brief.opener.next}</p>
+            </div>
+            <div>
+              <strong>Optional Softer Version</strong>
+              <p>${brief.opener.soft}</p>
+            </div>
+          </div>
+        `, "opener", "delay-6")
+      ].join("");
+
+      supportStack.innerHTML = `
+        <section class="support-card accent-teal reveal delay-0" data-section="signals">
+          <div class="support-head">
+            <h3>Call Signals</h3>
+            <button class="copy-action" data-copy-section="signals">Copy section</button>
+          </div>
+          <div class="signal-list">
+            ${brief.signals.map(item => `
+              <div class="signal-item">
+                <strong>${item.title} <span class="signal-tag">${item.type}</span></strong>
+                <p>${item.body}</p>
+              </div>
+            `).join("")}
+          </div>
+          <div class="copy-note" data-copy-note="signals"></div>
+        </section>
+
+        <section class="support-card accent-gold reveal delay-1" data-section="context">
+          <div class="support-head">
+            <h3>Grounding Notes</h3>
+            <button class="copy-action" data-copy-section="context">Copy section</button>
+          </div>
+          <textarea class="context-box" id="contextBox">${brief.sourceNotes}</textarea>
+          <div class="character-meter" id="characterMeter">
+            <span>Context length</span>
+            <span id="characterCount"></span>
+          </div>
+          <div class="copy-note" data-copy-note="context"></div>
+        </section>
+
+        <section class="support-card accent-rust reveal delay-2" data-section="prep">
+          <div class="support-head">
+            <h3>Prep Checklist</h3>
+            <button class="copy-action" data-copy-section="prep">Copy section</button>
+          </div>
+          <div class="prep-list">
+            ${brief.prep.map((item, index) => `
+              <label class="prep-item">
+                <input type="checkbox" data-prep="${brief.id}-${index}">
+                <span>${item}</span>
+              </label>
+            `).join("")}
+          </div>
+          <div class="copy-note" data-copy-note="prep"></div>
+        </section>
+      `;
+
+      hydrateInteractions(brief);
+      runProgressSequence();
+      requestAnimationFrame(() => {
+        const meter = document.querySelector(".fit-meter");
+        if (meter) meter.classList.add("ready");
+      });
+    }
+
+    function runProgressSequence() {
+      const steps = [...progressSteps.querySelectorAll(".step")];
+      const notes = [
+        "Reading account signals…",
+        "Framing the buyer angle…",
+        "Drafting the value story…",
+        "Sharpening discovery…",
+        "Pressure-testing objections…",
+        "Landing the opener…"
+      ];
+
+      steps.forEach(step => step.className = "step");
+
+      notes.forEach((note, index) => {
+        setTimeout(() => {
+          progressMessage.textContent = note;
+          steps.forEach((step, stepIndex) => {
+            step.classList.toggle("complete", stepIndex < index);
+            step.classList.toggle("active", stepIndex === index);
+          });
+          if (index === notes.length - 1) {
+            setTimeout(() => {
+              steps.forEach(step => {
+                step.classList.remove("active");
+                step.classList.add("complete");
+              });
+              progressMessage.textContent = "Brief ready to review.";
+            }, 240);
+          }
+        }, index * 170);
+      });
+    }
+
+    function copyText(text, noteElement) {
+      navigator.clipboard.writeText(text).then(() => {
+        if (noteElement) {
+          noteElement.textContent = "Copied.";
+          setTimeout(() => { noteElement.textContent = ""; }, 1400);
+        } else {
+          globalCopyNote.textContent = "Copied.";
+          setTimeout(() => { globalCopyNote.textContent = ""; }, 1400);
+        }
+      });
+    }
+
+    function getSectionText(brief, key) {
+      switch (key) {
+        case "account":
+          return [
+            "Account Snapshot",
+            brief.accountSnapshot.fitLine,
+            "Timing Signals:",
+            ...brief.accountSnapshot.timingSignals.map((item, index) => `${index + 1}. ${item}`),
+            "Account Read:",
+            brief.accountSnapshot.read,
+            "Seller Note:",
+            brief.accountSnapshot.sellerNote
+          ].join("\n");
+        case "contact":
+          return [
+            "Contact Angle",
+            `Buyer Type: ${brief.contactAngle.buyerType}`,
+            "Likely Priorities:",
+            ...brief.contactAngle.priorities.map((item, index) => `${index + 1}. ${item}`),
+            "Approach Note:",
+            brief.contactAngle.approach,
+            "What To Avoid:",
+            brief.contactAngle.avoid
+          ].join("\n");
+        case "value":
+          return [
+            "D2L Value Angles",
+            ...brief.valueAngles.flatMap((item, index) => [
+              `${index + 1}. ${item.name}`,
+              `Proof point: ${item.proof}`,
+              `Why it fits: ${item.why}`
+            ])
+          ].join("\n");
+        case "discovery":
+          return [
+            "Discovery Questions",
+            ...brief.discoveryQuestions.flatMap((item, index) => [
+              `${index + 1}. ${item.question}`,
+              `Why this matters: ${item.why}`
+            ])
+          ].join("\n");
+        case "objections":
+          return [
+            "Likely Objections",
+            ...brief.objections.flatMap((item, index) => [
+              `${index + 1}. Objection: ${item.objection}`,
+              `Counter: ${item.counter}`,
+              `Follow-up: ${item.followUp}`
+            ])
+          ].join("\n");
+        case "opener":
+          return [
+            "Opener + Next Step Ask",
+            "Opener:",
+            brief.opener.main,
+            "Next Step Ask:",
+            brief.opener.next,
+            "Optional Softer Version:",
+            brief.opener.soft
+          ].join("\n");
+        case "signals":
+          return [
+            "Call Signals",
+            ...brief.signals.map(item => `${item.type}: ${item.title}\n${item.body}`)
+          ].join("\n\n");
+        case "context":
+          return `Grounding Notes\n${document.getElementById("contextBox").value}`;
+        case "prep":
+          return [
+            "Prep Checklist",
+            ...brief.prep.map((item, index) => `${index + 1}. ${item}`)
+          ].join("\n");
+        default:
+          return "";
+      }
+    }
+
+    function hydrateInteractions(brief) {
+      document.querySelectorAll("[data-rationale-toggle]").forEach(button => {
+        button.addEventListener("click", () => {
+          const item = button.closest("[data-question]");
+          item.classList.toggle("open");
+          button.textContent = item.classList.contains("open") ? "Hide rationale" : "Why this matters";
+        });
+      });
+
+      document.querySelectorAll("[data-copy-section]").forEach(button => {
+        button.addEventListener("click", () => {
+          const key = button.getAttribute("data-copy-section");
+          const note = document.querySelector(`[data-copy-note="${key}"]`);
+          copyText(getSectionText(brief, key), note);
+        });
+      });
+
+      const contextBox = document.getElementById("contextBox");
+      const characterCount = document.getElementById("characterCount");
+      const characterMeter = document.getElementById("characterMeter");
+      const syncCounter = () => {
+        const count = contextBox.value.length;
+        characterCount.textContent = `${count} characters`;
+        const warn = count >= 400;
+        contextBox.classList.toggle("warn", warn);
+        characterMeter.classList.toggle("warn", warn);
+      };
+      contextBox.addEventListener("input", syncCounter);
+      syncCounter();
+
+      document.querySelectorAll("[data-prep]").forEach(box => {
+        const key = box.getAttribute("data-prep");
+        box.checked = localStorage.getItem(key) === "true";
+        box.addEventListener("change", () => {
+          localStorage.setItem(key, String(box.checked));
+        });
+      });
+    }
+
+    meetingList.addEventListener("click", event => {
+      const button = event.target.closest("[data-brief-id]");
+      if (!button) return;
+      state.activeId = button.getAttribute("data-brief-id");
+      renderBrief();
+    });
+
+    historyList.addEventListener("click", event => {
+      const button = event.target.closest("[data-brief-id]");
+      if (!button) return;
+      state.activeId = button.getAttribute("data-brief-id");
+      renderBrief();
+    });
+
+    copyAllButton.addEventListener("click", () => {
+      const brief = briefs.find(item => item.id === state.activeId);
+      copyText(toPlainText(brief));
+    });
+
+    renderMeetingList();
+    renderHistory();
+    renderBrief();
+  </script>
+</body>
+</html>

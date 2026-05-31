@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Call Brief | PRIMA & D2L</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@500;700;800&display=swap");
+
+    :root {
+      --bg: #f5efe5;
+      --bg-deep: #10353a;
+      --panel: rgba(255, 251, 246, 0.84);
+      --panel-strong: #fff9f1;
+      --line: rgba(16, 53, 58, 0.15);
+      --text: #16363a;
+      --muted: #5e6f73;
+      --accent: #d76638;
+      --accent-soft: rgba(215, 102, 56, 0.14);
+      --teal: #0f7c78;
+      --gold: #c4932d;
+      --olive: #7f8f44;
+      --danger: #b35336;
+      --shadow: 0 24px 60px rgba(16, 53, 58, 0.12);
+      --radius: 18px;
+      --content-width: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Syne", "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(212, 148, 52, 0.22), transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(15, 124, 120, 0.22), transparent 28%),
+        linear-gradient(180deg, #f8f1e7 0%, #efe7da 52%, #f6f1e8 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(16, 53, 58, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 53, 58, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 86%);
+    }
+
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 249, 241, 0.82);
+      border: 1px solid rgba(16, 53, 58, 0.08);
+      backdrop-filter: blur(18px);
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .eyebrow .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 6px rgba(15, 124, 120, 0.1);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button,
+    .mini-chip {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: var(--bg-deep);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(16, 53, 58, 0.18);
+    }
+
+    .secondary {
+      background: rgba(255, 251, 246, 0.9);
+      color: var(--text);
+      border: 1px solid rgba(16, 53, 58, 0.12);
+    }
+
+    .hero {
+      padding: 28px;
+      border-radius: 28px;
+      background:
+        linear-gradient(135deg, rgba(16, 53, 58, 0.96), rgba(16, 53, 58, 0.84)),
+        linear-gradient(135deg, rgba(215, 102, 56, 0.55), rgba(196, 147, 45, 0.3));
+      color: #fdf8f2;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8% -25% auto;
+      width: 320px;
+      height: 320px;
+      border-radius: 38% 62% 56% 44%;
+      background: linear-gradient(160deg, rgba(212, 148, 52, 0.28), rgba(215, 102, 56, 0.08));
+      transform: rotate(14deg);
+      opacity: 0.85;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+      gap: 20px;
+      align-items: end;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 4vw, 4.2rem);
+      line-height: 0.96;
+      max-width: 9ch;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 64ch;
+      color: rgba(253, 248, 242, 0.84);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .hero-notes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-self: stretch;
+    }
+
+    .hero-note {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      min-height: 88px;
+    }
+
+    .hero-note strong,
+    .metric strong,
+    .copy-note strong,
+    .section-heading strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.76;
+      margin-bottom: 7px;
+    }
+
+    .hero-note span,
+    .metric span {
+      font-size: 1rem;
+      line-height: 1.35;
+      display: block;
+    }
+
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 0;
+    }
+
+    .metric {
+      padding: 18px 18px 16px;
+      border-radius: 18px;
+      background: rgba(255, 251, 246, 0.82);
+      border: 1px solid rgba(16, 53, 58, 0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 16px 38px rgba(16, 53, 58, 0.08);
+    }
+
+    .metric .mono {
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.75fr);
+      gap: 20px;
+      margin-top: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid rgba(16, 53, 58, 0.08);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 20px 22px 0;
+    }
+
+    .panel-header h2 {
+      font-size: 1.15rem;
+    }
+
+    .history {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .history button {
+      background: rgba(16, 53, 58, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(16, 53, 58, 0.1);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+    }
+
+    .history button.active {
+      background: var(--bg-deep);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .composer {
+      padding: 20px 22px 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field,
+    .context-panel,
+    .section,
+    .side-block {
+      background: rgba(255, 253, 249, 0.78);
+      border: 1px solid rgba(16, 53, 58, 0.08);
+      border-radius: 18px;
+    }
+
+    .field {
+      padding: 14px;
+      min-height: 98px;
+    }
+
+    .field label,
+    .context-panel label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .field .value {
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-chip {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(15, 124, 120, 0.08);
+      color: var(--teal);
+      border: 1px solid rgba(15, 124, 120, 0.14);
+      font-size: 0.83rem;
+    }
+
+    .context-panel {
+      padding: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 142px;
+      resize: vertical;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      line-height: 1.55;
+      outline: none;
+      padding: 0;
+    }
+
+    .counter-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      margin-top: 12px;
+    }
+
+    .counter-row.warning {
+      color: #8a5700;
+    }
+
+    .counter-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(16, 53, 58, 0.05);
+    }
+
+    .counter-row.warning .counter-pill {
+      background: rgba(196, 147, 45, 0.18);
+    }
+
+    .brief {
+      padding: 0 22px 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .progress {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 249, 241, 0.9), rgba(255, 244, 232, 0.82));
+      border: 1px solid rgba(16, 53, 58, 0.08);
+    }
+
+    .progress-line {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(16, 53, 58, 0.08);
+      background: rgba(255, 255, 255, 0.74);
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .step small {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .step span {
+      font-size: 0.94rem;
+      line-height: 1.35;
+    }
+
+    .step.done {
+      background: rgba(15, 124, 120, 0.1);
+      border-color: rgba(15, 124, 120, 0.26);
+    }
+
+    .step.active {
+      background: rgba(215, 102, 56, 0.12);
+      border-color: rgba(215, 102, 56, 0.24);
+      transform: translateY(-2px);
+    }
+
+    .brief-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section {
+      padding: 18px;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: reveal 560ms cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+      box-shadow: 0 12px 24px rgba(16, 53, 58, 0.05);
+    }
+
+    .delay-1 { animation-delay: 120ms; }
+    .delay-2 { animation-delay: 220ms; }
+    .delay-3 { animation-delay: 320ms; }
+    .delay-4 { animation-delay: 420ms; }
+    .delay-5 { animation-delay: 520ms; }
+    .delay-6 { animation-delay: 620ms; }
+    .delay-7 { animation-delay: 720ms; }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-heading {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .section-heading h3 {
+      font-size: 1.3rem;
+    }
+
+    .copy-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .copy-btn {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(16, 53, 58, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(16, 53, 58, 0.1);
+      font-size: 0.84rem;
+    }
+
+    .copy-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(15, 124, 120, 0.08);
+      color: var(--teal);
+      font-size: 0.82rem;
+    }
+
+    .fit-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fit-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .fit-header strong {
+      font-size: 1.1rem;
+    }
+
+    .fit-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(16, 53, 58, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .fit-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      transition: width 900ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .list,
+    .numbered,
+    .qa-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .numbered li,
+    .list li,
+    .qa {
+      padding: 12px 0 0;
+      border-top: 1px solid rgba(16, 53, 58, 0.08);
+    }
+
+    .numbered li:first-child,
+    .list li:first-child,
+    .qa:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .numbered .idx {
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      color: var(--accent);
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .buyer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      border: 1px solid transparent;
+    }
+
+    .badge.high {
+      background: rgba(127, 143, 68, 0.16);
+      color: #52640d;
+      border-color: rgba(127, 143, 68, 0.25);
+    }
+
+    .badge.medium {
+      background: rgba(196, 147, 45, 0.16);
+      color: #7a5600;
+      border-color: rgba(196, 147, 45, 0.24);
+    }
+
+    .badge.low {
+      background: rgba(179, 83, 54, 0.14);
+      color: #893723;
+      border-color: rgba(179, 83, 54, 0.24);
+    }
+
+    .angle-title,
+    .objection-title {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .qa button {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+    }
+
+    .qa .question-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .caret {
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .qa .answer {
+      display: none;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+
+    .qa.open .answer {
+      display: block;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .accent-top-1 {
+      border-top: 5px solid var(--accent);
+    }
+
+    .accent-top-2 {
+      border-top: 5px solid var(--teal);
+    }
+
+    .side-column {
+      display: grid;
+      gap: 16px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .side-block {
+      padding: 18px;
+      box-shadow: 0 12px 24px rgba(16, 53, 58, 0.05);
+    }
+
+    .side-block h3 {
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
+    .kv {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+    }
+
+    .kv div {
+      padding-top: 12px;
+      border-top: 1px solid rgba(16, 53, 58, 0.08);
+    }
+
+    .kv div:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .kv dt {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .kv dd {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .checklist {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 0 0;
+      border-top: 1px solid rgba(16, 53, 58, 0.08);
+    }
+
+    .checklist li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .checklist input {
+      margin-top: 3px;
+      accent-color: var(--teal);
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .status-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .status-list li {
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(16, 53, 58, 0.04);
+      border: 1px solid rgba(16, 53, 58, 0.08);
+    }
+
+    .source-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .source-line strong {
+      font-size: 0.98rem;
+    }
+
+    .footer-note {
+      padding: 12px 0 0;
+      border-top: 1px solid rgba(16, 53, 58, 0.08);
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .board {
+        grid-template-columns: 1fr;
+      }
+
+      .side-column {
+        position: static;
+      }
+
+      .strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .progress-line,
+      .bottom-grid,
+      .grid-2,
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 22px 14px 40px;
+      }
+
+      .hero {
+        padding: 20px;
+      }
+
+      .hero-notes,
+      .strip {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 12vw, 3rem);
+        max-width: none;
+      }
+
+      .panel-header,
+      .composer,
+      .brief {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        <span>Calendar-anchored brief for Thu, May 14, 2026 at 1:30 PM EDT</span>
+      </div>
+      <div class="action-row">
+        <button class="secondary" id="copyAllBtn">Copy Full Brief</button>
+        <button class="primary" id="replayBtn">Replay Build</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>PRIMA &amp; D2L</h1>
+          <p>
+            This brief is anchored on your upcoming meeting with Shaunda Ragland and sharpened with the most relevant nearby email thread.
+            Zoom did not surface a clearly related prior PRIMA meeting, so the call should be treated as a fresh discovery conversation with a warm opening.
+          </p>
+        </div>
+        <div class="hero-notes">
+          <div class="hero-note">
+            <strong>Meeting</strong>
+            <span>Brief Chat</span>
+            <span class="muted">May 14, 2026 • 1:30 to 2:10 PM EDT</span>
+          </div>
+          <div class="hero-note">
+            <strong>Primary Contact</strong>
+            <span>Shaunda Ragland, MPA</span>
+            <span class="muted">Senior Director, Education and Training</span>
+          </div>
+          <div class="hero-note">
+            <strong>Account</strong>
+            <span>Public Risk Management Association</span>
+            <span class="muted">Association / member education</span>
+          </div>
+          <div class="hero-note">
+            <strong>Motion</strong>
+            <span>Early discovery</span>
+            <span class="muted">Good role fit, limited urgency proof</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="strip">
+      <div class="metric">
+        <strong>Anchor Signal</strong>
+        <span>Shaunda accepted the invite.</span>
+        <div class="mono">Rod Bryce invited • no response yet</div>
+      </div>
+      <div class="metric">
+        <strong>Email Signal</strong>
+        <span>Positive response to CE and credentialing outreach.</span>
+        <div class="mono">Thread active on May 5 and May 6</div>
+      </div>
+      <div class="metric">
+        <strong>Zoom Signal</strong>
+        <span>No clearly related prior PRIMA meeting found.</span>
+        <div class="mono">Treat this as a fresh first call</div>
+      </div>
+      <div class="metric">
+        <strong>Best Next Step</strong>
+        <span>Earn a deeper workflow session if pain is real.</span>
+        <div class="mono">Map process, reporting, and learner friction</div>
+      </div>
+    </section>
+
+    <div class="board">
+      <main class="panel">
+        <div class="panel-header">
+          <h2>Brief Workspace</h2>
+          <div class="history" id="historyTabs"></div>
+        </div>
+
+        <div class="composer">
+          <div class="field-grid">
+            <div class="field">
+              <label>Source-informed context</label>
+              <div class="value">
+                PRIMA accepted a brief chat after outreach focused on CE and credentialing for public sector risk professionals.
+                Contact is the senior education leader.
+              </div>
+              <div class="chips">
+                <span class="mini-chip">Calendar anchor</span>
+                <span class="mini-chip">Relevant email thread found</span>
+                <span class="mini-chip">No prior Zoom evidence</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Likely meeting type</label>
+              <div class="value">
+                Intro/discovery conversation with a program owner who likely sits close to both learner experience and operational delivery.
+              </div>
+              <div class="chips">
+                <span class="mini-chip">Association fit</span>
+                <span class="mini-chip">Early-stage qualification</span>
+                <span class="mini-chip">Low-pressure next step</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="context-panel">
+            <label for="manualContext">Manual context notes</label>
+            <textarea id="manualContext">Pat's outreach framed the conversation around CE and credentialing for public sector risk professionals. Shaunda replied quickly, agreed to a call next week, and later said she looked forward to the chat. No clear evidence yet of an active LMS search or funded project. Treat the meeting as a discovery pass focused on current-state friction, learner experience, and whether a deeper working session is warranted.</textarea>
+            <div class="counter-row" id="counterRow">
+              <span id="counterHint">Keep notes sharp so the brief stays crisp.</span>
+              <span class="counter-pill"><span id="charCount">0</span> chars</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="brief">
+          <div class="progress">
+            <div class="source-line">
+              <strong>Build Progress</strong>
+              <span class="muted" id="progressText">Sequencing the brief from account read through opener.</span>
+            </div>
+            <div class="progress-line" id="progressLine"></div>
+          </div>
+
+          <div class="brief-grid" id="briefGrid"></div>
+        </div>
+      </main>
+
+      <aside class="side-column">
+        <section class="side-block delay-1">
+          <h3>Meeting Anchor</h3>
+          <dl class="kv">
+            <div>
+              <dt>Title</dt>
+              <dd>PRIMA &amp; D2L: Brief Chat</dd>
+            </div>
+            <div>
+              <dt>When</dt>
+              <dd>Thursday, May 14, 2026<br>1:30 PM to 2:10 PM EDT</dd>
+            </div>
+            <div>
+              <dt>Organizer</dt>
+              <dd>Pat Ducoffe</dd>
+            </div>
+            <div>
+              <dt>Attendees</dt>
+              <dd>Shaunda Ragland accepted<br>Rod Bryce invited, not responded</dd>
+            </div>
+            <div>
+              <dt>Meeting Link</dt>
+              <dd>Zoom meeting attached in the calendar invite.</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="side-block delay-2">
+          <h3>Prep Checklist</h3>
+          <ul class="checklist" id="checklist">
+            <li><input type="checkbox" id="c1"><label for="c1">Open with PRIMA's education mission, not a broad D2L overview.</label></li>
+            <li><input type="checkbox" id="c2"><label for="c2">Decide which CE or credentialing example you can use if Shaunda asks how this fits associations.</label></li>
+            <li><input type="checkbox" id="c3"><label for="c3">Be ready to ask about the current learning stack before introducing Brightspace.</label></li>
+            <li><input type="checkbox" id="c4"><label for="c4">Have a soft next-step ask ready for a deeper workflow session with any additional stakeholder.</label></li>
+            <li><input type="checkbox" id="c5"><label for="c5">Confirm whether Rod needs to join or whether this should stay as a direct discovery with Shaunda.</label></li>
+          </ul>
+        </section>
+
+        <section class="side-block delay-3">
+          <h3>Grounding</h3>
+          <ul class="status-list">
+            <li>
+              <strong>Confirmed</strong><br>
+              Shaunda Ragland is Senior Director, Education and Training at the Public Risk Management Association.
+            </li>
+            <li>
+              <strong>Confirmed</strong><br>
+              The relevant email thread centered on CE and credentialing for public sector risk professionals.
+            </li>
+            <li>
+              <strong>Inferred</strong><br>
+              Shaunda likely owns both program quality and some of the operational burden around education delivery.
+            </li>
+            <li>
+              <strong>Gap</strong><br>
+              There is no evidence yet of active evaluation timing, budget, or a current platform pain point.
+            </li>
+          </ul>
+        </section>
+
+        <section class="side-block delay-4">
+          <h3>Source Notes</h3>
+          <ul class="status-list">
+            <li>
+              <strong>Calendar</strong><br>
+              Your next external meeting today is the PRIMA brief chat, with a clear accepted attendee and a 40-minute slot.
+            </li>
+            <li>
+              <strong>Email</strong><br>
+              Shaunda's latest reply was positive and simple: she looks forward to the chat.
+            </li>
+            <li>
+              <strong>Zoom</strong><br>
+              Search did not return a clearly related prior PRIMA meeting, so there is no earlier call evidence to lean on.
+            </li>
+          </ul>
+          <div class="footer-note">
+            Best use of this call: find out whether PRIMA's education team is living with a manageable status quo or real friction worth a second conversation.
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const briefData = {
+      id: "prima-shaunda-ragland-2026-05-14",
+      label: "PRIMA • Shaunda • Brief Chat",
+      account: "Public Risk Management Association",
+      contact: "Shaunda Ragland",
+      meetingType: "Brief Chat",
+      fitPercent: 82,
+      fitLabel: "Strong",
+      buyerPower: "medium",
+      progressSteps: [
+        "Account read",
+        "Contact read",
+        "Value angles",
+        "Discovery",
+        "Objections",
+        "Opener"
+      ],
+      sections: [
+        {
+          id: "account-snapshot",
+          heading: "Account Snapshot",
+          type: "account",
+          delay: "delay-1",
+          text: {
+            reason: "Association-led education remit and a senior education owner make this a credible Brightspace conversation.",
+            timing: [
+              "Shaunda accepted a brief chat within a day of outreach. That is not proof of urgency, but it is enough relevance to earn a real discovery call.",
+              "Your outreach centered on CE and credentialing for public sector risk professionals. That theme likely matched her remit and is the cleanest entry point for the conversation.",
+              "There is still a gap on timing. You do not yet have evidence of an active platform evaluation, budget event, or executive push, so keep the motion exploratory."
+            ],
+            read: "PRIMA appears to be a solid association fit if its education work includes continuing education, credentialing, or member training that needs stronger delivery and tracking. Shaunda's title puts you close to the person who would feel both learner-experience pressure and operational friction. The fit looks strong on role and category, but mixed on why-now. This meeting matters if it helps you learn whether PRIMA is simply curious or whether the current setup is already starting to strain.",
+            note: "Validate whether the real driver is CE and credential tracking, member experience, reporting visibility, or program growth."
+          }
+        },
+        {
+          id: "contact-angle",
+          heading: "Contact Angle",
+          type: "contact",
+          delay: "delay-2",
+          text: {
+            buyerType: "Program owner",
+            confidence: "High confidence",
+            priorities: [
+              "Program quality and learner trust. As the senior education leader, she is likely to care whether PRIMA's learning experience feels credible, useful, and easy to complete.",
+              "Operational efficiency and reporting. If CE or credentials are involved, manual tracking, staff effort, and completion visibility usually sit close to her team.",
+              "Practical change management. She will care whether a different platform actually helps without creating unnecessary disruption for staff or members."
+            ],
+            approach: "Lead in her world, not yours. Ask how PRIMA's education portfolio is structured today and where the friction shows up for learners versus staff. Keep the first few minutes concrete and consultative, tied to CE, credentialing, and member education. If she sounds more strategic than operational, shift toward growth, program quality, and visibility rather than workflow detail.",
+            avoid: "Do not open with a generic LMS pitch or assume they are already shopping for a replacement."
+          }
+        },
+        {
+          id: "value-angles",
+          heading: "D2L Value Angles",
+          type: "angles",
+          delay: "delay-3",
+          text: [
+            {
+              title: "Cleaner CE and credential tracking",
+              proof: "If PRIMA is juggling member education, CE credit, or credential workflows across multiple tools or manual steps, Brightspace gives them a more unified way to deliver learning, track completion, and see progress without adding admin clutter.",
+              fit: "Your outreach explicitly referenced CE and credentialing, and Shaunda's remit sits right at that intersection."
+            },
+            {
+              title: "A stronger member learning experience for a specialized audience",
+              proof: "For niche professional audiences, the platform matters because members need to find the right learning quickly, stay engaged, and complete programs without friction. Brightspace is strongest when learner experience and back-end workflow both matter.",
+              fit: "PRIMA serves a specific professional community, so usability and program credibility likely matter as much as content delivery."
+            },
+            {
+              title: "Flexibility as the education portfolio evolves",
+              proof: "Associations often need to support different program types over time, from onboarding and webinars to certification prep and ongoing CE. Brightspace fits best when the goal is to support that mix without rebuilding the process every time the program changes.",
+              fit: "A senior education leader usually has to balance today's delivery needs with future program variation and growth."
+            }
+          ]
+        },
+        {
+          id: "discovery-questions",
+          heading: "Discovery Questions",
+          type: "questions",
+          delay: "delay-4",
+          text: [
+            {
+              question: "When you look across PRIMA's education and training work today, which programs or learner journeys take the most effort to run?",
+              rationale: "This gets you into current-state reality fast and tells you where the workload actually sits."
+            },
+            {
+              question: "Where does the current experience start to break down most for your team or for members, especially around CE, completion tracking, or reporting?",
+              rationale: "You need the friction point before you talk about value. This also tests whether the CE angle is real or just a good outbound hook."
+            },
+            {
+              question: "What made this conversation worth taking right now?",
+              rationale: "This is the cleanest way to learn whether there is a current initiative, a pain event, simple curiosity, or a long-range interest."
+            },
+            {
+              question: "If PRIMA decided to improve this area, who else besides you would need to weigh in on platform, process, or budget?",
+              rationale: "That reveals whether you are dealing with a single-threaded discovery or the start of a broader buying path."
+            },
+            {
+              question: "By the end of today's call, what would make a next step feel worthwhile from your side?",
+              rationale: "This lets you calibrate the next move in her terms and keeps the call from ending with a vague promise to reconnect."
+            }
+          ]
+        },
+        {
+          id: "likely-objections",
+          heading: "Likely Objections",
+          type: "objections",
+          delay: "delay-5",
+          accent: "accent-top-1",
+          text: [
+            {
+              objection: "We already have something in place, and it works well enough.",
+              counter: "Totally fair. I'm not coming in assuming PRIMA needs a rip-and-replace. The useful question is whether your current setup still gives your team and your members what they need as programs grow or get more complex.",
+              followUp: "Where does the current approach feel solid, and where does it start to create extra work?"
+            },
+            {
+              objection: "This could turn into a bigger project than we want right now.",
+              counter: "I get that. Most teams do not want a platform exercise unless the pain is real. What I want to understand first is whether there is a high-friction problem worth isolating before anyone talks about broader change.",
+              followUp: "If you ever did revisit this area, what would have to be true for it to feel worth the effort?"
+            },
+            {
+              objection: "Timing or budget may not be there this year.",
+              counter: "That may be the right answer today. Even so, it is still useful to understand whether the cost of staying put is already showing up in staff time, member frustration, or limited reporting. If there is no real pain, we should know that early.",
+              followUp: "How are you thinking about priority and timing on the education side this year?"
+            }
+          ]
+        },
+        {
+          id: "opener-next-step-ask",
+          heading: "Opener + Next Step Ask",
+          type: "opener",
+          delay: "delay-6",
+          accent: "accent-top-2",
+          text: {
+            opener: "Thanks for making the time, Shaunda. From your role, I'm guessing you sit pretty close to both the learner experience and the operational side of PRIMA's education programs. I'd love to understand how you're handling CE and credentialing today, what feels like it is working well, and where it starts to get harder than it should. If I'm off on that, feel free to redirect me.",
+            ask: "If it sounds like there is a real fit, the next step I would suggest is a working session with whoever owns the day-to-day program workflow and any platform or reporting considerations, so we can map your current setup and see where Brightspace might actually help.",
+            softer: "If it is useful, we can always do a second conversation focused just on the current process and the areas you would want to improve, and then decide whether it makes sense to go further."
+          }
+        }
+      ]
+    };
+
+    const historyKey = "precall-brief-history";
+    const checklistKey = `precall-checklist-${briefData.id}`;
+    const sectionNotes = new Map();
+    const progressText = document.getElementById("progressText");
+    const progressLine = document.getElementById("progressLine");
+    const briefGrid = document.getElementById("briefGrid");
+    const historyTabs = document.getElementById("historyTabs");
+    const manualContext = document.getElementById("manualContext");
+    const charCount = document.getElementById("charCount");
+    const counterRow = document.getElementById("counterRow");
+
+    function plainTextBrief(data) {
+      const sections = [];
+      sections.push(`Account Snapshot\nICP Fit: ${data.fitLabel} - ${data.sections[0].text.reason}\nTiming Signals:\n1. ${data.sections[0].text.timing[0]}\n2. ${data.sections[0].text.timing[1]}\n3. ${data.sections[0].text.timing[2]}\nAccount Read:\n${data.sections[0].text.read}\nSeller Note:\n${data.sections[0].text.note}`);
+      sections.push(`Contact Angle\nBuyer Type: ${data.sections[1].text.buyerType} (${data.sections[1].text.confidence})\nLikely Priorities:\n1. ${data.sections[1].text.priorities[0]}\n2. ${data.sections[1].text.priorities[1]}\n3. ${data.sections[1].text.priorities[2]}\nApproach Note:\n${data.sections[1].text.approach}\nWhat To Avoid:\n${data.sections[1].text.avoid}`);
+      sections.push(`D2L Value Angles\n1. ${data.sections[2].text[0].title}\nProof point: ${data.sections[2].text[0].proof}\nWhy it fits: ${data.sections[2].text[0].fit}\n2. ${data.sections[2].text[1].title}\nProof point: ${data.sections[2].text[1].proof}\nWhy it fits: ${data.sections[2].text[1].fit}\n3. ${data.sections[2].text[2].title}\nProof point: ${data.sections[2].text[2].proof}\nWhy it fits: ${data.sections[2].text[2].fit}`);
+      sections.push(`Discovery Questions\n1. ${data.sections[3].text[0].question}\nWhy this matters: ${data.sections[3].text[0].rationale}\n2. ${data.sections[3].text[1].question}\nWhy this matters: ${data.sections[3].text[1].rationale}\n3. ${data.sections[3].text[2].question}\nWhy this matters: ${data.sections[3].text[2].rationale}\n4. ${data.sections[3].text[3].question}\nWhy this matters: ${data.sections[3].text[3].rationale}\n5. ${data.sections[3].text[4].question}\nWhy this matters: ${data.sections[3].text[4].rationale}`);
+      sections.push(`Likely Objections\n1. Objection: ${data.sections[4].text[0].objection}\nCounter: ${data.sections[4].text[0].counter}\nFollow-up: ${data.sections[4].text[0].followUp}\n2. Objection: ${data.sections[4].text[1].objection}\nCounter: ${data.sections[4].text[1].counter}\nFollow-up: ${data.sections[4].text[1].followUp}\n3. Objection: ${data.sections[4].text[2].objection}\nCounter: ${data.sections[4].text[2].counter}\nFollow-up: ${data.sections[4].text[2].followUp}`);
+      sections.push(`Opener + Next Step Ask\nOpener:\n${data.sections[5].text.opener}\nNext Step Ask:\n${data.sections[5].text.ask}\nOptional Softer Version:\n${data.sections[5].text.softer}`);
+      return sections.join("\n\n");
+    }
+
+    async function copyText(value, button) {
+      try {
+        await navigator.clipboard.writeText(value);
+        const original = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => { button.textContent = original; }, 1200);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function renderHistory() {
+      const history = JSON.parse(localStorage.getItem(historyKey) || "[]");
+      historyTabs.innerHTML = "";
+      history.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = index === 0 ? "active" : "";
+        btn.textContent = item.label;
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".history button").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+        historyTabs.appendChild(btn);
+      });
+    }
+
+    function saveHistory() {
+      const base = JSON.parse(localStorage.getItem(historyKey) || "[]").filter((item) => item.id !== briefData.id);
+      base.unshift({ id: briefData.id, label: briefData.label });
+      localStorage.setItem(historyKey, JSON.stringify(base.slice(0, 3)));
+      renderHistory();
+    }
+
+    function updateCounter() {
+      const length = manualContext.value.length;
+      charCount.textContent = String(length);
+      const isWarning = length >= 400;
+      counterRow.classList.toggle("warning", isWarning);
+      document.getElementById("counterHint").textContent = isWarning
+        ? "Context is getting dense. Consider trimming to keep the brief focused."
+        : "Keep notes sharp so the brief stays crisp.";
+    }
+
+    function renderProgress(activeIndex = -1, completed = 0) {
+      progressLine.innerHTML = "";
+      briefData.progressSteps.forEach((label, index) => {
+        const step = document.createElement("div");
+        const isDone = index < completed;
+        const isActive = index === activeIndex;
+        step.className = `step${isDone ? " done" : ""}${isActive ? " active" : ""}`;
+        step.innerHTML = `<small>Step ${index + 1}</small><span>${label}</span>`;
+        progressLine.appendChild(step);
+      });
+    }
+
+    function sectionCopyButton(text) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "copy-btn";
+      button.textContent = "Copy section";
+      button.addEventListener("click", () => copyText(text, button));
+      return button;
+    }
+
+    function renderAccount(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 1</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+        <div class="fit-wrap">
+          <div class="fit-header">
+            <div>
+              <div class="muted">ICP Fit</div>
+              <strong>${briefData.fitLabel}</strong>
+            </div>
+            <div class="copy-note">Calendar + email grounded</div>
+          </div>
+          <div class="fit-bar"><div class="fit-fill" id="fitFill"></div></div>
+          <div>${section.text.reason}</div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <strong class="muted">Timing Signals</strong>
+            <ol class="numbered">
+              ${section.text.timing.map((item, index) => `<li><span class="idx">0${index + 1}</span><div>${item}</div></li>`).join("")}
+            </ol>
+          </div>
+          <div>
+            <strong class="muted">Seller Note</strong>
+            <p>${section.text.note}</p>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <strong class="muted">Account Read</strong>
+          <p>${section.text.read}</p>
+        </div>
+      `;
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`Account Snapshot\nICP Fit: ${briefData.fitLabel} - ${section.text.reason}\nTiming Signals:\n1. ${section.text.timing[0]}\n2. ${section.text.timing[1]}\n3. ${section.text.timing[2]}\nAccount Read:\n${section.text.read}\nSeller Note:\n${section.text.note}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderContact(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 2</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+        <div class="buyer-row">
+          <div><strong>${section.text.buyerType}</strong> (${section.text.confidence})</div>
+          <span class="badge ${briefData.buyerPower}">${briefData.buyerPower === "medium" ? "Buyer Power: Medium" : "Buyer Power"}</span>
+        </div>
+        <ul class="list">
+          ${section.text.priorities.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+        <div class="grid-2">
+          <div>
+            <strong class="muted">Approach Note</strong>
+            <p>${section.text.approach}</p>
+          </div>
+          <div>
+            <strong class="muted">What To Avoid</strong>
+            <p>${section.text.avoid}</p>
+          </div>
+        </div>
+      `;
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`Contact Angle\nBuyer Type: ${section.text.buyerType} (${section.text.confidence})\nLikely Priorities:\n1. ${section.text.priorities[0]}\n2. ${section.text.priorities[1]}\n3. ${section.text.priorities[2]}\nApproach Note:\n${section.text.approach}\nWhat To Avoid:\n${section.text.avoid}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderAngles(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 3</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+        <ol class="numbered">
+          ${section.text.map((item, index) => `
+            <li>
+              <span class="idx">0${index + 1}</span>
+              <div class="angle-title">${item.title}</div>
+              <div><strong>Proof point:</strong> ${item.proof}</div>
+              <div class="muted" style="margin-top:8px"><strong>Why it fits:</strong> ${item.fit}</div>
+            </li>
+          `).join("")}
+        </ol>
+      `;
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`D2L Value Angles\n1. ${section.text[0].title}\nProof point: ${section.text[0].proof}\nWhy it fits: ${section.text[0].fit}\n2. ${section.text[1].title}\nProof point: ${section.text[1].proof}\nWhy it fits: ${section.text[1].fit}\n3. ${section.text[2].title}\nProof point: ${section.text[2].proof}\nWhy it fits: ${section.text[2].fit}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderQuestions(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 4</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+      `;
+      const list = document.createElement("div");
+      list.className = "qa-list";
+      section.text.forEach((item, index) => {
+        const qa = document.createElement("div");
+        qa.className = "qa";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.innerHTML = `<div class="question-line"><span><span class="idx">0${index + 1}</span> ${item.question}</span><span class="caret">+</span></div>`;
+        button.addEventListener("click", () => {
+          qa.classList.toggle("open");
+          qa.querySelector(".caret").textContent = qa.classList.contains("open") ? "−" : "+";
+        });
+        const answer = document.createElement("div");
+        answer.className = "answer";
+        answer.textContent = `Why this matters: ${item.rationale}`;
+        qa.appendChild(button);
+        qa.appendChild(answer);
+        list.appendChild(qa);
+      });
+      wrapper.appendChild(list);
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`Discovery Questions\n1. ${section.text[0].question}\nWhy this matters: ${section.text[0].rationale}\n2. ${section.text[1].question}\nWhy this matters: ${section.text[1].rationale}\n3. ${section.text[2].question}\nWhy this matters: ${section.text[2].rationale}\n4. ${section.text[3].question}\nWhy this matters: ${section.text[3].rationale}\n5. ${section.text[4].question}\nWhy this matters: ${section.text[4].rationale}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderObjections(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay} ${section.accent}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 5</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+        <ol class="numbered">
+          ${section.text.map((item, index) => `
+            <li>
+              <span class="idx">0${index + 1}</span>
+              <div class="objection-title">Objection: ${item.objection}</div>
+              <div><strong>Counter:</strong> ${item.counter}</div>
+              <div class="muted" style="margin-top:8px"><strong>Follow-up:</strong> ${item.followUp}</div>
+            </li>
+          `).join("")}
+        </ol>
+      `;
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`Likely Objections\n1. Objection: ${section.text[0].objection}\nCounter: ${section.text[0].counter}\nFollow-up: ${section.text[0].followUp}\n2. Objection: ${section.text[1].objection}\nCounter: ${section.text[1].counter}\nFollow-up: ${section.text[1].followUp}\n3. Objection: ${section.text[2].objection}\nCounter: ${section.text[2].counter}\nFollow-up: ${section.text[2].followUp}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderOpener(section) {
+      const wrapper = document.createElement("section");
+      wrapper.className = `section ${section.delay} ${section.accent}`;
+      wrapper.id = section.id;
+      wrapper.innerHTML = `
+        <div class="section-heading">
+          <div>
+            <strong>Section 6</strong>
+            <h3>${section.heading}</h3>
+          </div>
+        </div>
+        <div class="bottom-grid">
+          <div>
+            <strong class="muted">Opener</strong>
+            <p>${section.text.opener}</p>
+          </div>
+          <div>
+            <strong class="muted">Next Step Ask</strong>
+            <p>${section.text.ask}</p>
+            <strong class="muted">Optional Softer Version</strong>
+            <p>${section.text.softer}</p>
+          </div>
+        </div>
+      `;
+      const copyRow = document.createElement("div");
+      copyRow.className = "copy-row";
+      copyRow.appendChild(sectionCopyButton(`Opener + Next Step Ask\nOpener:\n${section.text.opener}\nNext Step Ask:\n${section.text.ask}\nOptional Softer Version:\n${section.text.softer}`));
+      wrapper.querySelector(".section-heading").appendChild(copyRow);
+      return wrapper;
+    }
+
+    function renderBrief() {
+      briefGrid.innerHTML = "";
+      briefData.sections.forEach((section) => {
+        let node;
+        if (section.type === "account") node = renderAccount(section);
+        if (section.type === "contact") node = renderContact(section);
+        if (section.type === "angles") node = renderAngles(section);
+        if (section.type === "questions") node = renderQuestions(section);
+        if (section.type === "objections") node = renderObjections(section);
+        if (section.type === "opener") node = renderOpener(section);
+        briefGrid.appendChild(node);
+      });
+      requestAnimationFrame(() => {
+        const fitFill = document.getElementById("fitFill");
+        if (fitFill) fitFill.style.width = `${briefData.fitPercent}%`;
+      });
+    }
+
+    function saveChecklistState() {
+      const states = Array.from(document.querySelectorAll("#checklist input")).map((box) => box.checked);
+      localStorage.setItem(checklistKey, JSON.stringify(states));
+    }
+
+    function loadChecklistState() {
+      const states = JSON.parse(localStorage.getItem(checklistKey) || "[]");
+      document.querySelectorAll("#checklist input").forEach((box, index) => {
+        box.checked = Boolean(states[index]);
+        box.addEventListener("change", saveChecklistState);
+      });
+    }
+
+    function replayBuild() {
+      renderProgress(-1, 0);
+      briefGrid.innerHTML = "";
+      let step = 0;
+      progressText.textContent = "Sequencing the brief from account read through opener.";
+      const timer = setInterval(() => {
+        renderProgress(step, step);
+        progressText.textContent = `Working on ${briefData.progressSteps[step].toLowerCase()}.`;
+        step += 1;
+        if (step > briefData.progressSteps.length) {
+          clearInterval(timer);
+          renderProgress(-1, briefData.progressSteps.length);
+          progressText.textContent = "Brief ready. Review, copy, or use the prep checklist.";
+          renderBrief();
+        }
+      }, 220);
+    }
+
+    document.getElementById("copyAllBtn").addEventListener("click", (event) => {
+      copyText(plainTextBrief(briefData), event.currentTarget);
+    });
+
+    document.getElementById("replayBtn").addEventListener("click", replayBuild);
+    manualContext.addEventListener("input", updateCounter);
+
+    updateCounter();
+    saveHistory();
+    renderProgress(-1, briefData.progressSteps.length);
+    renderBrief();
+    loadChecklistState();
+  </script>
+</body>
+</html>

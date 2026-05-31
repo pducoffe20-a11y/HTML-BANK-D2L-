@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Meeting Call Briefs | Week of May 18, 2026</title>
+  <style>
+    :root {
+      --bg: #f5f1e8;
+      --paper: rgba(255, 252, 247, 0.82);
+      --paper-strong: #fffaf1;
+      --ink: #162117;
+      --muted: #5e665a;
+      --line: rgba(22, 33, 23, 0.12);
+      --green: #2f6b4f;
+      --green-soft: #d9ebdf;
+      --amber: #b7791f;
+      --amber-soft: #f3dfb6;
+      --red: #b24d3f;
+      --red-soft: #f3d8d2;
+      --blue: #285c67;
+      --blue-soft: #d8ebef;
+      --stone: #d8ccb7;
+      --shadow: 0 18px 40px rgba(33, 27, 17, 0.12);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --history-size: 3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(47, 107, 79, 0.14), transparent 36%),
+        radial-gradient(circle at top right, rgba(183, 121, 31, 0.12), transparent 28%),
+        linear-gradient(180deg, #f9f6ef 0%, #f2ede3 48%, #efe7d9 100%);
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1520px;
+      margin: 0 auto;
+    }
+
+    .rail,
+    .main {
+      min-width: 0;
+    }
+
+    .rail {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--paper);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 24px 24px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(22, 33, 23, 0.06);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, h4, p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 16px;
+      font-size: clamp(2rem, 2vw, 2.7rem);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin-top: 14px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 46rem;
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+
+    .summary-cell {
+      padding: 18px 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .summary-cell:last-child {
+      border-right: 0;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .summary-value {
+      margin-top: 8px;
+      font-size: 1.75rem;
+      font-weight: 800;
+    }
+
+    .summary-note {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .meeting-list {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .meeting-card {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.68);
+      padding: 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      color: inherit;
+    }
+
+    .meeting-card:hover,
+    .meeting-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(47, 107, 79, 0.35);
+      box-shadow: 0 10px 24px rgba(25, 39, 30, 0.1);
+      outline: none;
+    }
+
+    .meeting-card.is-active {
+      border-color: rgba(47, 107, 79, 0.55);
+      background: linear-gradient(145deg, rgba(217, 235, 223, 0.95), rgba(255, 251, 243, 0.92));
+    }
+
+    .meeting-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .meeting-title {
+      margin-top: 8px;
+      font-size: 1.03rem;
+      line-height: 1.28;
+      font-weight: 800;
+    }
+
+    .meeting-contact {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .meeting-flags {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: rgba(22, 33, 23, 0.07);
+      color: var(--ink);
+    }
+
+    .chip.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .chip.amber {
+      background: var(--amber-soft);
+      color: #855307;
+    }
+
+    .chip.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .mini-panel {
+      padding: 18px 20px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .mini-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .history-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .history-item strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .history-item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .main {
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero {
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr);
+      gap: 22px;
+      padding: 26px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 2.8vw, 3.2rem);
+      line-height: 0.95;
+      font-weight: 900;
+    }
+
+    .hero-subtitle {
+      margin-top: 16px;
+      max-width: 54rem;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .source-row,
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .source-row {
+      margin-top: 18px;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 12px 22px rgba(22, 33, 23, 0.18);
+    }
+
+    .button.secondary {
+      background: rgba(22, 33, 23, 0.08);
+      color: var(--ink);
+    }
+
+    .button.ghost {
+      background: rgba(255, 255, 255, 0.62);
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .signal-board {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+      padding: 22px;
+      background:
+        linear-gradient(160deg, rgba(47, 107, 79, 0.08), rgba(183, 121, 31, 0.06)),
+        rgba(255, 252, 247, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .fit-wrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .fit-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .fit-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .fit-value {
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .fit-track {
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(22, 33, 23, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .fit-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #3e8b64, #c39332);
+      transition: width 780ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .fit-note,
+    .signal-note {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .power-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 96px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .power-high {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .power-medium {
+      background: var(--amber-soft);
+      color: #8a5508;
+    }
+
+    .power-low {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .signal-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .signal {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .signal h4 {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .signal p {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .progress-shell {
+      padding: 22px 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .progress-step {
+      padding: 14px 12px;
+      border-radius: 16px;
+      background: rgba(22, 33, 23, 0.05);
+      border: 1px solid transparent;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+      opacity: 0.55;
+    }
+
+    .progress-step.done {
+      opacity: 1;
+      transform: translateY(-2px);
+      background: rgba(217, 235, 223, 0.76);
+      border-color: rgba(47, 107, 79, 0.24);
+    }
+
+    .progress-step span {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .progress-step strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 318px;
+      gap: 22px;
+    }
+
+    .sections {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-card {
+      background: var(--paper);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .section-card.reveal {
+      animation: rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 { animation-delay: 50ms; }
+    .delay-2 { animation-delay: 100ms; }
+    .delay-3 { animation-delay: 150ms; }
+    .delay-4 { animation-delay: 200ms; }
+    .delay-5 { animation-delay: 250ms; }
+    .delay-6 { animation-delay: 300ms; }
+    .delay-7 { animation-delay: 350ms; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      padding: 22px 22px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h3 {
+      font-size: 1.35rem;
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .section-sub {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 54rem;
+    }
+
+    .section-body {
+      padding: 20px 22px 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stat-box {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      margin-top: 7px;
+      font-size: 1.2rem;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .tight-copy {
+      font-size: 15px;
+      line-height: 1.68;
+      color: #233024;
+    }
+
+    .tight-copy strong {
+      color: var(--ink);
+    }
+
+    .numbered-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .item-index {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(47, 107, 79, 0.12);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .item-title {
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 800;
+    }
+
+    .item-copy {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.68;
+      color: var(--muted);
+    }
+
+    .qa-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .qa {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .qa button {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .qa button strong {
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .qa button span {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .qa .answer {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.68;
+      color: var(--muted);
+    }
+
+    .qa.is-open .answer {
+      display: block;
+    }
+
+    .objection-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .objection {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .objection h4 {
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .objection p {
+      font-size: 14px;
+      line-height: 1.68;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .action-trio {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .action-card {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+      border-top-width: 6px;
+    }
+
+    .action-card.opener { border-top-color: var(--green); }
+    .action-card.next-step { border-top-color: var(--amber); }
+    .action-card.soft { border-top-color: var(--blue); }
+
+    .action-card h4 {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .action-card p {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .prep-panel,
+    .notes-panel {
+      background: var(--paper);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .prep-head,
+    .notes-head {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .prep-body,
+    .notes-body {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .check {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .check span {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .note-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .note {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .note strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .note span {
+      display: block;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .context-box {
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(22, 33, 23, 0.08);
+    }
+
+    .context-box textarea {
+      width: 100%;
+      min-height: 124px;
+      resize: vertical;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 0;
+    }
+
+    .context-box textarea:focus {
+      outline: none;
+    }
+
+    .context-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .context-meta.warn {
+      color: #975d0c;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(22, 33, 23, 0.92);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1240px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+      }
+
+      .workspace,
+      .hero-inner,
+      .summary-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-strip {
+        display: grid;
+      }
+
+      .summary-cell {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .summary-cell:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 860px) {
+      body {
+        padding: 16px;
+      }
+
+      .progress-grid,
+      .action-trio,
+      .section-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner,
+      .panel-head,
+      .progress-shell,
+      .section-head,
+      .section-body {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <section class="panel">
+        <div class="panel-head">
+          <div class="eyebrow">Pat Ducoffe • External Meetings</div>
+          <h1>Week Of May 18</h1>
+          <p class="subtitle">
+            Four customer-facing conversations surfaced on your calendar this week. These briefs blend calendar context, email signal, and cautious commercial inference so you can move quickly without sounding canned.
+          </p>
+        </div>
+        <div class="summary-strip">
+          <div class="summary-cell">
+            <div class="summary-label">Meetings</div>
+            <div class="summary-value">4</div>
+            <div class="summary-note">All external meetings, Eastern time.</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Fit Mix</div>
+            <div class="summary-value">3 Strong</div>
+            <div class="summary-note">One moderate-fit, very early-stage chat.</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Best-Mapped</div>
+            <div class="summary-value">GPM</div>
+            <div class="summary-note">Previous demo notes create the clearest story.</div>
+          </div>
+          <div class="summary-cell">
+            <div class="summary-label">Biggest Unknown</div>
+            <div class="summary-value">AmericanHort</div>
+            <div class="summary-note">Treat it as qualification-first.</div>
+          </div>
+        </div>
+        <div class="meeting-list" id="meetingList"></div>
+        <div class="mini-panel">
+          <div class="mini-title">Recent Briefs</div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="panel hero">
+        <div class="hero-inner">
+          <div>
+            <div class="eyebrow" id="heroEyebrow">Pre-demo • Wednesday</div>
+            <h2 class="hero-title" id="heroTitle">Loading brief…</h2>
+            <p class="hero-subtitle" id="heroSubtitle"></p>
+            <div class="hero-meta" id="heroMeta"></div>
+            <div class="source-row" id="sourceRow"></div>
+            <div class="action-row" style="margin-top: 18px;">
+              <button class="button primary" id="copyAll">Copy Full Brief</button>
+              <button class="button secondary" id="copyOpener">Copy Opener + Next Step</button>
+              <button class="button ghost" id="toggleAllDiscovery">Expand Discovery Rationale</button>
+            </div>
+          </div>
+          <div class="signal-board">
+            <div class="fit-wrap">
+              <div class="fit-head">
+                <div>
+                  <div class="fit-label">ICP Fit</div>
+                  <div class="fit-value" id="fitValue"></div>
+                </div>
+                <div class="power-badge" id="powerBadge"></div>
+              </div>
+              <div class="fit-track"><div class="fit-fill" id="fitFill"></div></div>
+              <div class="fit-note" id="fitNote"></div>
+            </div>
+            <div class="signal-stack">
+              <div class="signal">
+                <h4>Primary Read</h4>
+                <p id="signalPrimary"></p>
+              </div>
+              <div class="signal">
+                <h4>Call Job</h4>
+                <p id="signalCallJob"></p>
+              </div>
+              <div class="signal">
+                <h4>Seller Watchout</h4>
+                <p id="signalWatchout"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="progress-shell">
+          <div class="progress-head">
+            <div>
+              <div class="mini-title">Brief Assembly</div>
+              <p class="subtitle" style="margin-top: 8px; max-width: none;">
+                The brief view keeps the generation flow visible, even after the content is done, so you can skim it in the order it was built.
+              </p>
+            </div>
+            <div class="chip green">6 steps complete</div>
+          </div>
+          <div class="progress-grid" id="progressGrid"></div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="sections" id="sections"></div>
+        <aside class="side-stack">
+          <section class="prep-panel">
+            <div class="prep-head">
+              <div class="mini-title">Prep Checklist</div>
+              <p class="subtitle" style="margin-top: 8px;">Tuned to the meeting type so it supports the brief instead of repeating it.</p>
+            </div>
+            <div class="prep-body" id="prepList"></div>
+          </section>
+
+          <section class="notes-panel">
+            <div class="notes-head">
+              <div class="mini-title">Source Notes</div>
+              <p class="subtitle" style="margin-top: 8px;">Grounded facts, strong inferences, and the gaps to test live.</p>
+            </div>
+            <div class="notes-body">
+              <div class="note-list" id="noteList"></div>
+              <div class="context-box">
+                <textarea id="contextPad" placeholder="Optional: add your own prep notes here."></textarea>
+                <div class="context-meta" id="contextMeta">
+                  <span>Personal prep pad</span>
+                  <span id="contextCount">0 characters</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    const progressSteps = [
+      "Account read",
+      "Contact read",
+      "Value angles",
+      "Discovery plan",
+      "Objection prep",
+      "Final talk track"
+    ];
+
+    const briefs = [
+      {
+        id: "gpm",
+        day: "Wed",
+        date: "Wednesday, May 21",
+        time: "10:00-11:15 AM EDT",
+        meetingType: "Pre-demo",
+        title: "GPM - D2L Technical Demo - 1:1 W/ Michael",
+        account: "Green Project Management",
+        externalContact: "Michael Pace",
+        contactTitle: "Vice President, Learning and Academics",
+        contactEmail: "michael.pace@gpm.org",
+        fitLabel: "Strong",
+        fitScore: 91,
+        fitReason: "Active platform evaluation, explicit operational pain, and executive motion all line up with a high-value D2L conversation.",
+        powerLabel: "High Influence",
+        powerClass: "power-high",
+        headline: "Use the pre-demo to sharpen the two or three workflows Michael can carry into an executive conversation.",
+        summary: "Michael already gave you unusually concrete signal: five tools, manual tracking, accreditation risk, cohort issues, and a growing accessibility burden. This is not a vague curiosity call. The job is to turn that raw pain into a tightly scoped story for the executive demo they are already preparing.",
+        tags: ["Previous demo summary", "Executive momentum", "Accessibility pain", "Accreditation risk"],
+        sources: ["Outlook Calendar", "Outlook Email", "Terret prior call summary"],
+        primaryRead: "This account is far enough along that relevance matters more than education. You already know the pain; now you need to prove the next session will map to it.",
+        callJob: "Clarify the exact workflows and proof points the executive audience needs to see next week.",
+        watchout: "Do not slip into generic LMS-demo territory. Michael has already done enough discovery work for you.",
+        sourceNotes: [
+          { label: "Grounded", text: "Previous call summary confirmed a five-tool stack, accreditation reporting risk, accessibility backlog, and executive interest." },
+          { label: "Grounded", text: "Michael is familiar with the LMS category and specifically referenced Brightspace, Canvas, Blackboard, and Moodle." },
+          { label: "Inference", text: "The next session likely needs to help him sell internally, not simply evaluate features." }
+        ],
+        prep: [
+          "Re-open the pain list from the May 13 demo summary and pick the top two workflows to anchor today.",
+          "Get Maria and Rod aligned on what absolutely must be shown in the executive demo versus what can wait.",
+          "Decide how you will talk about consolidation without making the change feel heavy.",
+          "Be ready with one clean accessibility story and one reporting story."
+        ],
+        sections: [
+          {
+            heading: "Account Snapshot",
+            sub: "Fast read on fit and timing.",
+            type: "account",
+            icp: "Strong - there is active pain, clear platform relevance, and visible internal momentum.",
+            signals: [
+              "A five-tool learning stack is creating manual work, reporting gaps, and a single-point-of-failure problem.",
+              "Accreditation reporting and accessibility issues make the current setup hard to scale confidently.",
+              "Michael is already socializing the Brightspace story internally ahead of a likely executive session."
+            ],
+            read: "Green Project Management looks past surface-level interest. Michael already named the operational friction in delivery, assessment, badging, reporting, and accessibility, and those issues map directly to a Brightspace conversation about simplification and control. This meeting matters because the next audience appears to be more senior, so today's job is to narrow the story to what wins internal confidence.",
+            sellerNote: "Validate which one or two workflows must feel materially easier in Brightspace for Michael to champion the next step."
+          },
+          {
+            heading: "Contact Angle",
+            sub: "How to approach the buyer in front of you.",
+            type: "contact",
+            buyerType: "Program owner (High confidence)",
+            priorities: [
+              { title: "Operational simplicity", copy: "He is tired of stitching multiple systems together to run one learner journey." },
+              { title: "Accreditation and reporting confidence", copy: "Reporting quality looks tied to real compliance and credibility risk, not nice-to-have analytics." },
+              { title: "Accessibility and scalable delivery", copy: "The current accessibility cleanup burden is concrete and time-consuming." }
+            ],
+            approach: "Lead with what Michael already told you instead of resetting discovery from zero. Keep the conversation practical: learner flow, cohorts, reporting, accessibility, and what execs will care about. He knows the category; the win is showing that D2L understands his world in detail.",
+            avoid: "Avoid making him repeat pain he has already documented or giving him a general LMS tour."
+          },
+          {
+            heading: "D2L Value Angles",
+            sub: "Exactly three proof points tailored to the account.",
+            type: "angles",
+            items: [
+              {
+                title: "One platform instead of five handoffs",
+                proof: "Brightspace can become the operating layer for delivery, assessment, tracking, and learner progression so the team stops sewing the experience together across disconnected tools.",
+                fit: "This fits because Michael already described a stack spanning Thinkific, Rise, Brillium, Credly, and manual spreadsheets."
+              },
+              {
+                title: "Accreditation-ready visibility",
+                proof: "A single learning environment can give GPM cleaner reporting, cohort control, and progress visibility so accreditation evidence does not live in manual workarounds.",
+                fit: "This fits because he named reporting risk and non-scalable tracking as real issues tied to ISET requirements."
+              },
+              {
+                title: "Accessibility without duplicate-content overhead",
+                proof: "Brightspace can help the team manage accessibility inside the core course experience instead of maintaining parallel fixes and workaround files.",
+                fit: "This fits because the accessibility backlog is not abstract. It is already consuming real team capacity."
+              }
+            ]
+          },
+          {
+            heading: "Discovery Questions",
+            sub: "Questions stay visible; rationale opens on demand.",
+            type: "discovery",
+            questions: [
+              {
+                q: "When you picture the ideal learner journey at GPM, where are the handoffs or workarounds most likely to break today?",
+                why: "This isolates the workflow that should anchor the pre-demo rather than trying to solve every pain at once."
+              },
+              {
+                q: "Which reporting or accreditation checks create the most anxiety for your team right now?",
+                why: "It helps you tie the story to risk reduction instead of a general platform conversation."
+              },
+              {
+                q: "When you bring this to the broader executive team, what are they most likely to challenge you on?",
+                why: "That tells you how to frame the next session for internal buy-in, not just product fit."
+              },
+              {
+                q: "If Brightspace handled the delivery side well, what would still need to stay outside the platform?",
+                why: "This surfaces non-negotiables early and keeps you from overpromising consolidation."
+              },
+              {
+                q: "For next week's executive demo to feel like progress, what would you need people walking away saying?",
+                why: "It defines success for the next step in Michael's words and keeps the demo outcome-driven."
+              }
+            ]
+          },
+          {
+            heading: "Likely Objections",
+            sub: "Calm counters built for a live conversation.",
+            type: "objections",
+            items: [
+              {
+                objection: "This is a big change and we have too many moving pieces.",
+                counter: "Totally fair. The question is not whether change is hard. It is whether the current setup is already costing you more in manual work, reporting risk, and accessibility lift than it is buying you in flexibility.",
+                followUp: "If you phased this, which part of the stack would be smartest to simplify first?"
+              },
+              {
+                objection: "Our needs are specialized.",
+                counter: "I would expect that. What I want to pressure-test is which needs are truly unique to GPM and which are really a sign that too many systems are carrying work that should live in one place.",
+                followUp: "Which requirement usually makes vendors stumble when you get specific?"
+              },
+              {
+                objection: "I still need broader internal buy-in before this goes anywhere.",
+                counter: "That makes sense. We do not need to win the whole case today. We just need to shape the next session around the few outcomes your team and leadership will actually use to judge fit.",
+                followUp: "Who has to see themselves in the next session for momentum to hold?"
+              }
+            ]
+          },
+          {
+            heading: "Opener + Next Step Ask",
+            sub: "Copy-ready language for the call.",
+            type: "actions",
+            opener: "Michael, thanks again for laying out the current stack so clearly last week. You gave us a real picture of where the friction sits across delivery, reporting, cohorts, and accessibility. I'd like to use today to narrow that into the two or three workflows your team and execs most need to see handled better. If we get that right, the next demo will be much more useful than a generic walk-through.",
+            next: "If this maps well, let's lock the exec demo around the specific workflows you want to socialize internally and agree on who should be in that room.",
+            soft: "If it feels directionally right, we can sketch the best next session and decide together who it makes sense to bring in."
+          }
+        ]
+      },
+      {
+        id: "prima",
+        day: "Wed",
+        date: "Wednesday, May 21",
+        time: "1:30-2:10 PM EDT",
+        meetingType: "Brief chat",
+        title: "PRIMA & D2L: Brief Chat",
+        account: "Public Risk Management Association",
+        externalContact: "Shaunda Ragland",
+        contactTitle: "Senior Director, Education and Training",
+        contactEmail: "sragland@primacentral.org",
+        fitLabel: "Strong",
+        fitScore: 84,
+        fitReason: "Association context, education ownership, and explicit CE and credentialing language all make this a strong-shaped opportunity.",
+        powerLabel: "High Influence",
+        powerClass: "power-high",
+        headline: "Treat this as a smart first discovery call, not a platform pitch.",
+        summary: "PRIMA looks like a classic D2L-shaped association conversation: niche professional audience, education leader in seat, and an outreach thread centered on CE and credentialing. The missing piece is urgency. You need to learn whether this is active evaluation, soft curiosity, or relationship-building with future potential.",
+        tags: ["Association", "Education owner", "CE / credentialing", "Rescheduled, not lost"],
+        sources: ["Outlook Calendar", "Outlook Email"],
+        primaryRead: "The role match is excellent. The timing is still what needs to be qualified.",
+        callJob: "Find out how central CE, credentialing, and member learning are to PRIMA's current plans.",
+        watchout: "Do not assume there is an active platform search just because the fit is clean on paper.",
+        sourceNotes: [
+          { label: "Grounded", text: "Email thread explicitly framed the conversation around CE and credentialing for public sector risk professionals." },
+          { label: "Grounded", text: "Shaunda responded positively, agreed to meet, and later rescheduled rather than letting the thread die." },
+          { label: "Inference", text: "There is likely real learning-program ownership here, but not yet confirmed platform pain or buying motion." }
+        ],
+        prep: [
+          "Open with the member and credentialing context you used in the email, then get out of the way and let her describe the current state.",
+          "Be ready with one association-friendly example of how Brightspace supports CE tracking and member education.",
+          "Know what your threshold is for asking for a deeper working session.",
+          "Keep the call tight enough that it feels useful even if this is still early."
+        ],
+        sections: [
+          {
+            heading: "Account Snapshot",
+            sub: "Fast read on fit and timing.",
+            type: "account",
+            icp: "Strong - the organization and contact profile map cleanly to D2L's associations and credentialing sweet spot.",
+            signals: [
+              "Shaunda responded quickly to outreach and agreed to meet on the core topic.",
+              "Her title squarely owns education and training, so you are likely speaking with a real operator, not a random referral.",
+              "The meeting was rescheduled rather than dropped, which is a modest but useful intent signal."
+            ],
+            read: "PRIMA looks like a very plausible association-learning opportunity. The niche audience and education-owner contact both support the fit, and your email framing around CE and credentialing clearly resonated enough to earn time. What remains open is whether this is active evaluation, soft curiosity, or simply a promising first relationship-building conversation.",
+            sellerNote: "Validate whether CE and credentialing are strategic growth levers, operational headaches, or both."
+          },
+          {
+            heading: "Contact Angle",
+            sub: "How to approach the buyer in front of you.",
+            type: "contact",
+            buyerType: "Program owner (High confidence)",
+            priorities: [
+              { title: "Reliable CE and training delivery", copy: "She likely cares about serving a specialized member audience without the experience feeling improvised." },
+              { title: "Tracking and reporting confidence", copy: "Credentialing and education leaders usually need cleaner oversight than generic program delivery alone." },
+              { title: "Member experience with limited admin burden", copy: "If the team is lean, staff efficiency matters almost as much as learner experience." }
+            ],
+            approach: "Keep it grounded in how PRIMA serves risk professionals. Acknowledge that niche associations have different pressures than broad commercial training organizations. She is likely to respond better to practical tradeoffs and member-facing outcomes than to transformation language.",
+            avoid: "Do not front-load product positioning before you know whether there is a live problem to solve."
+          },
+          {
+            heading: "D2L Value Angles",
+            sub: "Exactly three proof points tailored to the account.",
+            type: "angles",
+            items: [
+              {
+                title: "Cleaner CE and credentialing operations",
+                proof: "Brightspace can support structured learning, completion visibility, and tracking discipline in a way that helps education teams manage CE and credentialing programs with less manual drag.",
+                fit: "This fits because the original outreach topic that earned the meeting was explicitly about CE and credentialing."
+              },
+              {
+                title: "A stronger member learning experience",
+                proof: "For associations, a better learner experience often matters because member education is part of the value of belonging, not just content delivery.",
+                fit: "This fits because PRIMA serves a specialized professional audience that likely expects relevant, credible learning experiences."
+              },
+              {
+                title: "Operational control for lean teams",
+                proof: "Brightspace can help an education team reduce scattered workflows and get better visibility into participation, completion, and program performance.",
+                fit: "This fits because senior education leaders in associations often live in the gap between strategic goals and manual administration."
+              }
+            ]
+          },
+          {
+            heading: "Discovery Questions",
+            sub: "Questions stay visible; rationale opens on demand.",
+            type: "discovery",
+            questions: [
+              {
+                q: "How does CE or credentialing show up in PRIMA's education strategy today?",
+                why: "This tells you whether the topic is central to the organization or just one small piece of a broader education mix."
+              },
+              {
+                q: "Where does the current member learning experience feel strongest, and where does it start to feel heavier than it should?",
+                why: "It surfaces the real friction without assuming there is dissatisfaction everywhere."
+              },
+              {
+                q: "When you think about education success this year, what would you most want to improve for members or for your internal team?",
+                why: "That ties the conversation to priorities instead of generic feature comparison."
+              },
+              {
+                q: "Who else tends to shape decisions when PRIMA looks at education processes or platforms?",
+                why: "It helps you understand whether this stays with Shaunda or quickly broadens to other stakeholders."
+              },
+              {
+                q: "If a follow-up were worth doing, what would you want it to help you evaluate or decide?",
+                why: "It gives you a natural path to a next step without forcing one."
+              }
+            ]
+          },
+          {
+            heading: "Likely Objections",
+            sub: "Calm counters built for a live conversation.",
+            type: "objections",
+            items: [
+              {
+                objection: "We are not actively shopping right now.",
+                counter: "That's completely fine. We do not need to turn this into a buying process today. If nothing else, the call can help us see whether there is a real use case worth paying attention to later.",
+                followUp: "What would need to be true for this to become more than a good conversation?"
+              },
+              {
+                objection: "Our needs are pretty specialized.",
+                counter: "I would expect that with a public-sector risk audience. The useful question is whether the specialization lives in the programs themselves or whether the team is also carrying avoidable operational complexity underneath them.",
+                followUp: "Which part of the education model feels most specific to PRIMA?"
+              },
+              {
+                objection: "We already have something in place.",
+                counter: "Makes sense. I am not assuming the current setup is broken. I just want to understand where it serves you well and where it may be limiting the member or admin experience.",
+                followUp: "What is the current setup best at, and where does it frustrate you?"
+              }
+            ]
+          },
+          {
+            heading: "Opener + Next Step Ask",
+            sub: "Copy-ready language for the call.",
+            type: "actions",
+            opener: "Shaunda, thanks again for being flexible on timing. The reason I reached out is that associations serving specialized professional audiences usually end up balancing a strong member learning experience with a lot of back-end CE and credentialing work. I'd love to understand how PRIMA is handling that today and where it feels smooth versus heavier than it should.",
+            next: "If it looks like there is a real use case here, could we do a follow-up working session around your current education flow and the pieces you would want any platform to handle well?",
+            soft: "If it seems relevant, we can compare notes on whether a deeper session would even be worth the time."
+          }
+        ]
+      },
+      {
+        id: "aps",
+        day: "Wed",
+        date: "Wednesday, May 21",
+        time: "3:00-3:45 PM EDT",
+        meetingType: "Intro + fit check",
+        title: "D2L; American Philatelic Society Intro",
+        account: "American Philatelic Society",
+        externalContact: "Jeff Puhala",
+        contactTitle: "Director of Education",
+        contactEmail: "jpuhala@stamps.org",
+        fitLabel: "Strong",
+        fitScore: 86,
+        fitReason: "Association learning goals, an incumbent platform, and a fit-check agenda make this highly relevant.",
+        powerLabel: "High Influence",
+        powerClass: "power-high",
+        headline: "Use the agenda Jeff already accepted to get concrete about where Forj helps and where it boxes APS in.",
+        summary: "APS is not a blank-sheet opportunity. The call agenda already ties learning to member education, community, and growth, and it explicitly names current Forj gaps and a Brightspace fit check. That means your best path is a grounded comparison conversation, not a generic intro deck.",
+        tags: ["Association", "Forj in place", "Member education", "Growth agenda"],
+        sources: ["Outlook Calendar", "Outlook Email"],
+        primaryRead: "This looks like a real platform-shaping conversation, but one where the incumbent context matters a lot.",
+        callJob: "Get precise on what APS wants from member education and what Forj is not giving them today.",
+        watchout: "Do not spend the call trashing Forj or treating community and education as the same thing.",
+        sourceNotes: [
+          { label: "Grounded", text: "Calendar agenda explicitly named APS goals around member education, community, and growth." },
+          { label: "Grounded", text: "The agenda also calls out current Forj setup, what is working, what is missing, and a Brightspace fit check." },
+          { label: "Grounded", text: "Jeff accepted the meeting and is identified in email context as Director of Education." }
+        ],
+        prep: [
+          "Bring one simple way to talk about Brightspace as a member-facing learning hub without overclaiming community capabilities.",
+          "Be ready to ask what Forj is doing well so the conversation feels balanced and credible.",
+          "Know which follow-up workflow demo you would propose if fit is real.",
+          "Keep growth and member education linked, but not mashed together."
+        ],
+        sections: [
+          {
+            heading: "Account Snapshot",
+            sub: "Fast read on fit and timing.",
+            type: "account",
+            icp: "Strong - association context, named education goals, and an active incumbent-platform discussion create a high-fit setup.",
+            signals: [
+              "The agenda already links member education, community, and growth as business outcomes.",
+              "Jeff is willing to compare what Forj is doing today versus what is missing.",
+              "This is framed as a fit check with Brightspace configuration context, not a cold hello."
+            ],
+            read: "APS appears to already have meaningful learning and community infrastructure in place, which is useful because it makes the conversation concrete. The gap to uncover is not whether they care about learning. It is where the current setup stops supporting their education goals, member experience, or growth ambitions well enough. The strongest outcome is a crisp read on the few workflows that would justify a deeper session.",
+            sellerNote: "Get precise on what Forj is doing well enough to keep versus where it is constraining education, community, or program growth."
+          },
+          {
+            heading: "Contact Angle",
+            sub: "How to approach the buyer in front of you.",
+            type: "contact",
+            buyerType: "Program owner (High confidence)",
+            priorities: [
+              { title: "Member education outcomes", copy: "Jeff likely cares about whether learning is actually supporting APS member value and progression." },
+              { title: "Practical platform gaps", copy: "The explicit Forj comparison suggests he wants a grounded conversation about current-state limits." },
+              { title: "Learning as part of growth", copy: "The agenda links education to community and growth, which hints at broader strategic expectations for the program." }
+            ],
+            approach: "Use the agenda he already accepted as your map. Let Jeff teach you where Forj is helping and where it is not enough before you position Brightspace. The tone should feel like a thoughtful fit assessment, not an attack on the incumbent.",
+            avoid: "Do not assume dissatisfaction is universal or that a platform switch is already decided."
+          },
+          {
+            heading: "D2L Value Angles",
+            sub: "Exactly three proof points tailored to the account.",
+            type: "angles",
+            items: [
+              {
+                title: "A member-facing learning hub that supports growth",
+                proof: "Brightspace can give APS a clearer education home for structured learning, member progression, and programs that contribute to retention and growth goals.",
+                fit: "This fits because member education, community, and growth were named directly in the meeting agenda."
+              },
+              {
+                title: "Flexibility beyond current Forj gaps",
+                proof: "If Forj is handling parts of the experience but leaving operational or learner-experience gaps, Brightspace can be evaluated as a stronger foundation for the learning workflows that matter most.",
+                fit: "This fits because the agenda explicitly asks what is working and what is missing in the current Forj setup."
+              },
+              {
+                title: "Better control for the education team",
+                proof: "Stronger delivery, completion visibility, and admin control can help APS run member learning more intentionally instead of forcing the education team to work around platform constraints.",
+                fit: "This fits because a Director of Education usually lives close to both strategy and day-to-day program execution."
+              }
+            ]
+          },
+          {
+            heading: "Discovery Questions",
+            sub: "Questions stay visible; rationale opens on demand.",
+            type: "discovery",
+            questions: [
+              {
+                q: "When APS talks about member education, community, and growth in the same breath, how do those goals connect in practice?",
+                why: "This helps you understand whether learning is seen as a core growth lever or simply one supporting function among many."
+              },
+              {
+                q: "What is Forj doing well enough today that you would not want to lose, and where does it start to feel limiting?",
+                why: "A balanced read on the incumbent makes your Brightspace positioning more credible and more useful."
+              },
+              {
+                q: "What should the member learning experience feel like if the platform is really working for APS?",
+                why: "This uncovers learner-experience expectations before you talk solution."
+              },
+              {
+                q: "Where does the education team feel friction behind the scenes even if members do not always see it?",
+                why: "The deal may be won as much on operational lift as on front-end experience."
+              },
+              {
+                q: "If a follow-up session made sense, what are the two or three workflows you would most want to pressure-test?",
+                why: "It creates a natural bridge to the next step without skipping ahead."
+              }
+            ]
+          },
+          {
+            heading: "Likely Objections",
+            sub: "Calm counters built for a live conversation.",
+            type: "objections",
+            items: [
+              {
+                objection: "Forj already covers a lot of what we need.",
+                counter: "That may be true, and I am not trying to force a replacement story where there isn't one. What is worth exploring is whether the remaining gaps matter enough to APS's education and growth goals to justify a different approach.",
+                followUp: "Which missing piece would have to improve for this to be worth serious attention?"
+              },
+              {
+                objection: "Our community strategy is broader than an LMS.",
+                counter: "I agree. I would not try to collapse community and learning into one thing. The useful question is where a better learning experience can support those broader member goals without pretending to solve everything.",
+                followUp: "Where does learning most clearly support community or growth today?"
+              },
+              {
+                objection: "A platform change sounds like a lot of work.",
+                counter: "It can be, which is why the goal here is not to jump straight to change. It is to understand whether the pain or constraint is meaningful enough to deserve a more focused evaluation.",
+                followUp: "What would need to be true for a deeper look to feel justified?"
+              }
+            ]
+          },
+          {
+            heading: "Opener + Next Step Ask",
+            sub: "Copy-ready language for the call.",
+            type: "actions",
+            opener: "Jeff, thanks for making the time. From the agenda, it sounds like you're trying to connect member education goals with bigger community and growth outcomes, while being honest about what Forj is and isn't giving you today. I'd like to start there so we can decide pretty quickly whether Brightspace is worth a deeper look or not.",
+            next: "If we see a fit, let's set up a follow-up session around the two or three member-facing workflows you'd want to see in a Brightspace configuration.",
+            soft: "If it looks directionally useful, we can compare notes on the best follow-up rather than forcing a bigger next step today."
+          }
+        ]
+      },
+      {
+        id: "americanhort",
+        day: "Thu",
+        date: "Thursday, May 22",
+        time: "12:30-1:00 PM EDT",
+        meetingType: "Quick chat",
+        title: "AmericanHort & D2L - Quick Chat w/ Pat",
+        account: "AmericanHort",
+        externalContact: "Meagann / Meagan",
+        contactTitle: "Title not surfaced",
+        contactEmail: "meagann@americanhort.org",
+        fitLabel: "Moderate",
+        fitScore: 58,
+        fitReason: "The organization likely sits in an association-shaped lane, but the live context is thin and the meeting appears very early.",
+        powerLabel: "Low Certainty",
+        powerClass: "power-low",
+        headline: "Qualification first. Do not pretend this is farther along than it is.",
+        summary: "This looks like a lightweight exploratory conversation with very little surrounding thread context. The safest and most useful prep move is to assume almost nothing: confirm role, audience, current learning or training priorities, and whether there is any real why-now behind the meeting.",
+        tags: ["Very early", "Thin context", "Qualification call", "Use cautious inference"],
+        sources: ["Outlook Calendar"],
+        primaryRead: "There may be a real associations-style fit here, but you do not have enough proof yet to build a hard-point-of-view pitch.",
+        callJob: "Figure out whether education or training is actually strategic for this contact and who owns it.",
+        watchout: "Do not sound overprepared in a way that reveals guesswork. Curiosity wins here.",
+        sourceNotes: [
+          { label: "Grounded", text: "The meeting exists on the calendar with a named external contact and no richer surrounding email context." },
+          { label: "Inference", text: "AmericanHort likely lives in an association or member-serving context, but that should be treated as a hypothesis until confirmed." },
+          { label: "Gap", text: "No contact title, current platform context, or clear trigger event surfaced in the connected sources." }
+        ],
+        prep: [
+          "Open light and quickly ask about role, audience, and why this conversation made sense now.",
+          "Be ready to talk about associations or member learning only after you confirm it is relevant.",
+          "Set a low bar for the next step: the win may simply be identifying the right owner or use case.",
+          "Keep notes on exact buyer language because you may be building the real brief live."
+        ],
+        sections: [
+          {
+            heading: "Account Snapshot",
+            sub: "Fast read on fit and timing.",
+            type: "account",
+            icp: "Moderate - plausible fit, but current evidence is thin and should be handled carefully.",
+            signals: [
+              "There is a live external conversation on the calendar with a named contact.",
+              "The invite was framed as a quick chat, which usually means low-pressure early-stage discovery.",
+              "No richer email thread or prior meeting context surfaced, so qualification is the main job."
+            ],
+            read: "This looks like an early-stage connection rather than an active evaluation. The opportunity is not to overprepare a solution story. It is to learn whether AmericanHort has member education, workforce training, or certification priorities that make D2L relevant at all. If the fit is real, the first call should surface ownership, audience, and why-now signal.",
+            sellerNote: "Spend the first half of the call qualifying role, audience, and initiative before you position anything."
+          },
+          {
+            heading: "Contact Angle",
+            sub: "How to approach the buyer in front of you.",
+            type: "contact",
+            buyerType: "Unknown (Low confidence)",
+            priorities: [
+              { title: "Quick relevance check", copy: "Early calls like this often succeed or fail on whether the conversation feels useful within the first few minutes." },
+              { title: "Clarity around ownership", copy: "You need to learn whether this person owns education, influences it, or is simply a connector." },
+              { title: "Practical value if a use case exists", copy: "If they touch learning programs, learner experience and team efficiency are likely to matter." }
+            ],
+            approach: "Keep it light, curious, and grounded. Ask simple questions that clarify their role, the audience they serve, and whether education is tied to membership, workforce, or credentialing goals. Earn the right to go deeper instead of assuming a known use case.",
+            avoid: "Do not act as if there is already a confirmed project or platform gap in motion."
+          },
+          {
+            heading: "D2L Value Angles",
+            sub: "Exactly three proof points tailored to the account.",
+            type: "angles",
+            items: [
+              {
+                title: "A flexible learning experience if member or workforce education is in play",
+                proof: "If AmericanHort is serving members, partners, or a professional audience through education, Brightspace can support a modern learner experience without forcing a rigid one-size-fits-all model.",
+                fit: "This is the best current hypothesis for an early conversation with an organization that appears association-shaped, but it still needs validation."
+              },
+              {
+                title: "Operational lift for lean program teams",
+                proof: "If a small team is managing programs, reporting, and learner support, Brightspace can help reduce scattered admin work and make delivery easier to manage.",
+                fit: "This is worth testing because lean-team pain is common in organizations with member or external learning programs."
+              },
+              {
+                title: "A stronger foundation if multiple audiences are involved",
+                proof: "If AmericanHort is serving different learner groups or planning to grow education offerings, Brightspace can be positioned as a platform that supports that complexity more cleanly over time.",
+                fit: "This should only be developed further if the call confirms multiple programs or audiences matter."
+              }
+            ]
+          },
+          {
+            heading: "Discovery Questions",
+            sub: "Questions stay visible; rationale opens on demand.",
+            type: "discovery",
+            questions: [
+              {
+                q: "Before we get into platforms, how does education or training show up in your world today?",
+                why: "This confirms whether there is even a real learning use case behind the meeting."
+              },
+              {
+                q: "Who is the primary audience you are serving through that work: members, partners, customers, staff, or someone else?",
+                why: "Audience tells you whether the conversation fits Pat's D2L lane and what value angles actually matter."
+              },
+              {
+                q: "What are the biggest goals tied to that work this year?",
+                why: "This surfaces whether the topic is strategic, operational, or simply exploratory."
+              },
+              {
+                q: "If you already have tools in place, where do they feel good enough and where do they create friction?",
+                why: "It gives you a current-state read without assuming dissatisfaction."
+              },
+              {
+                q: "If a follow-up were worth doing, what would you want it to help you evaluate or decide?",
+                why: "This gives you a clean way to qualify next-step seriousness."
+              }
+            ]
+          },
+          {
+            heading: "Likely Objections",
+            sub: "Calm counters built for a live conversation.",
+            type: "objections",
+            items: [
+              {
+                objection: "We are really just learning right now.",
+                counter: "That's perfectly fine. We do not need to manufacture urgency. If today's conversation simply helps us figure out whether there is a relevant use case and who should be involved, that is still a good outcome.",
+                followUp: "What would make a follow-up feel worthwhile instead of premature?"
+              },
+              {
+                objection: "This is not a priority for us at the moment.",
+                counter: "Understood. I would rather know that early than force a fit. It still may be useful to understand where education sits on the priority list so I know whether to stay close or step back.",
+                followUp: "What is taking precedence over it right now?"
+              },
+              {
+                objection: "We already have something in place.",
+                counter: "Makes sense. I am not assuming the current setup is broken. I am really just trying to understand whether it is doing the job you need or whether there are gaps worth keeping an eye on.",
+                followUp: "What is the current setup best at, and where does it start to feel limiting?"
+              }
+            ]
+          },
+          {
+            heading: "Opener + Next Step Ask",
+            sub: "Copy-ready language for the call.",
+            type: "actions",
+            opener: "Meagan, thanks for making a few minutes. I do not want to assume too much going in, so I'd love to start with how education or training fits into AmericanHort today and whether there is an active priority behind the conversation. If there is, I can be useful quickly. If not, we can keep it light and compare notes.",
+            next: "If there is a real use case here, could we pull in the person who owns the program or platform side and do a more focused working session?",
+            soft: "If it feels early, we can simply decide whether a second conversation makes sense at all."
+          }
+        ]
+      }
+    ];
+
+    const state = {
+      currentId: briefs[0].id,
+      recent: JSON.parse(localStorage.getItem("briefHistory") || "[]"),
+      expandAllDiscovery: false
+    };
+
+    const els = {
+      meetingList: document.getElementById("meetingList"),
+      historyList: document.getElementById("historyList"),
+      heroEyebrow: document.getElementById("heroEyebrow"),
+      heroTitle: document.getElementById("heroTitle"),
+      heroSubtitle: document.getElementById("heroSubtitle"),
+      heroMeta: document.getElementById("heroMeta"),
+      sourceRow: document.getElementById("sourceRow"),
+      fitValue: document.getElementById("fitValue"),
+      fitFill: document.getElementById("fitFill"),
+      fitNote: document.getElementById("fitNote"),
+      powerBadge: document.getElementById("powerBadge"),
+      signalPrimary: document.getElementById("signalPrimary"),
+      signalCallJob: document.getElementById("signalCallJob"),
+      signalWatchout: document.getElementById("signalWatchout"),
+      progressGrid: document.getElementById("progressGrid"),
+      sections: document.getElementById("sections"),
+      prepList: document.getElementById("prepList"),
+      noteList: document.getElementById("noteList"),
+      contextPad: document.getElementById("contextPad"),
+      contextMeta: document.getElementById("contextMeta"),
+      contextCount: document.getElementById("contextCount"),
+      toast: document.getElementById("toast"),
+      copyAll: document.getElementById("copyAll"),
+      copyOpener: document.getElementById("copyOpener"),
+      toggleAllDiscovery: document.getElementById("toggleAllDiscovery")
+    };
+
+    function getBrief(id) {
+      return briefs.find((brief) => brief.id === id) || briefs[0];
+    }
+
+    function renderMeetingList() {
+      els.meetingList.innerHTML = "";
+      briefs.forEach((brief) => {
+        const button = document.createElement("button");
+        button.className = "meeting-card" + (brief.id === state.currentId ? " is-active" : "");
+        button.innerHTML = `
+          <div class="meeting-meta">
+            <span>${brief.day}</span>
+            <span>${brief.time}</span>
+          </div>
+          <div class="meeting-title">${brief.account}</div>
+          <div class="meeting-contact">${brief.externalContact} • ${brief.meetingType}</div>
+          <div class="meeting-flags">
+            <span class="chip ${brief.fitLabel === "Strong" ? "green" : "amber"}">${brief.fitLabel} fit</span>
+            <span class="chip blue">${brief.contactTitle}</span>
+          </div>
+        `;
+        button.addEventListener("click", () => {
+          state.currentId = brief.id;
+          pushHistory(brief.id);
+          render();
+        });
+        els.meetingList.appendChild(button);
+      });
+    }
+
+    function renderHistory() {
+      els.historyList.innerHTML = "";
+      const items = state.recent
+        .filter((id, index, arr) => briefs.some((brief) => brief.id === id) && arr.indexOf(id) === index)
+        .slice(0, 3);
+
+      if (!items.length) {
+        const empty = document.createElement("div");
+        empty.className = "note";
+        empty.innerHTML = "<strong>No recent switches yet</strong><span>The last three briefs you open will live here for fast jump-backs.</span>";
+        els.historyList.appendChild(empty);
+        return;
+      }
+
+      items.forEach((id) => {
+        const brief = getBrief(id);
+        const button = document.createElement("button");
+        button.className = "history-item";
+        button.innerHTML = `<strong>${brief.account}</strong><span>${brief.externalContact} • ${brief.time}</span>`;
+        button.addEventListener("click", () => {
+          state.currentId = id;
+          pushHistory(id);
+          render();
+        });
+        els.historyList.appendChild(button);
+      });
+    }
+
+    function renderProgress() {
+      els.progressGrid.innerHTML = "";
+      progressSteps.forEach((label, index) => {
+        const step = document.createElement("div");
+        step.className = "progress-step";
+        step.innerHTML = `<span>Step ${index + 1}</span><strong>${label}</strong>`;
+        els.progressGrid.appendChild(step);
+      });
+
+      requestAnimationFrame(() => {
+        [...els.progressGrid.children].forEach((node, index) => {
+          setTimeout(() => node.classList.add("done"), 110 * index);
+        });
+      });
+    }
+
+    function renderHero(brief) {
+      els.heroEyebrow.textContent = `${brief.meetingType} • ${brief.date}`;
+      els.heroTitle.textContent = brief.account;
+      els.heroSubtitle.textContent = brief.summary;
+      els.heroMeta.innerHTML = `
+        <span class="chip">${brief.time}</span>
+        <span class="chip">${brief.externalContact}</span>
+        <span class="chip ${brief.fitLabel === "Strong" ? "green" : "amber"}">${brief.fitLabel} fit</span>
+        <span class="chip blue">${brief.contactEmail}</span>
+      `;
+      els.sourceRow.innerHTML = brief.sources.map((source) => `<span class="chip">${source}</span>`).join("");
+      els.fitValue.textContent = brief.fitLabel;
+      els.fitNote.textContent = brief.fitReason;
+      els.powerBadge.className = `power-badge ${brief.powerClass}`;
+      els.powerBadge.textContent = brief.powerLabel;
+      els.signalPrimary.textContent = brief.primaryRead;
+      els.signalCallJob.textContent = brief.callJob;
+      els.signalWatchout.textContent = brief.watchout;
+
+      requestAnimationFrame(() => {
+        els.fitFill.style.width = brief.fitScore + "%";
+      });
+    }
+
+    function createSectionCard(section, index) {
+      const card = document.createElement("article");
+      card.className = `section-card reveal delay-${Math.min(index + 1, 7)}`;
+
+      const head = document.createElement("div");
+      head.className = "section-head";
+      head.innerHTML = `
+        <div>
+          <h3>${section.heading}</h3>
+          <p class="section-sub">${section.sub}</p>
+        </div>
+        <button class="button secondary">Copy Section</button>
+      `;
+      const copyButton = head.querySelector("button");
+      copyButton.addEventListener("click", () => {
+        copyText(sectionToPlainText(section), "Section copied");
+      });
+
+      const body = document.createElement("div");
+      body.className = "section-body";
+
+      if (section.type === "account") {
+        body.innerHTML = `
+          <div class="section-columns">
+            <div class="stat-box">
+              <div class="stat-label">ICP Fit</div>
+              <div class="stat-value">${section.icp}</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Seller Note</div>
+              <div class="stat-value">${section.sellerNote}</div>
+            </div>
+          </div>
+          <div class="numbered-list">
+            ${section.signals.map((signal, idx) => `
+              <div class="item">
+                <div class="item-index">${idx + 1}</div>
+                <div>
+                  <div class="item-title">${signal}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+          <div class="tight-copy">${section.read}</div>
+        `;
+      }
+
+      if (section.type === "contact") {
+        body.innerHTML = `
+          <div class="section-columns">
+            <div class="stat-box">
+              <div class="stat-label">Buyer Type</div>
+              <div class="stat-value">${section.buyerType}</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">What To Avoid</div>
+              <div class="stat-value">${section.avoid}</div>
+            </div>
+          </div>
+          <div class="numbered-list">
+            ${section.priorities.map((priority, idx) => `
+              <div class="item">
+                <div class="item-index">${idx + 1}</div>
+                <div>
+                  <div class="item-title">${priority.title}</div>
+                  <div class="item-copy">${priority.copy}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+          <div class="tight-copy">${section.approach}</div>
+        `;
+      }
+
+      if (section.type === "angles") {
+        body.innerHTML = `
+          <div class="numbered-list">
+            ${section.items.map((item, idx) => `
+              <div class="item">
+                <div class="item-index">${idx + 1}</div>
+                <div>
+                  <div class="item-title">${item.title}</div>
+                  <div class="item-copy"><strong>Proof point:</strong> ${item.proof}</div>
+                  <div class="item-copy"><strong>Why it fits:</strong> ${item.fit}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      if (section.type === "discovery") {
+        const list = document.createElement("div");
+        list.className = "qa-list";
+        section.questions.forEach((question, idx) => {
+          const qa = document.createElement("div");
+          qa.className = "qa";
+          if (state.expandAllDiscovery) qa.classList.add("is-open");
+          qa.innerHTML = `
+            <button type="button" aria-expanded="${state.expandAllDiscovery ? "true" : "false"}">
+              <strong>${idx + 1}. ${question.q}</strong>
+              <span>${state.expandAllDiscovery ? "−" : "+"}</span>
+            </button>
+            <div class="answer"><strong>Why this matters:</strong> ${question.why}</div>
+          `;
+          qa.querySelector("button").addEventListener("click", () => {
+            qa.classList.toggle("is-open");
+            const button = qa.querySelector("button");
+            const open = qa.classList.contains("is-open");
+            button.setAttribute("aria-expanded", String(open));
+            qa.querySelector("span").textContent = open ? "−" : "+";
+          });
+          list.appendChild(qa);
+        });
+        body.appendChild(list);
+      }
+
+      if (section.type === "objections") {
+        body.innerHTML = `
+          <div class="objection-list">
+            ${section.items.map((item, idx) => `
+              <div class="objection">
+                <h4>${idx + 1}. ${item.objection}</h4>
+                <p><strong>Counter:</strong> ${item.counter}</p>
+                <p><strong>Follow-up:</strong> ${item.followUp}</p>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      if (section.type === "actions") {
+        body.innerHTML = `
+          <div class="action-trio">
+            <div class="action-card opener">
+              <h4>Opener</h4>
+              <p>${section.opener}</p>
+            </div>
+            <div class="action-card next-step">
+              <h4>Next Step Ask</h4>
+              <p>${section.next}</p>
+            </div>
+            <div class="action-card soft">
+              <h4>Optional Softer Version</h4>
+              <p>${section.soft}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      card.appendChild(head);
+      card.appendChild(body);
+      return card;
+    }
+
+    function renderSections(brief) {
+      els.sections.innerHTML = "";
+      brief.sections.forEach((section, index) => {
+        els.sections.appendChild(createSectionCard(section, index));
+      });
+    }
+
+    function renderPrep(brief) {
+      els.prepList.innerHTML = "";
+      brief.prep.forEach((item, index) => {
+        const key = `prep-${brief.id}-${index}`;
+        const wrap = document.createElement("label");
+        wrap.className = "check";
+        wrap.innerHTML = `
+          <input type="checkbox" ${localStorage.getItem(key) === "true" ? "checked" : ""}>
+          <span>${item}</span>
+        `;
+        wrap.querySelector("input").addEventListener("change", (event) => {
+          localStorage.setItem(key, String(event.target.checked));
+        });
+        els.prepList.appendChild(wrap);
+      });
+    }
+
+    function renderNotes(brief) {
+      els.noteList.innerHTML = "";
+      brief.sourceNotes.forEach((note) => {
+        const item = document.createElement("div");
+        item.className = "note";
+        item.innerHTML = `<strong>${note.label}</strong><span>${note.text}</span>`;
+        els.noteList.appendChild(item);
+      });
+      els.contextPad.value = localStorage.getItem(`context-pad-${brief.id}`) || "";
+      updateContextCount();
+    }
+
+    function sectionToPlainText(section) {
+      if (section.type === "account") {
+        return [
+          "Account Snapshot",
+          `ICP Fit: ${section.icp}`,
+          "Timing Signals:",
+          ...section.signals.map((signal, idx) => `${idx + 1}. ${signal}`),
+          `Account Read: ${section.read}`,
+          `Seller Note: ${section.sellerNote}`
+        ].join("\n");
+      }
+
+      if (section.type === "contact") {
+        return [
+          "Contact Angle",
+          `Buyer Type: ${section.buyerType}`,
+          "Likely Priorities:",
+          ...section.priorities.map((priority, idx) => `${idx + 1}. ${priority.title} - ${priority.copy}`),
+          `Approach Note: ${section.approach}`,
+          `What To Avoid: ${section.avoid}`
+        ].join("\n");
+      }
+
+      if (section.type === "angles") {
+        return [
+          "D2L Value Angles",
+          ...section.items.map((item, idx) => `${idx + 1}. ${item.title}\nProof point: ${item.proof}\nWhy it fits: ${item.fit}`)
+        ].join("\n");
+      }
+
+      if (section.type === "discovery") {
+        return [
+          "Discovery Questions",
+          ...section.questions.map((question, idx) => `${idx + 1}. ${question.q}\nWhy this matters: ${question.why}`)
+        ].join("\n");
+      }
+
+      if (section.type === "objections") {
+        return [
+          "Likely Objections",
+          ...section.items.map((item, idx) => `${idx + 1}. Objection: ${item.objection}\nCounter: ${item.counter}\nFollow-up: ${item.followUp}`)
+        ].join("\n");
+      }
+
+      if (section.type === "actions") {
+        return [
+          "Opener + Next Step Ask",
+          `Opener: ${section.opener}`,
+          `Next Step Ask: ${section.next}`,
+          `Optional Softer Version: ${section.soft}`
+        ].join("\n");
+      }
+
+      return "";
+    }
+
+    function briefToPlainText(brief) {
+      return [
+        `${brief.account} | ${brief.date} | ${brief.time}`,
+        `${brief.externalContact} | ${brief.contactTitle}`,
+        "",
+        ...brief.sections.map(sectionToPlainText)
+      ].join("\n\n");
+    }
+
+    function copyText(text, message) {
+      navigator.clipboard.writeText(text).then(() => showToast(message)).catch(() => {
+        showToast("Copy failed");
+      });
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        els.toast.classList.remove("show");
+      }, 1800);
+    }
+
+    function pushHistory(id) {
+      state.recent = [id, ...state.recent.filter((entry) => entry !== id)].slice(0, 3);
+      localStorage.setItem("briefHistory", JSON.stringify(state.recent));
+    }
+
+    function updateContextCount() {
+      const value = els.contextPad.value || "";
+      const count = value.length;
+      els.contextCount.textContent = `${count} characters`;
+      const warn = count >= 400;
+      els.contextMeta.classList.toggle("warn", warn);
+      els.contextMeta.firstElementChild.textContent = warn
+        ? "Context is getting dense. Clarity may drop."
+        : "Personal prep pad";
+    }
+
+    function render() {
+      const brief = getBrief(state.currentId);
+      renderMeetingList();
+      renderHistory();
+      renderHero(brief);
+      renderProgress();
+      renderSections(brief);
+      renderPrep(brief);
+      renderNotes(brief);
+      els.copyAll.onclick = () => copyText(briefToPlainText(brief), "Full brief copied");
+      els.copyOpener.onclick = () => {
+        const actionSection = brief.sections.find((section) => section.type === "actions");
+        copyText(sectionToPlainText(actionSection), "Opener copied");
+      };
+      els.toggleAllDiscovery.textContent = state.expandAllDiscovery ? "Collapse Discovery Rationale" : "Expand Discovery Rationale";
+    }
+
+    els.contextPad.addEventListener("input", () => {
+      const brief = getBrief(state.currentId);
+      localStorage.setItem(`context-pad-${brief.id}`, els.contextPad.value);
+      updateContextCount();
+    });
+
+    els.toggleAllDiscovery.addEventListener("click", () => {
+      state.expandAllDiscovery = !state.expandAllDiscovery;
+      renderSections(getBrief(state.currentId));
+      els.toggleAllDiscovery.textContent = state.expandAllDiscovery ? "Collapse Discovery Rationale" : "Expand Discovery Rationale";
+    });
+
+    pushHistory(state.currentId);
+    render();
+  </script>
+</body>
+</html>

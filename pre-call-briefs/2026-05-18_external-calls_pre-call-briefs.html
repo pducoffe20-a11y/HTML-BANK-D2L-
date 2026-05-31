@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Call Briefs | Week of May 18, 2026</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+    :root {
+      --bg: #f4efe5;
+      --bg-2: #efe7d8;
+      --ink: #14211d;
+      --muted: #54615b;
+      --panel: rgba(255, 251, 244, 0.88);
+      --panel-strong: #fffaf1;
+      --line: rgba(20, 33, 29, 0.12);
+      --teal: #0d766d;
+      --teal-deep: #0b5b56;
+      --amber: #c36c14;
+      --amber-soft: #f3d9b8;
+      --clay: #a2442f;
+      --moss: #5f7a34;
+      --navy: #163b4a;
+      --shadow: 0 22px 60px rgba(20, 33, 29, 0.12);
+      --radius: 22px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0)),
+        linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 52%, #e2eadf 100%);
+      color: var(--ink);
+      font-family: "Syne", "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(20, 33, 29, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 33, 29, 0.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.08));
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 22px;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .rail,
+    .stage {
+      min-width: 0;
+    }
+
+    .rail {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.6);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .rail-card {
+      padding: 20px;
+    }
+
+    .eyebrow,
+    .mono {
+      font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      letter-spacing: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--teal-deep);
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--amber);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .headline {
+      margin: 12px 0 8px;
+      font-size: clamp(2rem, 2.8vw, 3.6rem);
+      line-height: 0.98;
+    }
+
+    .subhead {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.97rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      background: rgba(255,255,255,0.45);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .brief-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .brief-button {
+      width: 100%;
+      text-align: left;
+      padding: 14px 14px 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.55);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .brief-button:hover,
+    .brief-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(13, 118, 109, 0.42);
+      outline: none;
+    }
+
+    .brief-button.active {
+      background: linear-gradient(135deg, rgba(13, 118, 109, 0.16), rgba(195, 108, 20, 0.14));
+      border-color: rgba(13, 118, 109, 0.34);
+    }
+
+    .brief-button .title {
+      display: block;
+      font-size: 0.98rem;
+      margin-bottom: 7px;
+    }
+
+    .brief-button .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 0 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-family: "IBM Plex Mono", monospace;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tag.upcoming {
+      background: rgba(13, 118, 109, 0.12);
+      color: var(--teal-deep);
+      border-color: rgba(13, 118, 109, 0.2);
+    }
+
+    .tag.completed {
+      background: rgba(84, 97, 91, 0.12);
+      color: #44504b;
+      border-color: rgba(84, 97, 91, 0.22);
+    }
+
+    .tag.hot {
+      background: rgba(162, 68, 47, 0.12);
+      color: var(--clay);
+      border-color: rgba(162, 68, 47, 0.24);
+    }
+
+    .stage {
+      padding-bottom: 40px;
+    }
+
+    .hero {
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .hero h2 {
+      margin: 10px 0 8px;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.02;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 70ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .action {
+      border: 1px solid rgba(20, 33, 29, 0.14);
+      background: rgba(255,255,255,0.68);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .action:hover,
+    .action:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.92);
+      outline: none;
+    }
+
+    .action.primary {
+      background: linear-gradient(135deg, var(--teal), #19968b);
+      border-color: transparent;
+      color: #fffdf9;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(310px, 0.8fr);
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .insight-band,
+    .support-panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.52);
+      padding: 18px;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini {
+      border-top: 4px solid transparent;
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,250,241,0.9);
+      min-height: 100%;
+    }
+
+    .mini h3,
+    .support-panel h3,
+    .section-card h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .mini ul,
+    .support-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .mini.grounded {
+      border-top-color: var(--teal);
+    }
+
+    .mini.inferred {
+      border-top-color: var(--amber);
+    }
+
+    .mini.questions {
+      border-top-color: var(--clay);
+    }
+
+    .support-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .fit-meter {
+      display: grid;
+      gap: 10px;
+    }
+
+    .fit-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .meter-track {
+      position: relative;
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(20, 33, 29, 0.08);
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal), #22a08d, #e2a24c);
+      transition: width 1200ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      font-family: "IBM Plex Mono", monospace;
+      border: 1px solid rgba(20, 33, 29, 0.14);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .badge.high {
+      color: var(--teal-deep);
+      border-color: rgba(13, 118, 109, 0.24);
+      background: rgba(13, 118, 109, 0.1);
+    }
+
+    .badge.medium {
+      color: #7c5419;
+      border-color: rgba(195, 108, 20, 0.26);
+      background: rgba(195, 108, 20, 0.12);
+    }
+
+    .badge.low {
+      color: #6a4742;
+      border-color: rgba(162, 68, 47, 0.24);
+      background: rgba(162, 68, 47, 0.12);
+    }
+
+    .context-box {
+      display: grid;
+      gap: 10px;
+    }
+
+    .context-box textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.82);
+      padding: 14px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .context-box textarea.warn {
+      border-color: rgba(195, 108, 20, 0.58);
+      box-shadow: 0 0 0 3px rgba(195, 108, 20, 0.1);
+    }
+
+    .counter-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .counter-row .warning {
+      color: #85530f;
+      display: none;
+    }
+
+    .counter-row .warning.show {
+      display: inline;
+    }
+
+    .loader {
+      margin-top: 22px;
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .loader-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .loader-title {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .progress-steps {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.52);
+      min-height: 74px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+
+    .step .index {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      display: inline-grid;
+      place-items: center;
+      background: rgba(20, 33, 29, 0.08);
+      font-size: 0.75rem;
+    }
+
+    .step.active {
+      transform: translateY(-2px);
+      background: rgba(13, 118, 109, 0.11);
+      border-color: rgba(13, 118, 109, 0.28);
+    }
+
+    .step.done {
+      background: rgba(95, 122, 52, 0.12);
+      border-color: rgba(95, 122, 52, 0.26);
+    }
+
+    .step.done .index {
+      background: rgba(95, 122, 52, 0.18);
+    }
+
+    .sections {
+      margin-top: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .section-card {
+      padding: 22px;
+      border-radius: 20px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(20, 33, 29, 0.1);
+      box-shadow: 0 12px 30px rgba(20, 33, 29, 0.06);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: rise 560ms cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+    }
+
+    .section-card.border-teal {
+      border-top: 5px solid var(--teal);
+    }
+
+    .section-card.border-amber {
+      border-top: 5px solid var(--amber);
+    }
+
+    .section-card.border-clay {
+      border-top: 5px solid var(--clay);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .copy-mini {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.84);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .section-body {
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .section-body p {
+      margin: 0 0 12px;
+    }
+
+    .section-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-body ol,
+    .section-body ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .section-body li + li {
+      margin-top: 8px;
+    }
+
+    .angle {
+      display: grid;
+      gap: 7px;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .angle:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .question {
+      border-top: 1px solid var(--line);
+      padding: 12px 0;
+    }
+
+    .question:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .question-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .question-row strong {
+      display: block;
+      font-size: 0.98rem;
+    }
+
+    .toggle {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.8);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.78rem;
+      flex-shrink: 0;
+    }
+
+    .question-detail {
+      margin-top: 10px;
+      padding-left: 12px;
+      border-left: 3px solid rgba(13, 118, 109, 0.18);
+      color: var(--muted);
+      display: none;
+    }
+
+    .question.open .question-detail {
+      display: block;
+    }
+
+    .objection {
+      border-top: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .objection:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .opener-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .opener-box {
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.7);
+      border-top: 4px solid transparent;
+      min-height: 100%;
+    }
+
+    .opener-box.opener {
+      border-top-color: var(--teal);
+    }
+
+    .opener-box.next {
+      border-top-color: var(--amber);
+    }
+
+    .opener-box.soft {
+      border-top-color: var(--clay);
+    }
+
+    .source-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(20, 33, 29, 0.06);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: rgba(20, 33, 29, 0.9);
+      color: #fffaf1;
+      padding: 12px 14px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 20;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { animation-delay: 0.04s; }
+    .delay-2 { animation-delay: 0.11s; }
+    .delay-3 { animation-delay: 0.18s; }
+    .delay-4 { animation-delay: 0.25s; }
+    .delay-5 { animation-delay: 0.32s; }
+    .delay-6 { animation-delay: 0.39s; }
+    .delay-7 { animation-delay: 0.46s; }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+      }
+
+      .hero-grid,
+      .opener-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        padding: 14px;
+      }
+
+      .hero,
+      .rail-card,
+      .loader,
+      .section-card {
+        padding: 18px;
+      }
+
+      .hero-top,
+      .loader-top,
+      .section-head,
+      .question-row,
+      .counter-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-actions,
+      .stats,
+      .insight-grid,
+      .progress-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <section class="panel rail-card">
+        <span class="eyebrow">Pat Ducoffe | External Meeting Prep</span>
+        <h1 class="headline">Week of May 18 call briefs</h1>
+        <p class="subhead">Detected from calendar events with non-D2L participants in the Monday, May 18, 2026 through Sunday, May 24, 2026 window. Built from calendar context first, then tightened with nearby email signals.</p>
+        <div class="stats">
+          <div class="stat">
+            <strong>3</strong>
+            <span class="mono">external meetings</span>
+          </div>
+          <div class="stat">
+            <strong>1</strong>
+            <span class="mono">still upcoming</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel rail-card">
+        <div class="eyebrow">Recent Briefs</div>
+        <div id="briefList" class="brief-list"></div>
+      </section>
+
+      <section class="panel rail-card">
+        <div class="eyebrow">Method</div>
+        <p class="subhead">These briefs separate grounded facts, strong inferences, and open questions so you can move fast without pretending certainty.</p>
+      </section>
+    </aside>
+
+    <main class="stage">
+      <section class="panel hero">
+        <div class="hero-top">
+          <div>
+            <span id="meetingStatus" class="tag upcoming">Upcoming</span>
+            <h2 id="meetingTitle"></h2>
+            <p id="meetingSummary"></p>
+          </div>
+          <div class="hero-actions">
+            <button class="action primary" id="copyAllButton" type="button">Copy full brief</button>
+            <button class="action" id="jumpQuestionsButton" type="button">Jump to discovery</button>
+          </div>
+        </div>
+
+        <div class="hero-grid">
+          <div class="insight-band">
+            <div class="insight-grid">
+              <div class="mini grounded">
+                <h3>Grounded facts</h3>
+                <ul id="groundedList"></ul>
+              </div>
+              <div class="mini inferred">
+                <h3>Strong inferences</h3>
+                <ul id="inferredList"></ul>
+              </div>
+              <div class="mini questions">
+                <h3>Open questions</h3>
+                <ul id="openList"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="support-panel">
+            <div class="fit-meter">
+              <div class="fit-label">
+                <strong id="fitText">ICP Fit</strong>
+                <span id="buyerBadge" class="badge medium">Buyer power</span>
+              </div>
+              <div class="meter-track" aria-hidden="true">
+                <div id="fitMeterFill" class="meter-fill"></div>
+              </div>
+            </div>
+
+            <div>
+              <h3>Meeting prep checklist</h3>
+              <ul id="checklist"></ul>
+            </div>
+
+            <div class="context-box">
+              <h3>Scratchpad</h3>
+              <textarea id="scratchpad" placeholder="Add last-minute context, objections, or names to pull in."></textarea>
+              <div class="counter-row">
+                <span class="mono" id="counter">0 characters</span>
+                <span id="counterWarning" class="warning mono">Passing 400 characters can muddy the signal.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="loader" class="panel loader">
+          <div class="loader-top">
+            <h3 class="loader-title">Assembling brief</h3>
+            <span class="mono" id="loaderState">Starting...</span>
+          </div>
+          <div id="progressSteps" class="progress-steps"></div>
+        </div>
+
+        <div id="sections" class="sections" hidden></div>
+        <div class="source-row" id="sourceRow"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const briefs = [
+      {
+        id: "americanhort",
+        title: "AmericanHort & D2L - Quick Chat w/ Pat",
+        shortTitle: "AmericanHort quick chat",
+        dateLabel: "Thu, May 22 | 12:30 PM EDT",
+        status: "upcoming",
+        statusLabel: "Upcoming today",
+        statusClass: "upcoming",
+        meetingType: "Quick chat",
+        account: "AmericanHort",
+        contact: "Meagan Nace",
+        contactTitle: "Title not visible in source",
+        summary: "Early-stage fit check with a likely association-style account. Strong vertical match is plausible, but role ownership, urgency, and current platform reality still need to be surfaced live.",
+        fitLabel: "Moderate fit",
+        fitPercent: 64,
+        buyerPower: "Low clarity",
+        buyerPowerClass: "low",
+        groundedFacts: [
+          "Calendar shows a 1:1 external meeting with Meagan Nace from AmericanHort.",
+          "Meagan accepted the invite on Wednesday, May 21, 2026.",
+          "No agenda or pain statement was shared in the invite thread."
+        ],
+        inferredFacts: [
+          "AmericanHort likely sits in an association or member-serving model where education can support engagement and non-dues value.",
+          "This looks like an exploratory conversation rather than an active evaluation.",
+          "The first useful goal is to confirm whether education is a real priority or just adjacent interest."
+        ],
+        openQuestions: [
+          "What role does Meagan own: education, membership, events, or another function?",
+          "What system or process does AmericanHort use today for member learning?",
+          "Is there an active trigger behind the meeting or is this simply early relationship building?"
+        ],
+        checklist: [
+          "Confirm Meagan's role in the first five minutes.",
+          "Ask what prompted the timing of this conversation now.",
+          "Find out what they use today for member or professional learning.",
+          "Decide whether the right next step is a deeper working session or a soft follow-up."
+        ],
+        sources: [
+          "Calendar invite sent May 14, 2026",
+          "Accepted reply from Meagan Nace on May 21, 2026"
+        ],
+        sections: [
+          {
+            title: "Account Snapshot",
+            border: "border-teal",
+            body: `
+              <p><strong>ICP Fit:</strong> Moderate - association-style fit looks promising, but the actual education priority and internal owner are still unverified.</p>
+              <p><strong>Timing Signals:</strong></p>
+              <ol>
+                <li>She accepted the quick chat without a lot of back-and-forth, which suggests basic openness.</li>
+                <li>The meeting is a direct 1:1 rather than a larger evaluation session, so this still reads as early stage.</li>
+                <li>No agenda or current-state detail has been shared yet, which is the main gap to close live.</li>
+              </ol>
+              <p><strong>Account Read:</strong> AmericanHort likely fits the kind of member-learning environment D2L knows well, but right now that fit is more directional than confirmed. The meeting matters because it is likely a first pass at whether there is a real education or member-experience issue worth unpacking. If there is signal, the next step should be a more structured follow-up with the owner of the current setup. If there is not, this should stay light and relationship-building.</p>
+              <p><strong>Seller Note:</strong> Spend the first 10 minutes determining whether this is an active initiative or just a useful exploratory conversation.</p>
+            `
+          },
+          {
+            title: "Contact Angle",
+            border: "border-teal",
+            body: `
+              <p><strong>Buyer Type:</strong> Unknown (Low confidence)</p>
+              <p><strong>Likely Priorities:</strong></p>
+              <ol>
+                <li>Member value and program relevance - likely if she sits near education, membership, or events.</li>
+                <li>Lean-team efficiency - common when education work spans a small association team.</li>
+                <li>Low-risk exploration - she accepted the meeting, but there is no visible pain language yet.</li>
+              </ol>
+              <p><strong>Approach Note:</strong> Keep it light, relevant, and diagnostic. Lead with AmericanHort's world rather than a D2L pitch, and invite her to correct your assumptions quickly. The goal is to earn the right to go deeper by uncovering one concrete pressure point, not to run a full platform story on a thin thread.</p>
+              <p><strong>What To Avoid:</strong> Do not assume she owns education strategy before you know how this decision path actually works.</p>
+            `
+          },
+          {
+            title: "D2L Value Angles",
+            border: "border-amber",
+            body: `
+              <div class="angle">
+                <strong>1. Member education that supports engagement and revenue</strong>
+                <span><strong>Proof point:</strong> If AmericanHort runs member learning, continuing education, or event-linked programming, Brightspace can help turn that into a clearer, more valuable experience for members rather than a scattered collection of content.</span>
+                <span><strong>Why it fits:</strong> Association-style organizations often need education to reinforce both member value and program growth.</span>
+              </div>
+              <div class="angle">
+                <strong>2. Cleaner operations for small teams</strong>
+                <span><strong>Proof point:</strong> D2L becomes relevant when a lean team is juggling content, delivery, reporting, and updates across multiple audiences and wants fewer manual workarounds.</span>
+                <span><strong>Why it fits:</strong> This is a practical hypothesis to test if education sits alongside membership or events rather than in a large dedicated learning tech team.</span>
+              </div>
+              <div class="angle">
+                <strong>3. Flexible foundation for mixed audience types</strong>
+                <span><strong>Proof point:</strong> If AmericanHort serves members, volunteers, partners, or event audiences differently, Brightspace can support varied pathways without flattening every audience into the same experience.</span>
+                <span><strong>Why it fits:</strong> Mixed audience needs are common in associations, even when the account is still early and lightly qualified.</span>
+              </div>
+            `
+          },
+          {
+            title: "Discovery Questions",
+            border: "border-amber",
+            discovery: [
+              {
+                question: "What prompted you to take this conversation now?",
+                why: "This gets to timing first and tells you whether there is a real initiative behind the meeting."
+              },
+              {
+                question: "How does education or professional development fit into AmericanHort's member strategy today?",
+                why: "You need to confirm whether the D2L-shaped use case actually exists and how central it is."
+              },
+              {
+                question: "What are you using now for courses, content, or member learning experiences, and where does it feel limiting?",
+                why: "This reveals current state and helps you separate curiosity from concrete pain."
+              },
+              {
+                question: "Who usually owns decisions like this on your side: education, membership, IT, or a mix?",
+                why: "You can map the buying path early instead of accidentally over-qualifying the wrong person."
+              },
+              {
+                question: "If this were worth another conversation, what would you want to learn or see next?",
+                why: "This gives you a buyer-led next step without forcing momentum that is not there yet."
+              }
+            ]
+          },
+          {
+            title: "Likely Objections",
+            border: "border-clay",
+            body: `
+              <div class="objection">
+                <p><strong>1. Objection:</strong> This is not a live priority right now.</p>
+                <p><strong>Counter:</strong> That is completely fine. A quick conversation can still be useful if it helps us decide whether this is worth revisiting later, and I do not need it to be more active than it is.</p>
+                <p><strong>Follow-up:</strong> What would need to change for this to become a real priority?</p>
+              </div>
+              <div class="objection">
+                <p><strong>2. Objection:</strong> We already have something in place.</p>
+                <p><strong>Counter:</strong> Understood. Most good conversations start there. The real question is whether what you have today is good enough for where the member education experience needs to go next.</p>
+                <p><strong>Follow-up:</strong> What is working well today, and what still feels patchy?</p>
+              </div>
+              <div class="objection">
+                <p><strong>3. Objection:</strong> Our team does not have bandwidth for a big change.</p>
+                <p><strong>Counter:</strong> That makes sense. If the team is stretched, the case for change only holds if it reduces complexity rather than adds to it. I would rather figure that out early.</p>
+                <p><strong>Follow-up:</strong> Where does the current setup eat the most time?</p>
+              </div>
+            `
+          },
+          {
+            title: "Opener + Next Step Ask",
+            border: "border-clay",
+            opener: "Thanks for making the time, Meagan. I do not want to force a big agenda onto a quick chat. My goal is really to understand how education or member learning fits into AmericanHort's priorities right now, and whether there is enough there to warrant a deeper conversation.",
+            next: "If it looks relevant, the next best step would probably be a short working session around your current setup, what you want members to experience, and where a platform like Brightspace would actually need to help.",
+            softer: "If the timing turns out to be early, even a quick compare-notes follow-up would still be useful."
+          }
+        ]
+      },
+      {
+        id: "gpm",
+        title: "GPM - D2L Technical Demo - 1:1 W/ Michael",
+        shortTitle: "GPM technical demo",
+        dateLabel: "Wed, May 21 | 10:00 AM EDT",
+        status: "completed",
+        statusLabel: "Completed yesterday",
+        statusClass: "completed",
+        meetingType: "Technical demo",
+        account: "Green Project Management",
+        contact: "Michael Pace",
+        contactTitle: "Vice President, Learning and Academics",
+        summary: "Strong-fit training organization already articulating stack pain, partner-delivery friction, and a specific bookstore workflow to validate in the next team session.",
+        fitLabel: "Strong fit",
+        fitPercent: 88,
+        buyerPower: "High influence",
+        buyerPowerClass: "high",
+        groundedFacts: [
+          "Michael described a five-plus-tool environment, including Thinkific, as fragmented and inefficient.",
+          "A 400-slide PowerPoint update process and accessibility concerns were called out as active pain.",
+          "Michael asked for a whole-team demo next Wednesday or Thursday and raised VitalSource or RedShelf workflow questions."
+        ],
+        inferredFacts: [
+          "This is beyond casual interest and already moving into multi-stakeholder evaluation.",
+          "The real test is not only general LMS fit but whether D2L can simplify specialized delivery and publishing workflows.",
+          "Leadership likely needs a business-case story built around simplification, governance, and scalability."
+        ],
+        openQuestions: [
+          "How central is the bookstore/content-pack motion to phase one versus a later requirement?",
+          "Which integration expectations are must-have versus nice-to-have for Michael's leadership team?",
+          "Will the executive demo be judged more on workflow clarity, operational efficiency, or strategic growth?"
+        ],
+        checklist: [
+          "Confirm who will join the whole-team or executive session.",
+          "Bring a crisp view on bookstore and external publishing workflow boundaries.",
+          "Anchor the story around stack consolidation, accessibility, and partner delivery control.",
+          "Send a short agenda before the next demo so Michael can tune it for the CEO and EVP."
+        ],
+        sources: [
+          "Calendar invite for May 21, 2026 technical demo",
+          "Michael Pace follow-up email on May 20, 2026",
+          "Terret call summary from May 21, 2026"
+        ],
+        sections: [
+          {
+            title: "Account Snapshot",
+            border: "border-teal",
+            body: `
+              <p><strong>ICP Fit:</strong> Strong - professional education delivery is core to the business, and the current learning stack pain is already explicit.</p>
+              <p><strong>Timing Signals:</strong></p>
+              <ol>
+                <li>The current delivery model relies on five or more disconnected tools, which creates clear operational drag.</li>
+                <li>Michael called out manual course updates, accessibility issues, and weak visibility when content is shared with outside academic partners.</li>
+                <li>He asked for next week's broader demo and raised a specific bookstore workflow question, which is a strong signal of active evaluation.</li>
+              </ol>
+              <p><strong>Account Read:</strong> GPM looks past generic interest and well into platform evaluation. The pressure is not just learner experience. It is also content operations, accessibility exposure, partner publishing control, and a fragmented admin workflow that leadership appears ready to fix. This meeting mattered because it helped validate Brightspace as a serious consolidation candidate. The next one matters because it has to prove D2L can handle the specialized delivery model without losing executive simplicity.</p>
+              <p><strong>Seller Note:</strong> Validate whether the bookstore and external partner delivery workflow is a phase-one requirement or part of a broader roadmap.</p>
+            `
+          },
+          {
+            title: "Contact Angle",
+            border: "border-teal",
+            body: `
+              <p><strong>Buyer Type:</strong> Program owner (High confidence)</p>
+              <p><strong>Likely Priorities:</strong></p>
+              <ol>
+                <li>Reduce tool sprawl and admin burden - he has already named the current environment as inefficient.</li>
+                <li>Protect partner distribution and data control - outside academic delivery is an active concern.</li>
+                <li>Give leadership a credible path to simplify and scale - he is already pulling a broader group toward the next demo.</li>
+              </ol>
+              <p><strong>Approach Note:</strong> Lead with what changes in Michael's day-to-day and what leadership can stop worrying about. Use his own language: fragmented tools, accessibility, bookstore workflow, and partner delivery control. The next conversation should feel like a working session with executive relevance, not a longer feature tour.</p>
+              <p><strong>What To Avoid:</strong> Do not overpromise integration detail before you confirm exactly how VitalSource or RedShelf sit inside their sales and fulfillment motion.</p>
+            `
+          },
+          {
+            title: "D2L Value Angles",
+            border: "border-amber",
+            body: `
+              <div class="angle">
+                <strong>1. Consolidate a fragmented learning stack</strong>
+                <span><strong>Proof point:</strong> Brightspace is strongest here if GPM wants to replace a patchwork of tools with one governed home for delivery, content management, learner progress, and assessment workflows.</span>
+                <span><strong>Why it fits:</strong> Michael already described a five-plus-tool environment and leadership is open to consolidation.</span>
+              </div>
+              <div class="angle">
+                <strong>2. Cut content ops and accessibility drag</strong>
+                <span><strong>Proof point:</strong> Brightspace and D2L authoring workflows can reduce the manual pain of updating large course assets while improving consistency and accessibility discipline.</span>
+                <span><strong>Why it fits:</strong> The 400-slide maintenance burden and accessibility exposure are already visible, named problems.</span>
+              </div>
+              <div class="angle">
+                <strong>3. Govern external publishing without losing control</strong>
+                <span><strong>Proof point:</strong> If GPM needs to sell or distribute learning through outside academic channels, D2L is relevant because it can support controlled publishing models, clearer enrollment ownership, and better visibility than ad hoc sharing.</span>
+                <span><strong>Why it fits:</strong> Michael explicitly asked about the bookstore workflow and external partner content access.</span>
+              </div>
+            `
+          },
+          {
+            title: "Discovery Questions",
+            border: "border-amber",
+            discovery: [
+              {
+                question: "When you say the current setup feels fragmented, where does that break hardest today: content updates, learner experience, reporting, or partner delivery?",
+                why: "This isolates the most expensive pain and keeps the next demo focused on the right operational story."
+              },
+              {
+                question: "For the bookstore or content-pack motion, what has to happen from purchase through student access for the workflow to feel workable?",
+                why: "You need the real delivery path before speaking confidently about integration fit."
+              },
+              {
+                question: "What would your CEO and EVP need to believe in the next demo to treat this as a real platform change rather than another tool conversation?",
+                why: "This frames the executive session around decision criteria instead of generic enthusiasm."
+              },
+              {
+                question: "Which parts of the current Thinkific-plus-other-tools setup are acceptable enough that replacing them would need a very clear payoff?",
+                why: "This helps you separate true pain from tolerable status quo."
+              },
+              {
+                question: "If this moves, what would a strong first phase look like for GPM: one flagship program, a publishing workflow fix, or a broader stack replacement plan?",
+                why: "This clarifies scope and gives the deal a more landable first step."
+              }
+            ]
+          },
+          {
+            title: "Likely Objections",
+            border: "border-clay",
+            body: `
+              <div class="objection">
+                <p><strong>1. Objection:</strong> Our workflow is specialized because of bookstore and academic partner delivery.</p>
+                <p><strong>Counter:</strong> That makes sense. If the workflow around bookstore fulfillment and outside academic access is central, we should treat that as a design constraint, not a side note. I would rather map the exact handoff points first and be clear where Brightspace fits cleanly and where we need to validate integration detail.</p>
+                <p><strong>Follow-up:</strong> Can you walk me through the student and admin journey from purchase to course access today?</p>
+              </div>
+              <div class="objection">
+                <p><strong>2. Objection:</strong> This feels like a big change for the team.</p>
+                <p><strong>Counter:</strong> Totally fair. The case for change only works if it removes ongoing friction rather than creating a giant project for its own sake. The useful question is whether the current setup is costing enough time, rework, and risk that a phased move is actually the lower-friction path.</p>
+                <p><strong>Follow-up:</strong> Which two headaches would need to improve first for this to feel worth pursuing?</p>
+              </div>
+              <div class="objection">
+                <p><strong>3. Objection:</strong> We need stronger executive proof before we move further.</p>
+                <p><strong>Counter:</strong> That is reasonable. The next session should not be a longer product tour. It should help leadership see whether there is a cleaner operating model here and whether it solves the issues you already flagged.</p>
+                <p><strong>Follow-up:</strong> What would make the executive demo feel decisive instead of merely informational?</p>
+              </div>
+            `
+          },
+          {
+            title: "Opener + Next Step Ask",
+            border: "border-clay",
+            opener: "Thanks again for the time. From our last conversation, it sounds like the pressure is not just finding a nicer LMS. It is cleaning up a fragmented setup, making content updates less painful, and getting more control over how learning is delivered through outside partners. For this next session, I want to pressure-test those points with the broader team and make sure we show the bookstore and publishing workflow in a way that is actually useful.",
+            next: "If it works on your side, let's set the whole-team session for next Wednesday or Thursday and shape the agenda around three things: executive-level simplification, the bookstore or content-pack workflow, and what phase one could realistically look like.",
+            softer: "Happy to draft a short agenda first and let you tune it before we lock the broader group."
+          }
+        ]
+      },
+      {
+        id: "aps",
+        title: "D2L; American Philatelic Society Intro",
+        shortTitle: "American Philatelic Society intro",
+        dateLabel: "Wed, May 21 | 3:00 PM EDT",
+        status: "completed",
+        statusLabel: "Completed yesterday",
+        statusClass: "completed",
+        meetingType: "Intro",
+        account: "American Philatelic Society",
+        contact: "Jeff Puhala",
+        contactTitle: "Director of Education",
+        summary: "Association-fit opportunity that moved from intro call to formal proposal motion in a single day. Strong urgency, clear education ownership, and immediate follow-up materials make this one of the sharper signals in the week.",
+        fitLabel: "Strong fit",
+        fitPercent: 91,
+        buyerPower: "High influence",
+        buyerPowerClass: "high",
+        groundedFacts: [
+          "The invite agenda named APS goals as member education, community, and growth.",
+          "The current Forj setup was explicitly framed as something to assess for what is working and missing.",
+          "Jeff sent an RFP, RFP Q&A, course outlines, lessons 1 and 2, and asked for a proposal by June 1."
+        ],
+        inferredFacts: [
+          "APS is not just exploring; they are already in formal evaluation mode.",
+          "Education is likely tied to broader member strategy, not just content hosting.",
+          "Speed, specificity, and proposal discipline will matter more than a broad storytelling arc."
+        ],
+        openQuestions: [
+          "Which parts of the RFP are must-win items versus lower-weight requirements?",
+          "Who else besides Jeff will shape the proposal decision?",
+          "How much of the need is about replacing Forj versus expanding beyond what it can support?"
+        ],
+        checklist: [
+          "Read the RFP, Q&A, outlines, and first two lessons before the next touchpoint.",
+          "Mirror APS language around member education, community, and growth.",
+          "Confirm who will evaluate the proposal besides Jeff.",
+          "Stay tight on phase-one scope so the June 1 proposal feels usable."
+        ],
+        sources: [
+          "Calendar agenda from May 19, 2026 invite",
+          "Jeff Puhala follow-up email with RFP package on May 21, 2026"
+        ],
+        sections: [
+          {
+            title: "Account Snapshot",
+            border: "border-teal",
+            body: `
+              <p><strong>ICP Fit:</strong> Strong - association education sits squarely inside D2L's sweet spot, and this account has already moved into formal buying motion.</p>
+              <p><strong>Timing Signals:</strong></p>
+              <ol>
+                <li>The meeting agenda connected education directly to member value, community, and growth.</li>
+                <li>Jeff named the current Forj setup as a comparison point, which means there is already a platform conversation in motion.</li>
+                <li>He sent an RFP package and asked for a proposal by Sunday, June 1, 2026, which is a real near-term deadline.</li>
+              </ol>
+              <p><strong>Account Read:</strong> APS is not browsing. Jeff moved the conversation into a formal proposal lane immediately after the intro, which is one of the strongest buying signals in the week. The use case is highly aligned to D2L's association positioning: member education, community, growth, and a likely need for a stronger structured learning environment than Forj alone provides. This meeting mattered because it opened the door. The next move matters because it has to translate a good conversation into a precise, credible proposal.</p>
+              <p><strong>Seller Note:</strong> Validate what absolutely must show up in the June 1 proposal versus what can stay outside phase one.</p>
+            `
+          },
+          {
+            title: "Contact Angle",
+            border: "border-teal",
+            body: `
+              <p><strong>Buyer Type:</strong> Program owner (High confidence)</p>
+              <p><strong>Likely Priorities:</strong></p>
+              <ol>
+                <li>Member education and growth outcomes - those were called out directly in the meeting setup.</li>
+                <li>Practical gaps in the current Forj environment - the comparison is already active.</li>
+                <li>Proposal clarity and low-risk forward motion - Jeff followed up with real documents and a defined date.</li>
+              </ol>
+              <p><strong>Approach Note:</strong> Be direct, organized, and proposal-minded. Jeff already rewarded speed and specificity by sending the RFP package the same day. Use the strategic plan and materials he shared to mirror APS language back to him, and show that D2L understands both the member-facing experience and the internal education workload behind it.</p>
+              <p><strong>What To Avoid:</strong> Do not drift into generic nonprofit messaging when he has already handed over a formal scope and timeline.</p>
+            `
+          },
+          {
+            title: "D2L Value Angles",
+            border: "border-amber",
+            body: `
+              <div class="angle">
+                <strong>1. Member learning hub that supports growth</strong>
+                <span><strong>Proof point:</strong> Brightspace fits when an association wants education to do more than host content. It should support member value, repeat participation, and program growth in one member-facing environment.</span>
+                <span><strong>Why it fits:</strong> The invite agenda tied APS goals directly to member education, community, and growth.</span>
+              </div>
+              <div class="angle">
+                <strong>2. Better fit than a lighter community-first setup</strong>
+                <span><strong>Proof point:</strong> If Forj is good enough for community but thin for structured education, D2L can provide a stronger foundation for courses, pathways, reporting, and education operations without reducing the member experience to a file library.</span>
+                <span><strong>Why it fits:</strong> The current Forj setup was named explicitly as part of the fit discussion.</span>
+              </div>
+              <div class="angle">
+                <strong>3. Faster, cleaner education operations for a lean team</strong>
+                <span><strong>Proof point:</strong> Brightspace is relevant if APS needs to manage outlines, lessons, assessments, and future program expansion without growing admin drag every time a course changes.</span>
+                <span><strong>Why it fits:</strong> Jeff immediately shared detailed content materials, which suggests real program-management workload behind the scenes.</span>
+              </div>
+            `
+          },
+          {
+            title: "Discovery Questions",
+            border: "border-amber",
+            discovery: [
+              {
+                question: "When APS says education should support community and growth, what outcomes matter most: member retention, non-dues revenue, engagement, or program reach?",
+                why: "This ties the proposal to the business outcome that leadership will actually care about."
+              },
+              {
+                question: "What is Forj doing well enough today that you would want to preserve, and where is it getting in the way of the education experience?",
+                why: "You need to know whether the gap is feature depth, learner experience, admin workflow, or reporting."
+              },
+              {
+                question: "Looking at the RFP and course samples you sent, which requirements are truly must-have for phase one?",
+                why: "This keeps the proposal sharp and prevents it from growing into an unfocused transformation pitch."
+              },
+              {
+                question: "Who besides you will weigh in on the proposal and what lens will they use: education quality, budget, technical fit, or member strategy?",
+                why: "This surfaces the real evaluation committee and helps you prepare the next step properly."
+              },
+              {
+                question: "If this moves forward, what would a successful first 90 days look like for APS?",
+                why: "This gives rollout shape and helps position a realistic starting point."
+              }
+            ]
+          },
+          {
+            title: "Likely Objections",
+            border: "border-clay",
+            body: `
+              <div class="objection">
+                <p><strong>1. Objection:</strong> We already have Forj or another environment in place.</p>
+                <p><strong>Counter:</strong> Understood. The question is not whether something exists. It is whether it carries the education strategy well enough as the programs grow. If the current setup supports community but leaves real gaps in structured learning, that is worth looking at directly.</p>
+                <p><strong>Follow-up:</strong> Where does the current setup fall short most for your team or your learners?</p>
+              </div>
+              <div class="objection">
+                <p><strong>2. Objection:</strong> We need to keep the proposal timeline and workload manageable.</p>
+                <p><strong>Counter:</strong> That makes sense. The fastest way to keep this manageable is to stay tight on phase-one requirements and not turn the proposal into a giant transformation plan.</p>
+                <p><strong>Follow-up:</strong> What would make a June 1 proposal feel focused and usable on your side?</p>
+              </div>
+              <div class="objection">
+                <p><strong>3. Objection:</strong> Our association needs are pretty specific.</p>
+                <p><strong>Counter:</strong> I would expect that. Associations usually have a mix of member expectations, program complexity, and lean internal capacity. The useful next step is to map which needs are truly unique versus which ones need a stronger learning platform underneath.</p>
+                <p><strong>Follow-up:</strong> Which requirements feel most specific to APS?</p>
+              </div>
+            `
+          },
+          {
+            title: "Opener + Next Step Ask",
+            border: "border-clay",
+            opener: "Thanks again for making the time. What stood out to me is that APS is looking at education not just as content delivery, but as part of member value, community, and growth. I would like to use this conversation to understand where the current Forj setup supports that vision and where it starts to box you in.",
+            next: "If the conversation goes the right way, let's leave with a clear read on what needs to show up in a June 1 proposal and who else should weigh in before we put something formal in front of the team.",
+            softer: "If helpful, I can send back a short summary of what I heard and a draft proposal outline before we go further."
+          }
+        ]
+      }
+    ];
+
+    const progressLabels = [
+      "Account read",
+      "Contact read",
+      "Value angles",
+      "Discovery draft",
+      "Objection prep",
+      "Final opener"
+    ];
+
+    const storageKeys = {
+      selected: "precall-week-selected",
+      notes: "precall-week-notes",
+      checks: "precall-week-checks"
+    };
+
+    const elements = {
+      briefList: document.getElementById("briefList"),
+      meetingStatus: document.getElementById("meetingStatus"),
+      meetingTitle: document.getElementById("meetingTitle"),
+      meetingSummary: document.getElementById("meetingSummary"),
+      groundedList: document.getElementById("groundedList"),
+      inferredList: document.getElementById("inferredList"),
+      openList: document.getElementById("openList"),
+      checklist: document.getElementById("checklist"),
+      fitText: document.getElementById("fitText"),
+      buyerBadge: document.getElementById("buyerBadge"),
+      fitMeterFill: document.getElementById("fitMeterFill"),
+      loader: document.getElementById("loader"),
+      loaderState: document.getElementById("loaderState"),
+      progressSteps: document.getElementById("progressSteps"),
+      sections: document.getElementById("sections"),
+      sourceRow: document.getElementById("sourceRow"),
+      copyAllButton: document.getElementById("copyAllButton"),
+      jumpQuestionsButton: document.getElementById("jumpQuestionsButton"),
+      scratchpad: document.getElementById("scratchpad"),
+      counter: document.getElementById("counter"),
+      counterWarning: document.getElementById("counterWarning"),
+      toast: document.getElementById("toast")
+    };
+
+    let currentBriefId = localStorage.getItem(storageKeys.selected) || briefs[0].id;
+    let currentTimer = null;
+
+    function readNotes() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKeys.notes) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function writeNotes(notes) {
+      localStorage.setItem(storageKeys.notes, JSON.stringify(notes));
+    }
+
+    function readChecks() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKeys.checks) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function writeChecks(checks) {
+      localStorage.setItem(storageKeys.checks, JSON.stringify(checks));
+    }
+
+    function currentBrief() {
+      return briefs.find((brief) => brief.id === currentBriefId) || briefs[0];
+    }
+
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        elements.toast.classList.remove("show");
+      }, 1800);
+    }
+
+    function renderBriefButtons() {
+      const activeId = currentBriefId;
+      elements.briefList.innerHTML = briefs.map((brief) => `
+        <button class="brief-button ${brief.id === activeId ? "active" : ""}" data-brief-id="${brief.id}" type="button">
+          <span class="title">${brief.shortTitle}</span>
+          <span class="meta">
+            <span>${brief.dateLabel}</span>
+            <span class="tag ${brief.statusClass}">${brief.statusLabel}</span>
+          </span>
+        </button>
+      `).join("");
+
+      elements.briefList.querySelectorAll("[data-brief-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextId = button.getAttribute("data-brief-id");
+          if (nextId && nextId !== currentBriefId) {
+            currentBriefId = nextId;
+            localStorage.setItem(storageKeys.selected, nextId);
+            renderBriefButtons();
+            startBriefRender();
+          }
+        });
+      });
+    }
+
+    function populateLists(target, items) {
+      target.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    function renderChecklist(brief) {
+      const checks = readChecks();
+      const briefChecks = checks[brief.id] || [];
+      elements.checklist.innerHTML = brief.checklist.map((item, index) => {
+        const checked = briefChecks.includes(index);
+        return `
+          <li>
+            <label style="display:flex; gap:10px; align-items:flex-start;">
+              <input type="checkbox" data-check-index="${index}" ${checked ? "checked" : ""} style="margin-top:4px;">
+              <span>${item}</span>
+            </label>
+          </li>
+        `;
+      }).join("");
+
+      elements.checklist.querySelectorAll("[data-check-index]").forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+          const index = Number(checkbox.getAttribute("data-check-index"));
+          const nextChecks = readChecks();
+          const set = new Set(nextChecks[brief.id] || []);
+          if (checkbox.checked) {
+            set.add(index);
+          } else {
+            set.delete(index);
+          }
+          nextChecks[brief.id] = Array.from(set).sort((a, b) => a - b);
+          writeChecks(nextChecks);
+        });
+      });
+    }
+
+    function renderScratchpad(brief) {
+      const notes = readNotes();
+      elements.scratchpad.value = notes[brief.id] || "";
+      updateCounter();
+      elements.scratchpad.oninput = () => {
+        const nextNotes = readNotes();
+        nextNotes[brief.id] = elements.scratchpad.value;
+        writeNotes(nextNotes);
+        updateCounter();
+      };
+    }
+
+    function updateCounter() {
+      const count = elements.scratchpad.value.length;
+      elements.counter.textContent = `${count} characters`;
+      const warn = count >= 400;
+      elements.counterWarning.classList.toggle("show", warn);
+      elements.scratchpad.classList.toggle("warn", warn);
+    }
+
+    function buildDiscoveryMarkup(items) {
+      return items.map((item, index) => `
+        <div class="question">
+          <div class="question-row">
+            <div>
+              <strong>${index + 1}. ${item.question}</strong>
+            </div>
+            <button class="toggle" type="button" data-question-toggle>Why this matters</button>
+          </div>
+          <div class="question-detail"><strong>Why this matters:</strong> ${item.why}</div>
+        </div>
+      `).join("");
+    }
+
+    function buildSectionCard(section, index) {
+      const delay = `delay-${Math.min(index + 1, 7)}`;
+      let content = section.body || "";
+
+      if (section.discovery) {
+        content = buildDiscoveryMarkup(section.discovery);
+      }
+
+      if (section.opener) {
+        content = `
+          <div class="opener-grid">
+            <div class="opener-box opener">
+              <h3>Opener</h3>
+              <p>${section.opener}</p>
+            </div>
+            <div class="opener-box next">
+              <h3>Next Step Ask</h3>
+              <p>${section.next}</p>
+            </div>
+            <div class="opener-box soft">
+              <h3>Optional Softer Version</h3>
+              <p>${section.softer}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <section class="section-card ${section.border || ""} ${delay}" data-section="${section.title}">
+          <div class="section-head">
+            <h3>${section.title}</h3>
+            <button class="copy-mini" type="button" data-copy-section="${section.title}">Copy section</button>
+          </div>
+          <div class="section-body">${content}</div>
+        </section>
+      `;
+    }
+
+    function bindSectionInteractions() {
+      elements.sections.querySelectorAll("[data-question-toggle]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const question = button.closest(".question");
+          question.classList.toggle("open");
+          button.textContent = question.classList.contains("open") ? "Hide rationale" : "Why this matters";
+        });
+      });
+
+      elements.sections.querySelectorAll("[data-copy-section]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const card = button.closest(".section-card");
+          const title = card?.getAttribute("data-section") || "Section";
+          const text = sectionToText(card);
+          await navigator.clipboard.writeText(text);
+          showToast(`${title} copied`);
+        });
+      });
+    }
+
+    function sectionToText(card) {
+      const title = card.getAttribute("data-section");
+      const text = card.innerText.replace(/\n{3,}/g, "\n\n").trim();
+      return `${title}\n${"-".repeat(title.length)}\n${text.replace(title, "").trim()}`;
+    }
+
+    function briefToText(brief) {
+      const cards = Array.from(elements.sections.querySelectorAll(".section-card"));
+      const header = `${brief.title}\n${brief.dateLabel}\n${brief.contact} | ${brief.contactTitle}\nStatus: ${brief.statusLabel}\n`;
+      const grounded = [
+        "Grounded facts:",
+        ...brief.groundedFacts.map((item, index) => `${index + 1}. ${item}`),
+        "",
+        "Strong inferences:",
+        ...brief.inferredFacts.map((item, index) => `${index + 1}. ${item}`),
+        "",
+        "Open questions:",
+        ...brief.openQuestions.map((item, index) => `${index + 1}. ${item}`)
+      ].join("\n");
+      const sections = cards.map((card) => sectionToText(card)).join("\n\n");
+      return `${header}\n${grounded}\n\n${sections}`;
+    }
+
+    function renderSources(brief) {
+      elements.sourceRow.innerHTML = brief.sources.map((source) => `<span class="source-chip">${source}</span>`).join("");
+    }
+
+    function renderHero(brief) {
+      elements.meetingStatus.className = `tag ${brief.statusClass}`;
+      elements.meetingStatus.textContent = brief.statusLabel;
+      elements.meetingTitle.textContent = `${brief.account} | ${brief.contact}`;
+      elements.meetingSummary.textContent = `${brief.dateLabel} | ${brief.contactTitle}. ${brief.summary}`;
+      populateLists(elements.groundedList, brief.groundedFacts);
+      populateLists(elements.inferredList, brief.inferredFacts);
+      populateLists(elements.openList, brief.openQuestions);
+      elements.fitText.textContent = `${brief.fitLabel} | ${brief.meetingType}`;
+      elements.buyerBadge.className = `badge ${brief.buyerPowerClass}`;
+      elements.buyerBadge.textContent = brief.buyerPower;
+      renderChecklist(brief);
+      renderScratchpad(brief);
+      renderSources(brief);
+    }
+
+    function renderSections(brief) {
+      elements.sections.innerHTML = brief.sections.map((section, index) => buildSectionCard(section, index)).join("");
+      bindSectionInteractions();
+    }
+
+    function renderProgress() {
+      elements.progressSteps.innerHTML = progressLabels.map((label, index) => `
+        <div class="step" data-step-index="${index}">
+          <span class="index">${index + 1}</span>
+          <strong>${label}</strong>
+        </div>
+      `).join("");
+    }
+
+    function startBriefRender() {
+      clearTimeout(currentTimer);
+      const brief = currentBrief();
+      renderHero(brief);
+      renderProgress();
+      elements.sections.hidden = true;
+      elements.loader.hidden = false;
+      elements.fitMeterFill.style.width = "0%";
+
+      const steps = Array.from(elements.progressSteps.querySelectorAll(".step"));
+      let idx = 0;
+
+      function advance() {
+        steps.forEach((step, stepIndex) => {
+          step.classList.toggle("done", stepIndex < idx);
+          step.classList.toggle("active", stepIndex === idx);
+        });
+
+        if (idx < progressLabels.length) {
+          elements.loaderState.textContent = progressLabels[idx];
+          idx += 1;
+          currentTimer = setTimeout(advance, 180);
+        } else {
+          elements.loaderState.textContent = "Brief ready";
+          renderSections(brief);
+          elements.sections.hidden = false;
+          currentTimer = setTimeout(() => {
+            elements.loader.hidden = true;
+            elements.fitMeterFill.style.width = `${brief.fitPercent}%`;
+          }, 220);
+        }
+      }
+
+      currentTimer = setTimeout(advance, 120);
+    }
+
+    elements.copyAllButton.addEventListener("click", async () => {
+      const brief = currentBrief();
+      await navigator.clipboard.writeText(briefToText(brief));
+      showToast("Full brief copied");
+    });
+
+    elements.jumpQuestionsButton.addEventListener("click", () => {
+      const cards = Array.from(elements.sections.querySelectorAll(".section-card"));
+      const card = cards.find((item) => item.getAttribute("data-section") === "Discovery Questions");
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
+    renderBriefButtons();
+    startBriefRender();
+  </script>
+</body>
+</html>

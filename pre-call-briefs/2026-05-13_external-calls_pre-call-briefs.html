@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pat Ducoffe | May 13 Call Briefs</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@500;700;800&display=swap");
+
+    :root {
+      --bg: #f4f0e8;
+      --paper: #fbf8f2;
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-strong: rgba(255, 255, 255, 0.9);
+      --text: #1f2320;
+      --muted: #657067;
+      --line: rgba(31, 35, 32, 0.12);
+      --accent: #bf5a36;
+      --accent-deep: #8a3e22;
+      --teal: #1d6d67;
+      --olive: #64724a;
+      --gold: #b88a2f;
+      --rose: #9c4d52;
+      --shadow: 0 24px 60px rgba(53, 41, 23, 0.12);
+      --radius: 20px;
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --display: "Syne", "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1)),
+        repeating-linear-gradient(90deg, rgba(31,35,32,0.03) 0, rgba(31,35,32,0.03) 1px, transparent 1px, transparent 96px),
+        var(--bg);
+      color: var(--text);
+      font-family: "Inter", "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 28px;
+    }
+
+    .shell {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .rail,
+    .main {
+      backdrop-filter: blur(18px);
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      box-shadow: var(--shadow);
+    }
+
+    .rail {
+      position: sticky;
+      top: 24px;
+      padding: 24px;
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .rail::before,
+    .main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent 30%, transparent 70%, rgba(255,255,255,0.35));
+      opacity: 0.7;
+    }
+
+    .rail,
+    .main {
+      position: relative;
+    }
+
+    .main {
+      padding: 26px;
+      border-radius: 32px;
+    }
+
+    .eyebrow,
+    .meta-label,
+    .tiny {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .eyebrow {
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--display);
+      letter-spacing: 0;
+      margin: 0;
+    }
+
+    .brand {
+      font-size: clamp(2.2rem, 3vw, 3.4rem);
+      line-height: 0.95;
+      margin-bottom: 12px;
+      max-width: 12ch;
+    }
+
+    .subhead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 30ch;
+      font-size: 0.98rem;
+    }
+
+    .rail-block + .rail-block {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .history-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.66);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      min-height: 108px;
+    }
+
+    .history-btn:hover,
+    .history-btn:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(191, 90, 54, 0.36);
+      outline: none;
+    }
+
+    .history-btn.active {
+      border-color: rgba(191, 90, 54, 0.55);
+      background: rgba(191, 90, 54, 0.08);
+    }
+
+    .history-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .history-title {
+      font-weight: 700;
+      line-height: 1.2;
+      font-size: 0.98rem;
+    }
+
+    .history-meta,
+    .context-line,
+    .summary-line {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(29, 109, 103, 0.12);
+      color: var(--teal);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .pill.warn {
+      background: rgba(184, 138, 47, 0.14);
+      color: #8d651a;
+    }
+
+    .pill.hot {
+      background: rgba(191, 90, 54, 0.12);
+      color: var(--accent-deep);
+    }
+
+    .fit-mini {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31, 35, 32, 0.08);
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .fit-mini span,
+    .fit-meter span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--fit-color), color-mix(in srgb, var(--fit-color) 70%, white));
+    }
+
+    .assist {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .assist strong {
+      color: var(--text);
+    }
+
+    .rail-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    .copy-btn {
+      font: inherit;
+    }
+
+    .action-btn,
+    .copy-btn {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .action-btn:hover,
+    .copy-btn:hover,
+    .action-btn:focus-visible,
+    .copy-btn:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(191, 90, 54, 0.36);
+      outline: none;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .title-wrap {
+      max-width: 70ch;
+    }
+
+    .topline {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .main-title {
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 0.95;
+      margin-bottom: 10px;
+    }
+
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 65ch;
+    }
+
+    .progress-wrap {
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(31,35,32,0.08);
+      margin-bottom: 22px;
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .step {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.45);
+      min-height: 72px;
+      transition: background 220ms ease, border-color 220ms ease, transform 220ms ease;
+    }
+
+    .step.active {
+      background: rgba(191, 90, 54, 0.1);
+      border-color: rgba(191, 90, 54, 0.34);
+      transform: translateY(-1px);
+    }
+
+    .step.done {
+      background: rgba(29, 109, 103, 0.08);
+      border-color: rgba(29, 109, 103, 0.28);
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(31, 35, 32, 0.08);
+      color: var(--muted);
+    }
+
+    .step.active .step-num,
+    .step.done .step-num {
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--accent-deep);
+    }
+
+    .step.done .step-num {
+      color: var(--teal);
+    }
+
+    .step-label {
+      font-size: 0.85rem;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .hero-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hero-panel,
+    .side-panel,
+    .section,
+    .summary-band {
+      background: var(--panel-strong);
+      border: 1px solid rgba(31,35,32,0.08);
+      border-radius: 24px;
+    }
+
+    .hero-panel,
+    .side-panel,
+    .summary-band {
+      padding: 20px;
+    }
+
+    .hero-panel h2 {
+      font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+      line-height: 1;
+      margin-bottom: 12px;
+      max-width: 14ch;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .detail-cell {
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      min-height: 70px;
+    }
+
+    .meta-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .source-list,
+    .summary-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .summary-band {
+      margin-bottom: 18px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .summary-col h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .summary-item {
+      display: flex;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+
+    .summary-item::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      flex-shrink: 0;
+      margin-top: 0.45rem;
+      background: var(--accent);
+    }
+
+    .summary-col:last-child .summary-item::before {
+      background: var(--gold);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+    }
+
+    .sections {
+      display: grid;
+      gap: 16px;
+    }
+
+    .section {
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+    }
+
+    .section-body p {
+      margin: 0;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .fit-wrap {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .fit-meter {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(31, 35, 32, 0.08);
+      overflow: hidden;
+    }
+
+    .fit-row,
+    .buyer-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .fit-reason,
+    .seller-note {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .number-list,
+    .objection-list,
+    .angle-list {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .angle-item,
+    .objection-item,
+    .priority-item {
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .angle-item:first-child,
+    .objection-item:first-child,
+    .priority-item:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .item-title {
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .item-copy {
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 0.95rem;
+    }
+
+    .item-copy strong {
+      color: var(--text);
+    }
+
+    .discovery-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    details.question {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.48);
+      overflow: hidden;
+    }
+
+    details.question[open] {
+      border-color: rgba(29, 109, 103, 0.28);
+      background: rgba(29, 109, 103, 0.06);
+    }
+
+    details.question summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) 20px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    details.question summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .q-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(29, 109, 103, 0.12);
+      color: var(--teal);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .q-text {
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .q-toggle {
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    details.question[open] .q-toggle {
+      transform: rotate(90deg);
+    }
+
+    .why {
+      padding: 0 16px 16px 56px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .badge.high {
+      color: var(--teal);
+      background: rgba(29, 109, 103, 0.12);
+      border-color: rgba(29, 109, 103, 0.22);
+    }
+
+    .badge.medium {
+      color: #8d651a;
+      background: rgba(184, 138, 47, 0.14);
+      border-color: rgba(184, 138, 47, 0.24);
+    }
+
+    .badge.low {
+      color: var(--rose);
+      background: rgba(156, 77, 82, 0.12);
+      border-color: rgba(156, 77, 82, 0.22);
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .action-card {
+      padding-top: 18px;
+      border-top: 4px solid transparent;
+    }
+
+    .action-card.opener {
+      border-top-color: var(--accent);
+    }
+
+    .action-card.next {
+      border-top-color: var(--teal);
+    }
+
+    .action-card h4 {
+      font-size: 1rem;
+      margin: 0 0 10px;
+    }
+
+    .action-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sticky {
+      display: grid;
+      gap: 16px;
+      align-self: start;
+      position: sticky;
+      top: 24px;
+    }
+
+    .side-panel h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-row {
+      display: flex;
+      gap: 10px;
+      align-items: start;
+      line-height: 1.5;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .check-row input {
+      margin-top: 4px;
+      accent-color: var(--teal);
+    }
+
+    .notes-box {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 14px;
+      color: var(--text);
+      line-height: 1.6;
+      font: 0.92rem/1.6 var(--mono);
+    }
+
+    .notes-box.warn {
+      border-color: rgba(184, 138, 47, 0.5);
+      box-shadow: inset 0 0 0 1px rgba(184, 138, 47, 0.25);
+    }
+
+    .counter {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .counter.warn {
+      color: #8d651a;
+    }
+
+    .source-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(31, 35, 32, 0.88);
+      color: white;
+      font-family: var(--mono);
+      font-size: 12px;
+      transform: translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1180px) {
+      .shell,
+      .workspace,
+      .hero-band {
+        grid-template-columns: 1fr;
+      }
+
+      .rail,
+      .sticky {
+        position: static;
+      }
+
+      .detail-grid,
+      .summary-grid,
+      .actions-grid,
+      .progress-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 16px;
+      }
+
+      .main,
+      .rail {
+        padding: 18px;
+        border-radius: 24px;
+      }
+
+      .topbar {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .detail-grid,
+      .summary-grid,
+      .actions-grid,
+      .progress-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head,
+      .hero-panel h2 {
+        align-items: start;
+      }
+
+      details.question summary {
+        grid-template-columns: 28px minmax(0, 1fr);
+      }
+
+      .q-toggle {
+        display: none;
+      }
+
+      .why {
+        padding-left: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="eyebrow">D2L Pre-Call Briefs</div>
+      <h1 class="brand">Pat's two external calls for Wednesday.</h1>
+      <p class="subhead">
+        Built from Outlook Calendar and Outlook Email context for May 13, 2026 in Detroit time.
+      </p>
+
+      <section class="rail-block">
+        <div class="eyebrow">Recent Briefs</div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section class="rail-block">
+        <div class="eyebrow">How This Was Built</div>
+        <div class="assist">
+          <div><strong>Connectors used:</strong> Outlook Calendar for the meeting window, Outlook Email for thread and inbound context.</div>
+          <div><strong>Default workflow:</strong> check Zoom history when relevant, then add light public research for first conversations.</div>
+          <div><strong>What still needs live validation:</strong> Current platform details, buying stage, and final stakeholder map.</div>
+        </div>
+      </section>
+
+      <section class="rail-block">
+        <div class="eyebrow">Actions</div>
+        <div class="rail-actions">
+          <button id="copyAllBtn" class="action-btn">Copy active brief</button>
+          <button id="replayBtn" class="action-btn">Replay build</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="title-wrap">
+          <div class="topline">
+            <span class="pill hot">May 13, 2026</span>
+            <span class="pill">America/Detroit</span>
+            <span class="pill">2 external calls</span>
+          </div>
+          <h2 id="pageTitle" class="main-title"></h2>
+          <p id="pageLede" class="lede"></p>
+        </div>
+        <div class="pill warn">Reusable single-file app</div>
+      </div>
+
+      <section class="progress-wrap">
+        <div class="eyebrow">Assembly Flow</div>
+        <div id="progressGrid" class="progress-grid"></div>
+      </section>
+
+      <section class="hero-band">
+        <div class="hero-panel">
+          <div class="eyebrow">Identified From Connectors</div>
+          <h2 id="briefHeading"></h2>
+          <p id="briefSubhead" class="lede"></p>
+          <div id="detailGrid" class="detail-grid"></div>
+        </div>
+        <div class="side-panel">
+          <div class="eyebrow">Source Signal</div>
+          <div id="sourceList" class="source-list"></div>
+        </div>
+      </section>
+
+      <section class="summary-band">
+        <div class="summary-grid">
+          <div class="summary-col">
+            <div class="eyebrow">Confirmed Context</div>
+            <div id="confirmedList" class="summary-list"></div>
+          </div>
+          <div class="summary-col">
+            <div class="eyebrow">Need To Validate</div>
+            <div id="openList" class="summary-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="workspace">
+        <div id="sections" class="sections"></div>
+        <aside class="sticky">
+          <section class="side-panel">
+            <div class="eyebrow">Prep Checklist</div>
+            <h3 id="checklistTitle"></h3>
+            <div id="checklist" class="checklist"></div>
+          </section>
+
+          <section class="side-panel">
+            <div class="eyebrow">Invite Context</div>
+            <h3>Working Notes</h3>
+            <textarea id="notesBox" class="notes-box"></textarea>
+            <div id="counter" class="counter"></div>
+          </section>
+
+          <section class="side-panel">
+            <div class="eyebrow">Source Note</div>
+            <div id="sourceNote" class="source-note"></div>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script>
+    const progressLabels = [
+      "Account read",
+      "Contact read",
+      "Value angles",
+      "Discovery plan",
+      "Objection prep",
+      "Opener + ask"
+    ];
+
+    const briefs = [
+      {
+        id: "gpm",
+        account: "GPM",
+        contact: "Michael Pace, Ph.D.",
+        contactTitle: "Vice President, Learning and Academics",
+        meetingType: "Quick demo strategy session",
+        localTime: "12:00 PM to 12:30 PM EDT",
+        duration: "30 minutes",
+        fitLabel: "Strong",
+        fitScore: 88,
+        fitColor: "#1d6d67",
+        buyerPower: "High",
+        historyBlurb: "PMI-adjacent sustainability learning conversation with a known LMS evaluator and much clearer business context.",
+        lede: "Connector context plus public research points to a credible sustainability training and certification organization sitting unusually close to D2L's association and professional learning motion. The open question is still urgency, not relevance.",
+        sourceTags: ["Calendar", "Email thread", "Public research", "Accepted by Michael"],
+        confirmed: [
+          "Michael Pace is the Vice President, Learning and Academics at GPM.",
+          "The conversation came from your outreach after speaking with Porsha Seechung about academic partnerships tied to GPM.",
+          "You positioned D2L's PMI relationship as the reason this conversation matters now.",
+          "Michael said he knows D2L through prior competitive evaluations and named Canvas, Blackboard, and Moodle.",
+          "Public sources show PMI and GPM now operate in a joint venture around sustainability-focused standards, certifications, and learning assets."
+        ],
+        openQuestions: [
+          "How much of the PMI-GPM joint venture work actually sits inside Michael's remit day to day.",
+          "What GPM uses today for learner delivery and certification enablement, and what is actually painful enough to revisit.",
+          "Whether tomorrow is a real evaluation path, an ecosystem alignment check, or a smart market read by an informed leader."
+        ],
+        sourceNote: "Calendar subject: Quick Demo Strategy Session - GPM x D2L. Email context came from the Michael Pace thread and Rod's forwarded note. Public research added PMI and GPM partnership and joint-venture context.",
+        notes: "Pat outreach framed GPM as a professional training and certification conversation connected to PMI. Michael replied that he knows D2L via competitor evaluations, cited Canvas, Blackboard, and Moodle examples, and said his schedule would open once grades were due. Public sources now make the business context clearer: GPM positions itself around sustainable project management standards, certifications, and learning resources, while PMI says the two organizations now operate through a joint venture that integrates GPM's certifications, frameworks, and tools into PMI's learning ecosystem. You later told Rod that Porsha had some context on GPM's current LMS but not whether there is appetite to explore alternatives. Internal attendees tomorrow are Rod Bryce and Maria Capobianchi, so the call can move past a pure intro if there is energy.",
+        details: [
+          { label: "Account", value: "GPM" },
+          { label: "Contact", value: "Michael Pace, Ph.D." },
+          { label: "Meeting Type", value: "Quick demo strategy session" },
+          { label: "Time", value: "12:00 PM to 12:30 PM EDT" }
+        ],
+        checklistTitle: "Quick demo strategy session checklist",
+        checklist: [
+          "Review the PMI and Porsha context so you can anchor the call in why-now, not product history.",
+          "Align roles with Rod and Maria before the meeting so one person drives discovery and one listens for technical or program detail.",
+          "Open by pressure-testing the current LMS situation before showing anything.",
+          "Be ready with one crisp Brightspace story tied to partner or credentialing learning, not a generic demo tour.",
+          "Land a next step that includes whoever owns platform, program outcomes, or budget if Michael signals real interest."
+        ],
+        brief: {
+          accountSnapshot: {
+            fit: "Strong",
+            reason: "GPM sits directly inside the sustainability certification and professional learning space where Brightspace usually has a credible story, and the PMI linkage makes the relevance unusually concrete.",
+            timingSignals: [
+              "Your outreach tied GPM's work to PMI, and public sources now confirm the PMI-GPM relationship is strategic rather than casual.",
+              "PMI says the joint venture integrates GPM certifications, standards, and learning assets into PMI's ecosystem, which makes learning delivery infrastructure a live business question rather than a random platform topic.",
+              "Michael already knows the LMS landscape, but you still have a gap on appetite to replace or expand, so tomorrow should qualify urgency before it tries to persuade."
+            ],
+            read: "This looks like a high-quality conversation with a real learning leader in an organization built around standards, certifications, and sustainability education. The upside is that the business model and PMI relationship make D2L relevant on paper before the call even starts. The risk is that relevance does not equal project. If you treat this like an open replacement cycle too early, the call will flatten out.",
+            sellerNote: "Listen hard for whether Michael describes a live initiative, a joint-venture buildout, or just general curiosity. That distinction should decide whether you stay at strategy level or earn a deeper session."
+          },
+          contactAngle: {
+            buyerType: "Program owner",
+            confidence: "High",
+            powerLevel: "High",
+            priorities: [
+              "Protect learning quality and academic credibility as GPM grows certifications, standards, and sustainability education inside a larger PMI-linked ecosystem.",
+              "Understand whether the current learning stack can support external delivery, partner alignment, and smoother admin operations without extra drag.",
+              "See a platform partner that can hold its own against familiar incumbents without turning modernization into a heavy migration story."
+            ],
+            approachNote: "Treat Michael like an informed operator, not someone who needs LMS basics. Lead with the partnership context, ask how learning is organized today, and make the first ten minutes about strategic fit and current friction. If you get a signal, then earn the right to talk through what a tailored follow-up should cover.",
+            avoid: "Do not jump into a feature tour just because the subject says demo. He has seen platforms before and will tune out if the call feels generic."
+          },
+          valueAngles: [
+            {
+              name: "Partnership-ready learner experience",
+              proof: "If GPM is delivering more sustainability learning, standards, or certifications through the PMI relationship, Brightspace gives you a cleaner way to run external professional learning without the experience feeling stitched together.",
+              fit: "That matters here because public sources show GPM's learning assets are being brought into a PMI-linked ecosystem, so cross-audience delivery is already in the frame."
+            },
+            {
+              name: "Academic-quality delivery without an academic-only posture",
+              proof: "Brightspace can support rigorous learning design and learner engagement while still fitting a professional training environment that cares about outcomes, completion, and credibility.",
+              fit: "Michael sits over Learning and Academics, so quality and instructional integrity are likely as important as raw system capability."
+            },
+            {
+              name: "Modernization path that respects incumbent reality",
+              proof: "You do not have to position Brightspace as a big-bang rip-and-replace from minute one. It can be framed as a way to pressure-test whether current tools still match the next phase of certification and ecosystem growth.",
+              fit: "Michael already referenced Canvas, Blackboard, and Moodle, so a low-drama modernization conversation will likely land better than a hard displacement pitch."
+            }
+          ],
+          discoveryQuestions: [
+            {
+              q: "When you think about the learning work that matters most at GPM this year, where does the PMI connection or any adjacent partnership activity actually show up?",
+              why: "This tells you whether the partnership angle is real and operational, or just a loose point of relevance."
+            },
+            {
+              q: "How are you delivering those learning experiences today, and where does the current setup start to feel limiting?",
+              why: "You need the actual current-state motion before you can decide whether this is a displacement play, an expansion play, or just education."
+            },
+            {
+              q: "When you evaluate a platform conversation like this, what outcomes do you personally care about most: learner experience, admin burden, reporting, academic quality, or something else?",
+              why: "It frames the rest of the call around Michael's lens instead of yours."
+            },
+            {
+              q: "If there were a reason to look more seriously at alternatives, who else would need to weigh in on program design, technical fit, or budget?",
+              why: "You need stakeholder mapping early because strategy conversations often stall when the real buying group stays offstage."
+            },
+            {
+              q: "By the end of this session, what would make you say a deeper working session is worth scheduling?",
+              why: "This gives you the success criteria for the call and a cleaner path to the next step."
+            }
+          ],
+          objections: [
+            {
+              objection: "Our platform may already be set.",
+              counter: "That may be true, and I am not trying to manufacture a project that is not there. If the current setup is doing the job, that is useful to know. What I would want to understand is whether the next phase of the work asks more from the platform than the current phase did.",
+              followUp: "What has changed recently, if anything, that would even justify looking at this category again?"
+            },
+            {
+              objection: "We know the LMS market well enough already.",
+              counter: "Fair. This does not need to be LMS 101. The useful part for me is figuring out whether your current priorities line up with what we are seeing in adjacent organizations, especially around partner and professional learning. If there is no gap, we can say that quickly.",
+              followUp: "Where do you think the real difference between vendors would matter most for GPM?"
+            },
+            {
+              objection: "We do not have time for a broad demo cycle.",
+              counter: "That makes sense, and I would not recommend a broad cycle either. If there is a fit, the next step should be tight and specific around one use case, not a sprawling tour.",
+              followUp: "What one scenario would be worth pressure-testing if we narrowed this down?"
+            }
+          ],
+          opener: "Michael, thanks again for making time. The PMI angle was what made me think this conversation was worth having, and my goal today is pretty simple: understand how learning is organized at GPM today, what is changing, and whether there is enough there to justify a more focused follow-up.",
+          nextStepAsk: "If it sounds like there is a real use case here, I would suggest we pull together one deeper session with the people who own the platform and program outcomes, and keep it centered on the one scenario that matters most to you.",
+          softerVersion: "If it feels useful, we can compare notes today and decide whether a narrower follow-up is worth anyone's calendar."
+        }
+      },
+      {
+        id: "pwtg",
+        account: "Peaceful Warrier Training Group",
+        contact: "Mike Bolender",
+        contactTitle: "Title not in connector context",
+        meetingType: "Introduction and follow-up call",
+        localTime: "3:30 PM to 4:00 PM EDT",
+        duration: "30 minutes",
+        fitLabel: "Good",
+        fitScore: 74,
+        fitColor: "#b88a2f",
+        buyerPower: "Low",
+        historyBlurb: "Inbound discovery with a now-legible training business, but still early on buyer authority and commercial shape.",
+        lede: "Connector context plus public research says this is an active-threat and incident-response training company led by a credible founder with real operational background. The call still needs qualification, but you can now speak to their business with much more precision.",
+        sourceTags: ["Calendar", "Qualified inbound", "Public research", "No-demo note"],
+        confirmed: [
+          "The meeting came in as an inbound booking through Qualified and was forwarded by Stephanie Jean.",
+          "The visitor name is Mike Bolender and the booking email is pwtraininggroup@gmail.com from Wisconsin.",
+          "Stephanie's prep note asked about learner count, integrations, current tools, and deadlines.",
+          "The invite note explicitly says the meeting will not include a demonstration.",
+          "Public sources show Peaceful Warrior Training Group provides active-threat, active-shooter, school safety, and incident-management training and lists Mike Bolender as founder."
+        ],
+        openQuestions: [
+          "How much of PWTG's revenue comes from instructor-led training versus digital or blended delivery today.",
+          "Whether Mike is evaluating a platform for customer education scale, internal certification management, or simple content delivery.",
+          "How urgent the need is and whether there is enough scale and repeatability to justify a deeper sales motion."
+        ],
+        sourceNote: "Calendar subject: D2L + Peaceful Warrier Training Group | Introduction and Follow up. Connector context came from Stephanie's forwarded Qualified email and the invite notes. Public research added PWTG site, instructor background, and partner references.",
+        notes: "This is an inbound meeting booked through Qualified by Mike Bolender in Wisconsin using pwtraininggroup@gmail.com. Stephanie's forwarded note says the meeting is an intro and follow-up call and should not include a demo. The prep note asks Mike to share annual learner volume, required integrations, what solutions he uses today, and any deadlines he is working against. Public research now clarifies the business: Peaceful Warrior Training Group positions itself around active-threat, active-shooter, school safety, and incident-management training; its site says Mike Bolender retired after 32 years with Oak Creek Police, teaches nationally, and leads a team with first-responder backgrounds. PWTG also appears as an authorized training partner for C3 Pathways courses. That means tomorrow should stay discovery-led, but you no longer have to guess what the company does.",
+        details: [
+          { label: "Account", value: "Peaceful Warrier Training Group" },
+          { label: "Contact", value: "Mike Bolender" },
+          { label: "Meeting Type", value: "Introduction and follow-up call" },
+          { label: "Time", value: "3:30 PM to 4:00 PM EDT" }
+        ],
+        checklistTitle: "Intro and follow-up checklist",
+        checklist: [
+          "Start by understanding what Peaceful Warrier Training Group does before you talk about platform shape.",
+          "Use Stephanie's four prep prompts to qualify learner volume, integrations, current tools, and timing.",
+          "Keep the call discovery-only and resist the urge to improvise a demo.",
+          "Figure out Mike's role and whether any other decision-makers need to join the next conversation.",
+          "End with a clear branch: either a deeper working session with the right people or a polite no-fit close."
+        ],
+        brief: {
+          accountSnapshot: {
+            fit: "Moderate",
+            reason: "There is a credible training-organization fit because PWTG appears to sell repeatable external training programs, but the learner model, scale, and platform urgency are still not fully qualified.",
+            timingSignals: [
+              "This is inbound interest, which is always more useful than a cold introduction.",
+              "Public research shows a real training business with named course types, instructors, and partner relationships, so this is more than a vague consulting inquiry.",
+              "The invite already flags the core qualification points, and the note that this should not include a demo tells you the opportunity is still early and needs shaping before solution depth."
+            ],
+            read: "This is a better opportunity than it looked on the first pass because the company clearly does structured external training, not just ad hoc consulting. The positive signal is that Mike booked time and the business appears to have repeatable offerings in a high-stakes training category. The gap is still commercial shape: delivery model, learner volume, buyer authority, stack, and urgency. The right move is to leave the call with a simple go or no-go on a deeper session.",
+            sellerNote: "Use the first ten minutes to understand how much of this business is instructor-led services versus scalable training delivery. That is the hinge for whether Brightspace is strategic or overbuilt."
+          },
+          contactAngle: {
+            buyerType: "Executive sponsor / founder",
+            confidence: "Medium",
+            powerLevel: "High",
+            priorities: [
+              "Figure out whether a learning platform could help him scale or systematize delivery without losing training credibility.",
+              "Understand what kind of setup, complexity, or integrations a platform would need to support in a lean operating environment.",
+              "Get a grounded view of cost, effort, and whether platform infrastructure would actually help the business grow."
+            ],
+            approachNote: "Treat Mike like a founder-operator with deep domain credibility, not a procurement-style buyer. Keep the tone practical, ask how the business is delivered today, and let him describe where training demand is headed before you translate that into platform language. If the fit is real, help him define the next conversation rather than over-answering on the spot.",
+            avoid: "Do not assume enterprise scale or default to association language. His world looks operational, safety-focused, and founder-led."
+          },
+          valueAngles: [
+            {
+              name: "A platform that can grow with the training business",
+              proof: "If Peaceful Warrier Training Group wants to extend beyond purely live instruction, Brightspace gives them room to structure learner journeys, prework, completion tracking, and follow-up reinforcement instead of relying on email, documents, or one-off coordination.",
+              fit: "That matters here because the business already appears to run named training programs and partner-delivered courses, which is the kind of motion that can outgrow lightweight tools."
+            },
+            {
+              name: "Operational simplicity for a small team",
+              proof: "A strong LMS story here is not about flash. It is about reducing manual admin work, tracking participation cleanly, and giving a lean team a platform they can actually run without heavy overhead.",
+              fit: "The Gmail address, founder-led posture, and specialist training business all suggest admin burden and simplicity will matter more than broad enterprise bells and whistles."
+            },
+            {
+              name: "More defensible client outcomes",
+              proof: "Brightspace can help turn high-stakes training into a more measurable experience through cleaner content delivery, learner records, and proof of completion when customers care about preparedness and accountability.",
+              fit: "That only lands if Mike confirms buyers want more formalized delivery or documentation, but it fits the safety and incident-readiness market better than a generic LMS story."
+            }
+          ],
+          discoveryQuestions: [
+            {
+              q: "Before we get into platforms, can you give me the short version of how Peaceful Warrior Training Group delivers training today and which customer groups you spend the most time serving?",
+              why: "Public research tells you what the company does in broad strokes, but you still need the real delivery model and customer mix."
+            },
+            {
+              q: "Roughly how many learners are you supporting in a year today, and do you expect that number to change materially?",
+              why: "Volume is one of the fastest ways to understand platform fit, commercial shape, and urgency."
+            },
+            {
+              q: "What are you using right now to deliver training, prep learners, and keep track of completion or follow-up, and what is starting to feel clunky about it?",
+              why: "This reveals whether the problem is real enough to move or still too soft to justify a next step."
+            },
+            {
+              q: "Are there any systems you already know an LMS would need to connect with, or any reporting requirements that matter right away?",
+              why: "Integration and reporting complexity can quickly change both the fit story and the stakeholder map."
+            },
+            {
+              q: "If this conversation turns out to be useful, what would you want a next meeting to help you decide?",
+              why: "That gives you a clean handoff to either a tailored follow-up or an honest no-fit outcome."
+            }
+          ],
+          objections: [
+            {
+              objection: "We are really just gathering information right now.",
+              counter: "That is completely fine. Early conversations are useful when they help you get oriented without overcommitting. My goal today is mostly to understand how your training business runs and tell you honestly whether a platform discussion is worth taking any further.",
+              followUp: "What would you need to learn on this call for it to feel worthwhile?"
+            },
+            {
+              objection: "We may be too small for something like this.",
+              counter: "Possibly, and if that is the case I would rather tell you that than force a fit. Size matters less than whether the training motion is repeatable enough and messy enough that better infrastructure would actually help.",
+              followUp: "Where is the current approach creating friction today?"
+            },
+            {
+              objection: "We already use a few tools and are not sure we want to change them.",
+              counter: "That is normal. I would not assume change is the answer before we understand what those tools are doing well and where they are falling short. Sometimes the real next step is simply clarifying whether a platform decision even belongs on the list yet.",
+              followUp: "Which part of the current setup works fine, and which part has you taking meetings like this?"
+            }
+          ],
+          opener: "Mike, thanks for carving out time. I saw the note that you wanted an intro conversation, so I thought the best use of today would be to understand how Peaceful Warrior Training Group is delivering training today, where you may be feeling operational limits, and whether there is enough there to make a more focused follow-up worthwhile.",
+          nextStepAsk: "If it looks like there is a real use case, the next meeting should stay practical and include anyone else who would care about learner volume, process, or integrations so we can tailor the conversation to the actual need.",
+          softerVersion: "If it helps, we can use today to compare notes and decide whether a deeper session makes sense or whether the timing is just not there yet."
+        }
+      }
+    ];
+
+    const state = {
+      selectedId: briefs[0].id,
+      progress: 0
+    };
+
+    const historyList = document.getElementById("historyList");
+    const progressGrid = document.getElementById("progressGrid");
+    const pageTitle = document.getElementById("pageTitle");
+    const pageLede = document.getElementById("pageLede");
+    const briefHeading = document.getElementById("briefHeading");
+    const briefSubhead = document.getElementById("briefSubhead");
+    const detailGrid = document.getElementById("detailGrid");
+    const sourceList = document.getElementById("sourceList");
+    const confirmedList = document.getElementById("confirmedList");
+    const openList = document.getElementById("openList");
+    const sections = document.getElementById("sections");
+    const checklistTitle = document.getElementById("checklistTitle");
+    const checklist = document.getElementById("checklist");
+    const notesBox = document.getElementById("notesBox");
+    const counter = document.getElementById("counter");
+    const sourceNote = document.getElementById("sourceNote");
+    const toast = document.getElementById("toast");
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function getBrief() {
+      return briefs.find((brief) => brief.id === state.selectedId);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
+    }
+
+    function copyText(value, label) {
+      navigator.clipboard.writeText(value).then(() => showToast(label));
+    }
+
+    function formatSectionCopy(brief) {
+      return [
+        `${brief.account} | ${brief.contact}`,
+        `${brief.meetingType} | ${brief.localTime}`,
+        "",
+        "Account Snapshot",
+        `ICP Fit: ${brief.brief.accountSnapshot.fit} - ${brief.brief.accountSnapshot.reason}`,
+        "Timing Signals:",
+        ...brief.brief.accountSnapshot.timingSignals.map((item, index) => `${index + 1}. ${item}`),
+        "Account Read:",
+        brief.brief.accountSnapshot.read,
+        "Seller Note:",
+        brief.brief.accountSnapshot.sellerNote,
+        "",
+        "Contact Angle",
+        `Buyer Type: ${brief.brief.contactAngle.buyerType} (${brief.brief.contactAngle.confidence} confidence)`,
+        "Likely Priorities:",
+        ...brief.brief.contactAngle.priorities.map((item, index) => `${index + 1}. ${item}`),
+        "Approach Note:",
+        brief.brief.contactAngle.approachNote,
+        "What To Avoid:",
+        brief.brief.contactAngle.avoid,
+        "",
+        "D2L Value Angles",
+        ...brief.brief.valueAngles.flatMap((item, index) => [
+          `${index + 1}. ${item.name}`,
+          `Proof point: ${item.proof}`,
+          `Why it fits: ${item.fit}`
+        ]),
+        "",
+        "Discovery Questions",
+        ...brief.brief.discoveryQuestions.flatMap((item, index) => [
+          `${index + 1}. ${item.q}`,
+          `Why this matters: ${item.why}`
+        ]),
+        "",
+        "Likely Objections",
+        ...brief.brief.objections.flatMap((item, index) => [
+          `${index + 1}. Objection: ${item.objection}`,
+          `Counter: ${item.counter}`,
+          `Follow-up: ${item.followUp}`
+        ]),
+        "",
+        "Opener + Next Step Ask",
+        "Opener:",
+        brief.brief.opener,
+        "Next Step Ask:",
+        brief.brief.nextStepAsk,
+        "Optional Softer Version:",
+        brief.brief.softerVersion
+      ].join("\n");
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = briefs.map((brief) => `
+        <button class="history-btn ${brief.id === state.selectedId ? "active" : ""}" data-id="${brief.id}" style="--fit-color:${brief.fitColor}">
+          <div class="history-top">
+            <div>
+              <div class="history-title">${escapeHtml(brief.account)}</div>
+              <div class="history-meta">${escapeHtml(brief.contact)}</div>
+            </div>
+            <span class="pill">${escapeHtml(brief.fitLabel)}</span>
+          </div>
+          <div class="summary-line">${escapeHtml(brief.meetingType)}</div>
+          <div class="context-line">${escapeHtml(brief.localTime)}</div>
+          <div class="fit-mini"><span style="width:${brief.fitScore}%"></span></div>
+        </button>
+      `).join("");
+
+      historyList.querySelectorAll(".history-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.id === state.selectedId) return;
+          state.selectedId = button.dataset.id;
+          renderHistory();
+          renderBrief(true);
+        });
+      });
+    }
+
+    function renderProgress() {
+      progressGrid.innerHTML = progressLabels.map((label, index) => {
+        const className = index < state.progress ? "step done" : index === state.progress ? "step active" : "step";
+        return `
+          <div class="${className}">
+            <div class="step-num">${index < state.progress ? "✓" : index + 1}</div>
+            <div class="step-label">${escapeHtml(label)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function setCounter() {
+      const length = notesBox.value.length;
+      const warn = length >= 400;
+      notesBox.classList.toggle("warn", warn);
+      counter.classList.toggle("warn", warn);
+      counter.innerHTML = `
+        <span>${length} characters</span>
+        <span>${warn ? "Dense notes can make the brief harder to scan." : "Right-sized context keeps the read sharp."}</span>
+      `;
+    }
+
+    function renderBrief(animate = false) {
+      const brief = getBrief();
+      pageTitle.textContent = `${brief.account} | ${brief.contact}`;
+      pageLede.textContent = brief.historyBlurb;
+      briefHeading.textContent = `${brief.account} with ${brief.contact}`;
+      briefSubhead.textContent = brief.lede;
+
+      detailGrid.innerHTML = brief.details.map((item) => `
+        <div class="detail-cell">
+          <div class="meta-label">${escapeHtml(item.label)}</div>
+          <div class="detail-value">${escapeHtml(item.value)}</div>
+        </div>
+      `).join("");
+
+      sourceList.innerHTML = brief.sourceTags.map((tag) => `<span class="pill">${escapeHtml(tag)}</span>`).join("");
+
+      confirmedList.innerHTML = brief.confirmed.map((item) => `<div class="summary-item">${escapeHtml(item)}</div>`).join("");
+      openList.innerHTML = brief.openQuestions.map((item) => `<div class="summary-item">${escapeHtml(item)}</div>`).join("");
+
+      checklistTitle.textContent = brief.checklistTitle;
+      checklist.innerHTML = brief.checklist.map((item, index) => `
+        <label class="check-row">
+          <input type="checkbox" ${animate ? "" : index === 0 ? "checked" : ""}>
+          <span>${escapeHtml(item)}</span>
+        </label>
+      `).join("");
+
+      notesBox.value = brief.notes;
+      sourceNote.textContent = brief.sourceNote;
+      setCounter();
+
+      sections.innerHTML = `
+        <section class="section" style="--fit-color:${brief.fitColor}">
+          <div class="section-head">
+            <h3 class="section-title">Account Snapshot</h3>
+            <button class="copy-btn" data-copy="account">Copy section</button>
+          </div>
+          <div class="section-body">
+            <div class="fit-wrap">
+              <div class="fit-row">
+                <span class="pill">${escapeHtml(brief.brief.accountSnapshot.fit)} fit</span>
+                <span class="fit-reason">${escapeHtml(brief.brief.accountSnapshot.reason)}</span>
+              </div>
+              <div class="fit-meter"><span style="width:${brief.fitScore}%"></span></div>
+            </div>
+            <ol class="number-list">
+              ${brief.brief.accountSnapshot.timingSignals.map((item) => `
+                <li class="priority-item">
+                  <div class="item-copy">${escapeHtml(item)}</div>
+                </li>
+              `).join("")}
+            </ol>
+            <p style="margin-top:16px">${escapeHtml(brief.brief.accountSnapshot.read)}</p>
+            <p class="seller-note" style="margin-top:16px"><strong>Seller Note:</strong> ${escapeHtml(brief.brief.accountSnapshot.sellerNote)}</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h3 class="section-title">Contact Angle</h3>
+            <button class="copy-btn" data-copy="contact">Copy section</button>
+          </div>
+          <div class="section-body">
+            <div class="buyer-row" style="margin-bottom:14px">
+              <span class="pill">${escapeHtml(brief.brief.contactAngle.buyerType)}</span>
+              <span class="badge ${brief.brief.contactAngle.powerLevel.toLowerCase()}">${escapeHtml(brief.brief.contactAngle.powerLevel)} buyer power</span>
+              <span class="summary-line">${escapeHtml(brief.brief.contactAngle.confidence)} confidence</span>
+            </div>
+            <ol class="number-list">
+              ${brief.brief.contactAngle.priorities.map((item) => `
+                <li class="priority-item">
+                  <div class="item-copy">${escapeHtml(item)}</div>
+                </li>
+              `).join("")}
+            </ol>
+            <p style="margin-top:16px"><strong>Approach Note:</strong> ${escapeHtml(brief.brief.contactAngle.approachNote)}</p>
+            <p class="seller-note" style="margin-top:12px"><strong>What To Avoid:</strong> ${escapeHtml(brief.brief.contactAngle.avoid)}</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h3 class="section-title">D2L Value Angles</h3>
+            <button class="copy-btn" data-copy="angles">Copy section</button>
+          </div>
+          <div class="section-body">
+            <ol class="angle-list">
+              ${brief.brief.valueAngles.map((item) => `
+                <li class="angle-item">
+                  <div class="item-title">${escapeHtml(item.name)}</div>
+                  <div class="item-copy"><strong>Proof point:</strong> ${escapeHtml(item.proof)}</div>
+                  <div class="item-copy" style="margin-top:8px"><strong>Why it fits:</strong> ${escapeHtml(item.fit)}</div>
+                </li>
+              `).join("")}
+            </ol>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h3 class="section-title">Discovery Questions</h3>
+            <button class="copy-btn" data-copy="discovery">Copy section</button>
+          </div>
+          <div class="section-body discovery-list">
+            ${brief.brief.discoveryQuestions.map((item, index) => `
+              <details class="question">
+                <summary>
+                  <span class="q-num">${index + 1}</span>
+                  <span class="q-text">${escapeHtml(item.q)}</span>
+                  <span class="q-toggle">›</span>
+                </summary>
+                <div class="why"><strong>Why this matters:</strong> ${escapeHtml(item.why)}</div>
+              </details>
+            `).join("")}
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h3 class="section-title">Likely Objections</h3>
+            <button class="copy-btn" data-copy="objections">Copy section</button>
+          </div>
+          <div class="section-body">
+            <ol class="objection-list">
+              ${brief.brief.objections.map((item) => `
+                <li class="objection-item">
+                  <div class="item-copy"><strong>Objection:</strong> ${escapeHtml(item.objection)}</div>
+                  <div class="item-copy" style="margin-top:10px"><strong>Counter:</strong> ${escapeHtml(item.counter)}</div>
+                  <div class="item-copy" style="margin-top:10px"><strong>Follow-up:</strong> ${escapeHtml(item.followUp)}</div>
+                </li>
+              `).join("")}
+            </ol>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h3 class="section-title">Opener + Next Step Ask</h3>
+            <button class="copy-btn" data-copy="close">Copy section</button>
+          </div>
+          <div class="section-body actions-grid">
+            <div class="action-card opener">
+              <h4>Opener</h4>
+              <p>${escapeHtml(brief.brief.opener)}</p>
+            </div>
+            <div class="action-card next">
+              <h4>Next Step Ask</h4>
+              <p>${escapeHtml(brief.brief.nextStepAsk)}</p>
+              <p style="margin-top:14px"><strong>Optional softer version:</strong> ${escapeHtml(brief.brief.softerVersion)}</p>
+            </div>
+          </div>
+        </section>
+      `;
+
+      const copyLookup = {
+        account: [
+          "Account Snapshot",
+          `ICP Fit: ${brief.brief.accountSnapshot.fit} - ${brief.brief.accountSnapshot.reason}`,
+          "Timing Signals:",
+          ...brief.brief.accountSnapshot.timingSignals.map((item, index) => `${index + 1}. ${item}`),
+          "Account Read:",
+          brief.brief.accountSnapshot.read,
+          "Seller Note:",
+          brief.brief.accountSnapshot.sellerNote
+        ].join("\n"),
+        contact: [
+          "Contact Angle",
+          `Buyer Type: ${brief.brief.contactAngle.buyerType} (${brief.brief.contactAngle.confidence} confidence)`,
+          "Likely Priorities:",
+          ...brief.brief.contactAngle.priorities.map((item, index) => `${index + 1}. ${item}`),
+          "Approach Note:",
+          brief.brief.contactAngle.approachNote,
+          "What To Avoid:",
+          brief.brief.contactAngle.avoid
+        ].join("\n"),
+        angles: [
+          "D2L Value Angles",
+          ...brief.brief.valueAngles.flatMap((item, index) => [
+            `${index + 1}. ${item.name}`,
+            `Proof point: ${item.proof}`,
+            `Why it fits: ${item.fit}`
+          ])
+        ].join("\n"),
+        discovery: [
+          "Discovery Questions",
+          ...brief.brief.discoveryQuestions.flatMap((item, index) => [
+            `${index + 1}. ${item.q}`,
+            `Why this matters: ${item.why}`
+          ])
+        ].join("\n"),
+        objections: [
+          "Likely Objections",
+          ...brief.brief.objections.flatMap((item, index) => [
+            `${index + 1}. Objection: ${item.objection}`,
+            `Counter: ${item.counter}`,
+            `Follow-up: ${item.followUp}`
+          ])
+        ].join("\n"),
+        close: [
+          "Opener + Next Step Ask",
+          "Opener:",
+          brief.brief.opener,
+          "Next Step Ask:",
+          brief.brief.nextStepAsk,
+          "Optional Softer Version:",
+          brief.brief.softerVersion
+        ].join("\n")
+      };
+
+      sections.querySelectorAll(".copy-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          copyText(copyLookup[button.dataset.copy], "Section copied");
+        });
+      });
+
+      if (animate) {
+        runProgress();
+      } else {
+        state.progress = progressLabels.length;
+        renderProgress();
+      }
+    }
+
+    function runProgress() {
+      state.progress = 0;
+      renderProgress();
+      progressLabels.forEach((_, index) => {
+        window.setTimeout(() => {
+          state.progress = index + 1;
+          renderProgress();
+        }, index * 160);
+      });
+    }
+
+    renderHistory();
+    renderProgress();
+    renderBrief(true);
+
+    notesBox.addEventListener("input", setCounter);
+    document.getElementById("copyAllBtn").addEventListener("click", () => {
+      copyText(formatSectionCopy(getBrief()), "Active brief copied");
+    });
+    document.getElementById("replayBtn").addEventListener("click", runProgress);
+  </script>
+</body>
+</html>
