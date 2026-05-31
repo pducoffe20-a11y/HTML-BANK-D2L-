@@ -6,128 +6,110 @@
   <title>HTML Bank</title>
   <style>
     :root {
-      --ink: #1f2933;
-      --muted: #52606d;
-      --line: #d9e2ec;
+      --ink: #1e252c;
+      --muted: #66717d;
+      --line: #d8e0e8;
       --panel: #ffffff;
-      --accent: #0b5cad;
-      --accent-2: #137c6d;
-      --warn: #9f580a;
-      --shadow: 0 16px 42px rgba(31, 41, 51, 0.08);
+      --page: #f4f7fa;
+      --teal: #137c6d;
+      --blue: #265f9f;
+      --coral: #b34d36;
+      --amber: #90640f;
+      --violet: #5d5a9d;
+      --shadow: 0 18px 46px rgba(30, 37, 44, 0.10);
       color-scheme: light;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: linear-gradient(180deg, #eef4fb 0, #f8fafc 340px, #f6f8fb 100%); }
-    main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 52px; }
-    header { display: grid; gap: 10px; margin-bottom: 24px; }
-    .eyebrow { margin: 0; color: var(--accent-2); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
-    h1 { margin: 0; font-size: clamp(34px, 6vw, 64px); line-height: 1; letter-spacing: 0; }
-    .intro { max-width: 760px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
-    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 22px 0; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, 0.78); box-shadow: var(--shadow); }
-    .search { flex: 1 1 280px; min-height: 42px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; color: var(--ink); font: inherit; background: white; }
-    .home-link { display: inline-flex; align-items: center; min-height: 42px; padding: 0 13px; border-radius: 8px; background: var(--ink); color: white; font-weight: 800; text-decoration: none; white-space: nowrap; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: linear-gradient(180deg, rgba(237,245,241,.95) 0, rgba(244,247,250,0) 360px), var(--page); }
+    a { color: inherit; }
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 24px 0 56px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; font-weight: 900; letter-spacing: 0; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 8px; display: grid; place-items: center; color: white; background: linear-gradient(135deg, var(--teal), var(--blue)); box-shadow: 0 10px 24px rgba(19,124,109,.24); flex: 0 0 auto; }
+    .repo-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .button { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 13px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); font-size: 14px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+    .button.primary { background: var(--ink); border-color: var(--ink); color: white; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: 18px; align-items: stretch; margin-bottom: 18px; }
+    .hero-copy, .status-panel, .toolbar, .category { border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.9); box-shadow: var(--shadow); }
+    .hero-copy { padding: clamp(22px, 4vw, 38px); display: grid; align-content: center; min-height: 280px; }
+    .eyebrow { margin: 0 0 12px; color: var(--teal); font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+    h1 { margin: 0; font-size: clamp(38px, 6vw, 72px); line-height: .98; letter-spacing: 0; max-width: 760px; }
+    .intro { max-width: 720px; margin: 16px 0 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
+    .status-panel { padding: 18px; display: grid; gap: 14px; align-content: start; }
+    .status-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .status-title h2, .category h2 { margin: 0; font-size: 18px; letter-spacing: 0; }
+    .live-pill { border: 1px solid #b9dfd4; background: #edf8f4; color: #0f6d5e; border-radius: 999px; padding: 6px 9px; font-size: 12px; font-weight: 900; }
+    .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfe; min-width: 0; }
+    .metric span { display: block; color: var(--muted); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+    .metric strong { display: block; margin-top: 5px; font-size: 28px; line-height: 1; }
+    .rules { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .rules li { display: grid; grid-template-columns: 10px 1fr; gap: 10px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .rules li:before { content: ""; width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; background: var(--teal); }
+    .toolbar { display: grid; grid-template-columns: minmax(240px, 1fr) auto; gap: 10px; align-items: center; padding: 12px; margin-bottom: 18px; }
+    .search-wrap { position: relative; min-width: 0; }
+    .search-wrap span { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; font-weight: 900; }
+    .search { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px 0 70px; color: var(--ink); font: inherit; background: white; }
+    .search:focus { outline: 3px solid rgba(19,124,109,.18); border-color: var(--teal); }
+    .view-note { color: var(--muted); font-size: 13px; font-weight: 800; white-space: nowrap; }
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
-    section { min-width: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; }
-    .section-head { display: grid; gap: 7px; padding: 18px; border-bottom: 1px solid var(--line); background: #fbfdff; }
-    h2 { margin: 0; font-size: 20px; letter-spacing: 0; }
-    .section-head p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
-    .folder-link { color: var(--accent); font-size: 13px; font-weight: 800; text-decoration: none; }
-    .folder-link:hover, .asset a:hover { text-decoration: underline; }
-    ul { margin: 0; padding: 8px 0; list-style: none; }
-    .asset { display: grid; gap: 4px; padding: 12px 18px; border-top: 1px solid #eef2f6; }
-    .asset:first-child { border-top: 0; }
-    .asset a { color: var(--ink); font-weight: 800; line-height: 1.35; text-decoration: none; overflow-wrap: anywhere; }
-    .asset span { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+    .category { overflow: hidden; min-width: 0; }
+    .category-head { display: grid; gap: 12px; padding: 18px; border-bottom: 1px solid var(--line); background: #fbfdff; }
+    .category-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .category-title { display: flex; gap: 10px; align-items: center; min-width: 0; }
+    .folder-mark { width: 34px; height: 34px; flex: 0 0 auto; border-radius: 8px; display: grid; place-items: center; color: white; font-size: 12px; font-weight: 900; }
+    .outreach-dashboards .folder-mark { background: var(--blue); }
+    .pre-call-briefs .folder-mark { background: var(--violet); }
+    .client-ready-assets .folder-mark { background: var(--coral); }
+    .count-pill { border: 1px solid var(--line); border-radius: 999px; padding: 6px 9px; background: white; color: var(--muted); font-size: 12px; font-weight: 900; white-space: nowrap; }
+    .category-head p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .category-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .folder-link { min-height: 34px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); font-size: 13px; font-weight: 800; text-decoration: none; }
+    ul { margin: 0; padding: 8px; list-style: none; }
+    .asset { display: grid; gap: 6px; padding: 12px; border-radius: 8px; }
+    .asset + .asset { margin-top: 4px; }
+    .asset:hover { background: #f7fafc; }
+    .asset a { color: var(--ink); font-weight: 900; line-height: 1.35; text-decoration: none; overflow-wrap: anywhere; }
+    .asset a:hover, .folder-link:hover, .button:hover { text-decoration: underline; }
+    .asset-meta { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+    .asset-date { color: var(--amber); font-weight: 900; }
     .empty, .notice { padding: 18px; color: var(--muted); font-size: 14px; line-height: 1.45; }
     .notice { margin-top: 16px; border: 1px solid #f2d6a2; border-radius: 8px; background: #fff8eb; color: var(--warn); display: none; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-    @media (max-width: 560px) { main { width: min(100% - 24px, 1120px); padding-top: 24px; } .toolbar { align-items: stretch; } .home-link { justify-content: center; width: 100%; } }
+    @media (max-width: 980px) { .hero, .grid { grid-template-columns: 1fr; } .hero-copy { min-height: auto; } }
+    @media (max-width: 620px) { .shell { width: min(100% - 24px, 1180px); padding-top: 16px; } .topbar, .toolbar { align-items: stretch; grid-template-columns: 1fr; } .topbar { flex-direction: column; } .repo-actions, .button, .category-actions, .folder-link { width: 100%; } .button, .folder-link { justify-content: center; } .metrics { grid-template-columns: 1fr; } h1 { font-size: 40px; } }
   </style>
 </head>
 <body>
-  <main>
-    <header>
-      <p class="eyebrow">HTML Bank</p>
-      <h1>Live HTML Asset Library</h1>
-      <p class="intro">A shareable home for outreach dashboards, pre-call briefs, and client-ready assets. Click an asset name to open its live page. Use the GitHub folder links when you want to upload or manage files.</p>
-    </header>
-    <div class="toolbar">
-      <input id="search" class="search" type="search" placeholder="Search files" aria-label="Search files">
-      <a class="home-link" href="https://github.com/pducoffe20-a11y/HTML-BANK---Engine">Open Repo</a>
-    </div>
-    <div class="grid" id="sections"></div>
-    <p class="notice" id="apiNotice">The index is showing its built-in fallback list because GitHub did not return a public folder listing. If this repo is private, make it public or update the fallback list when adding files.</p>
+  <main class="shell">
+    <div class="topbar"><div class="brand"><div class="brand-mark">HB</div><span>HTML Bank</span></div><div class="repo-actions"><a class="button" href="https://github.com/pducoffe20-a11y/HTML-BANK---Engine">Open Repo</a><a class="button primary" href="https://github.com/pducoffe20-a11y/HTML-BANK---Engine/upload/main/outreach-dashboards">Upload HTML</a></div></div>
+    <section class="hero" aria-label="HTML Bank overview"><div class="hero-copy"><p class="eyebrow">Live HTML Asset Library</p><h1>Sales assets, ready to open and share.</h1><p class="intro">A clean front door for outreach dashboards, pre-call briefs, and client-ready HTML files published through GitHub Pages.</p></div><aside class="status-panel"><div class="status-title"><h2>Library Status</h2><span class="live-pill">Live</span></div><div class="metrics" aria-label="Library counts"><div class="metric"><span>Total</span><strong id="totalCount">0</strong></div><div class="metric"><span>Folders</span><strong>3</strong></div><div class="metric"><span>Newest</span><strong id="newestDate">--</strong></div></div><ul class="rules"><li>Use outreach dashboards for account boards, territory views, and re-engagement trackers.</li><li>Use pre-call briefs for single-prospect or single-meeting prep.</li><li>Use client-ready assets for files safe to send or screen-share externally.</li></ul></aside></section>
+    <div class="toolbar"><div class="search-wrap"><span>Search</span><input id="search" class="search" type="search" placeholder="Find by account, asset type, or filename" aria-label="Search files"></div><div class="view-note" id="viewNote">Loading files...</div></div>
+    <div class="grid" id="sections"></div><p class="notice" id="apiNotice">The index is showing its built-in fallback list because GitHub did not return a public folder listing. If this repo is private, make it public or update the fallback list when adding files.</p>
   </main>
   <script>
     const OWNER = "pducoffe20-a11y";
     const REPO = "HTML-BANK---Engine";
     const FOLDERS = [
-      { id: "outreach-dashboards", title: "Outreach Dashboards", description: "Prospect/account boards, territory views, re-engagement trackers, and internal sales dashboard views." },
-      { id: "pre-call-briefs", title: "Pre-Call Briefs", description: "Single-prospect or single-meeting prep documents used before a call." },
-      { id: "client-ready-assets", title: "Client-Ready Assets", description: "External-facing assets that could be sent to or screen-shared with a client or prospect." }
+      { id: "outreach-dashboards", initials: "OD", title: "Outreach Dashboards", description: "Prospect/account boards, territory views, re-engagement trackers, and internal sales dashboard views." },
+      { id: "pre-call-briefs", initials: "PC", title: "Pre-Call Briefs", description: "Single-prospect or single-meeting prep documents used before a call." },
+      { id: "client-ready-assets", initials: "CR", title: "Client-Ready Assets", description: "External-facing assets that could be sent to or screen-shared with a client or prospect." }
     ];
     const FALLBACK_FILES = {
-      "outreach-dashboards": [
-        "top_350_brightspace_outreach_refreshed_with_titles.html",
-        "d2l_brightspace_prospect_board_v2.html",
-        "dashboard.html",
-        "2026-05-30_d2l-brightspace_prospect-execution-dashboard.html"
-      ],
-      "pre-call-briefs": [],
-      "client-ready-assets": []
+      "outreach-dashboards": ["dashboard_pat_voice_personal.html", "top_350_brightspace_outreach_refreshed_with_titles.html", "d2l_brightspace_prospect_board_v2.html", "dashboard.html", "2026-05-30_d2l-brightspace_prospect-execution-dashboard.html"],
+      "pre-call-briefs": ["2026-05-25_external-meetings_pre-call-briefs.html", "2026-05-18_external-meetings_pre-call-briefs.html", "2026-05-18_external-calls_pre-call-briefs.html", "2026-05-14_prima_pre-call-brief.html", "2026-05-13_external-calls_pre-call-briefs.html"],
+      "client-ready-assets": ["GPM_Brightspace_Executive_Brief.html"]
     };
     const state = new Map();
-    function labelFromFile(name) {
-      return name.replace(/\.html$/i, "").replace(/^\d{4}-\d{2}-\d{2}_/, "").replace(/[_-]+/g, " ").replace(/\b\w/g, char => char.toUpperCase());
-    }
-    function fileDate(name) {
-      const match = name.match(/^(\d{4}-\d{2}-\d{2})_/);
-      return match ? match[1] : "Undated";
-    }
+    function labelFromFile(name) { return name.replace(/\.html$/i, "").replace(/^\d{4}-\d{2}-\d{2}_/, "").replace(/[_-]+/g, " ").replace(/\b\w/g, char => char.toUpperCase()); }
+    function fileDate(name) { const match = name.match(/^(\d{4}-\d{2}-\d{2})_/); return match ? match[1] : "Undated"; }
     function renderShell() {
-      document.getElementById("sections").innerHTML = FOLDERS.map(folder => `
-        <section aria-labelledby="${folder.id}-title">
-          <div class="section-head">
-            <h2 id="${folder.id}-title">${folder.title}</h2>
-            <p>${folder.description}</p>
-            <a class="folder-link" href="https://github.com/${OWNER}/${REPO}/tree/main/${folder.id}">Open GitHub folder</a>
-          </div>
-          <ul id="${folder.id}-list"><li class="empty">Loading files...</li></ul>
-        </section>`).join("");
+      document.getElementById("sections").innerHTML = FOLDERS.map(folder => `<section class="category ${folder.id}" aria-labelledby="${folder.id}-title"><div class="category-head"><div class="category-top"><div class="category-title"><div class="folder-mark">${folder.initials}</div><h2 id="${folder.id}-title">${folder.title}</h2></div><span class="count-pill" id="${folder.id}-count">0 files</span></div><p>${folder.description}</p><div class="category-actions"><a class="folder-link" href="https://github.com/${OWNER}/${REPO}/tree/main/${folder.id}">Open GitHub folder</a><a class="folder-link" href="https://github.com/${OWNER}/${REPO}/upload/main/${folder.id}">Upload here</a></div></div><ul id="${folder.id}-list"><li class="empty">Loading files...</li></ul></section>`).join("");
     }
-    function renderFolder(folderId, files) {
-      state.set(folderId, files);
-      const query = document.getElementById("search").value.trim().toLowerCase();
-      const list = document.getElementById(`${folderId}-list`);
-      const filtered = files.filter(name => name.toLowerCase().includes(query) || labelFromFile(name).toLowerCase().includes(query));
-      if (!filtered.length) {
-        list.innerHTML = `<li class="empty">No matching HTML files.</li>`;
-        return;
-      }
-      list.innerHTML = filtered.map(name => {
-        const href = `${folderId}/${encodeURIComponent(name)}`;
-        return `<li class="asset"><a href="${href}">${labelFromFile(name)}</a><span>${fileDate(name)} / ${name}</span></li>`;
-      }).join("");
-    }
-    async function loadFolder(folderId) {
-      const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folderId}`;
-      try {
-        const response = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github+json" } });
-        if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
-        const items = await response.json();
-        const files = items.filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".html")).map(item => item.name).sort((a, b) => b.localeCompare(a));
-        renderFolder(folderId, files);
-      } catch (error) {
-        document.getElementById("apiNotice").style.display = "block";
-        renderFolder(folderId, FALLBACK_FILES[folderId] || []);
-      }
-    }
-    function rerenderAll() {
-      FOLDERS.forEach(folder => renderFolder(folder.id, state.get(folder.id) || []));
-    }
-    renderShell();
-    FOLDERS.forEach(folder => loadFolder(folder.id));
-    document.getElementById("search").addEventListener("input", rerenderAll);
+    function updateSummary() { const allFiles = FOLDERS.flatMap(folder => state.get(folder.id) || []); const datedFiles = allFiles.map(fileDate).filter(date => date !== "Undated").sort().reverse(); document.getElementById("totalCount").textContent = allFiles.length; document.getElementById("newestDate").textContent = datedFiles[0] || "--"; document.getElementById("viewNote").textContent = `${allFiles.length} live HTML file${allFiles.length === 1 ? "" : "s"}`; }
+    function renderFolder(folderId, files) { state.set(folderId, files); const query = document.getElementById("search").value.trim().toLowerCase(); const list = document.getElementById(`${folderId}-list`); const count = document.getElementById(`${folderId}-count`); const filtered = files.filter(name => name.toLowerCase().includes(query) || labelFromFile(name).toLowerCase().includes(query)); count.textContent = `${files.length} file${files.length === 1 ? "" : "s"}`; if (!filtered.length) { list.innerHTML = `<li class="empty">No matching HTML files.</li>`; updateSummary(); return; } list.innerHTML = filtered.map(name => { const href = `${folderId}/${encodeURIComponent(name)}`; return `<li class="asset"><a href="${href}">${labelFromFile(name)}</a><div class="asset-meta"><span class="asset-date">${fileDate(name)}</span><span>${name}</span></div></li>`; }).join(""); updateSummary(); }
+    async function loadFolder(folderId) { const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folderId}`; try { const response = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github+json" } }); if (!response.ok) throw new Error(`GitHub API returned ${response.status}`); const items = await response.json(); const files = items.filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".html")).map(item => item.name).sort((a, b) => b.localeCompare(a)); renderFolder(folderId, files); } catch (error) { document.getElementById("apiNotice").style.display = "block"; renderFolder(folderId, FALLBACK_FILES[folderId] || []); } }
+    function rerenderAll() { FOLDERS.forEach(folder => renderFolder(folder.id, state.get(folder.id) || [])); }
+    renderShell(); FOLDERS.forEach(folder => loadFolder(folder.id)); document.getElementById("search").addEventListener("input", rerenderAll);
   </script>
 </body>
 </html>
