@@ -13,19 +13,5 @@
   "html_asset_files": [
     "outreach-dashboards/2026-05-30_d2l-brightspace_prospect-execution-dashboard.html"
   ],
-  "instruction_files": [
-    "README.md",
-    "AGENTS.md"
-  ],
-  "support_files_preserved_from_previous_site": [
-    ".nojekyll",
-    "dashboard-data.json",
-    "dashboard_original.html",
-    "account_research.csv",
-    "deprioritize.csv",
-    "light_research.csv",
-    "prospects_flat.csv",
-    "suppress.csv",
-    "work_now.csv"
-  ]
+  "instruction_files": ["README.md", "AGENTS.md"]
 }

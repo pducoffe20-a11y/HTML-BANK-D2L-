@@ -10,203 +10,38 @@
       --muted: #52606d;
       --line: #d9e2ec;
       --panel: #ffffff;
-      --soft: #f6f8fb;
       --accent: #0b5cad;
       --accent-2: #137c6d;
       --warn: #9f580a;
       --shadow: 0 16px 42px rgba(31, 41, 51, 0.08);
       color-scheme: light;
     }
-
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--ink);
-      background: linear-gradient(180deg, #eef4fb 0, #f8fafc 340px, #f6f8fb 100%);
-    }
-
-    main {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 36px 0 52px;
-    }
-
-    header {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .eyebrow {
-      margin: 0;
-      color: var(--accent-2);
-      font-size: 13px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(34px, 6vw, 64px);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-
-    .intro {
-      max-width: 760px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.55;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin: 22px 0;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.78);
-      box-shadow: var(--shadow);
-    }
-
-    .search {
-      flex: 1 1 280px;
-      min-height: 42px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 0 12px;
-      color: var(--ink);
-      font: inherit;
-      background: white;
-    }
-
-    .home-link {
-      display: inline-flex;
-      align-items: center;
-      min-height: 42px;
-      padding: 0 13px;
-      border-radius: 8px;
-      background: var(--ink);
-      color: white;
-      font-weight: 800;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      align-items: start;
-    }
-
-    section {
-      min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .section-head {
-      display: grid;
-      gap: 7px;
-      padding: 18px;
-      border-bottom: 1px solid var(--line);
-      background: #fbfdff;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: 0;
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .folder-link {
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .folder-link:hover,
-    .asset a:hover {
-      text-decoration: underline;
-    }
-
-    ul {
-      margin: 0;
-      padding: 8px 0;
-      list-style: none;
-    }
-
-    .asset {
-      display: grid;
-      gap: 4px;
-      padding: 12px 18px;
-      border-top: 1px solid #eef2f6;
-    }
-
-    .asset:first-child {
-      border-top: 0;
-    }
-
-    .asset a {
-      color: var(--ink);
-      font-weight: 800;
-      line-height: 1.35;
-      text-decoration: none;
-      overflow-wrap: anywhere;
-    }
-
-    .asset span {
-      color: var(--muted);
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .empty,
-    .notice {
-      padding: 18px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .notice {
-      margin-top: 16px;
-      border: 1px solid #f2d6a2;
-      border-radius: 8px;
-      background: #fff8eb;
-      color: var(--warn);
-      display: none;
-    }
-
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 560px) {
-      main { width: min(100% - 24px, 1120px); padding-top: 24px; }
-      .toolbar { align-items: stretch; }
-      .home-link { justify-content: center; width: 100%; }
-    }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: linear-gradient(180deg, #eef4fb 0, #f8fafc 340px, #f6f8fb 100%); }
+    main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 52px; }
+    header { display: grid; gap: 10px; margin-bottom: 24px; }
+    .eyebrow { margin: 0; color: var(--accent-2); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+    h1 { margin: 0; font-size: clamp(34px, 6vw, 64px); line-height: 1; letter-spacing: 0; }
+    .intro { max-width: 760px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 22px 0; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, 0.78); box-shadow: var(--shadow); }
+    .search { flex: 1 1 280px; min-height: 42px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; color: var(--ink); font: inherit; background: white; }
+    .home-link { display: inline-flex; align-items: center; min-height: 42px; padding: 0 13px; border-radius: 8px; background: var(--ink); color: white; font-weight: 800; text-decoration: none; white-space: nowrap; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+    section { min-width: 0; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; }
+    .section-head { display: grid; gap: 7px; padding: 18px; border-bottom: 1px solid var(--line); background: #fbfdff; }
+    h2 { margin: 0; font-size: 20px; letter-spacing: 0; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .folder-link { color: var(--accent); font-size: 13px; font-weight: 800; text-decoration: none; }
+    .folder-link:hover, .asset a:hover { text-decoration: underline; }
+    ul { margin: 0; padding: 8px 0; list-style: none; }
+    .asset { display: grid; gap: 4px; padding: 12px 18px; border-top: 1px solid #eef2f6; }
+    .asset:first-child { border-top: 0; }
+    .asset a { color: var(--ink); font-weight: 800; line-height: 1.35; text-decoration: none; overflow-wrap: anywhere; }
+    .asset span { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+    .empty, .notice { padding: 18px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .notice { margin-top: 16px; border: 1px solid #f2d6a2; border-radius: 8px; background: #fff8eb; color: var(--warn); display: none; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { main { width: min(100% - 24px, 1120px); padding-top: 24px; } .toolbar { align-items: stretch; } .home-link { justify-content: center; width: 100%; } }
   </style>
 </head>
 <body>
@@ -214,120 +49,82 @@
     <header>
       <p class="eyebrow">HTML Bank</p>
       <h1>Live HTML Asset Library</h1>
-      <p class="intro">A shareable home for outreach dashboards, pre-call briefs, and client-ready assets. Each file opens as its own live GitHub Pages preview.</p>
+      <p class="intro">A shareable home for outreach dashboards, pre-call briefs, and client-ready assets. Click an asset name to open its live page. Use the GitHub folder links when you want to upload or manage files.</p>
     </header>
-
     <div class="toolbar">
       <input id="search" class="search" type="search" placeholder="Search files" aria-label="Search files">
       <a class="home-link" href="https://github.com/pducoffe20-a11y/HTML-BANK---Engine">Open Repo</a>
     </div>
-
     <div class="grid" id="sections"></div>
     <p class="notice" id="apiNotice">The index is showing its built-in fallback list because GitHub did not return a public folder listing. If this repo is private, make it public or update the fallback list when adding files.</p>
   </main>
-
   <script>
     const OWNER = "pducoffe20-a11y";
     const REPO = "HTML-BANK---Engine";
-
     const FOLDERS = [
-      {
-        id: "outreach-dashboards",
-        title: "Outreach Dashboards",
-        description: "Prospect/account boards, territory views, re-engagement trackers, and internal sales dashboard views."
-      },
-      {
-        id: "pre-call-briefs",
-        title: "Pre-Call Briefs",
-        description: "Single-prospect or single-meeting prep documents used before a call."
-      },
-      {
-        id: "client-ready-assets",
-        title: "Client-Ready Assets",
-        description: "External-facing assets that could be sent to or screen-shared with a client or prospect."
-      }
+      { id: "outreach-dashboards", title: "Outreach Dashboards", description: "Prospect/account boards, territory views, re-engagement trackers, and internal sales dashboard views." },
+      { id: "pre-call-briefs", title: "Pre-Call Briefs", description: "Single-prospect or single-meeting prep documents used before a call." },
+      { id: "client-ready-assets", title: "Client-Ready Assets", description: "External-facing assets that could be sent to or screen-shared with a client or prospect." }
     ];
-
     const FALLBACK_FILES = {
       "outreach-dashboards": [
+        "top_350_brightspace_outreach_refreshed_with_titles.html",
+        "d2l_brightspace_prospect_board_v2.html",
+        "dashboard.html",
         "2026-05-30_d2l-brightspace_prospect-execution-dashboard.html"
       ],
       "pre-call-briefs": [],
       "client-ready-assets": []
     };
-
     const state = new Map();
-
     function labelFromFile(name) {
-      return name
-        .replace(/\.html$/i, "")
-        .replace(/^\d{4}-\d{2}-\d{2}_/, "")
-        .replace(/[_-]+/g, " ")
-        .replace(/\b\w/g, char => char.toUpperCase());
+      return name.replace(/\.html$/i, "").replace(/^\d{4}-\d{2}-\d{2}_/, "").replace(/[_-]+/g, " ").replace(/\b\w/g, char => char.toUpperCase());
     }
-
     function fileDate(name) {
       const match = name.match(/^(\d{4}-\d{2}-\d{2})_/);
       return match ? match[1] : "Undated";
     }
-
     function renderShell() {
       document.getElementById("sections").innerHTML = FOLDERS.map(folder => `
         <section aria-labelledby="${folder.id}-title">
           <div class="section-head">
             <h2 id="${folder.id}-title">${folder.title}</h2>
             <p>${folder.description}</p>
-            <a class="folder-link" href="${folder.id}/">Open folder</a>
+            <a class="folder-link" href="https://github.com/${OWNER}/${REPO}/tree/main/${folder.id}">Open GitHub folder</a>
           </div>
           <ul id="${folder.id}-list"><li class="empty">Loading files...</li></ul>
-        </section>
-      `).join("");
+        </section>`).join("");
     }
-
     function renderFolder(folderId, files) {
       state.set(folderId, files);
       const query = document.getElementById("search").value.trim().toLowerCase();
       const list = document.getElementById(`${folderId}-list`);
       const filtered = files.filter(name => name.toLowerCase().includes(query) || labelFromFile(name).toLowerCase().includes(query));
-
       if (!filtered.length) {
         list.innerHTML = `<li class="empty">No matching HTML files.</li>`;
         return;
       }
-
       list.innerHTML = filtered.map(name => {
         const href = `${folderId}/${encodeURIComponent(name)}`;
-        return `
-          <li class="asset">
-            <a href="${href}">${labelFromFile(name)}</a>
-            <span>${fileDate(name)} / ${name}</span>
-          </li>
-        `;
+        return `<li class="asset"><a href="${href}">${labelFromFile(name)}</a><span>${fileDate(name)} / ${name}</span></li>`;
       }).join("");
     }
-
     async function loadFolder(folderId) {
       const apiUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${folderId}`;
-
       try {
         const response = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github+json" } });
         if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
         const items = await response.json();
-        const files = items
-          .filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".html"))
-          .map(item => item.name)
-          .sort((a, b) => b.localeCompare(a));
+        const files = items.filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".html")).map(item => item.name).sort((a, b) => b.localeCompare(a));
         renderFolder(folderId, files);
       } catch (error) {
         document.getElementById("apiNotice").style.display = "block";
         renderFolder(folderId, FALLBACK_FILES[folderId] || []);
       }
     }
-
     function rerenderAll() {
       FOLDERS.forEach(folder => renderFolder(folder.id, state.get(folder.id) || []));
     }
-
     renderShell();
     FOLDERS.forEach(folder => loadFolder(folder.id));
     document.getElementById("search").addEventListener("input", rerenderAll);
